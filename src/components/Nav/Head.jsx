@@ -1,46 +1,66 @@
-import Container from 'react-bootstrap/Container';
-import Nav from 'react-bootstrap/Nav';
-import Navbar from 'react-bootstrap/Navbar';
-import NavDropdown from 'react-bootstrap/NavDropdown';
+import { NavLink } from 'react-router';
+import { Navbar, Nav, NavDropdown, Container } from 'react-bootstrap'; 
 import Logo from './Logo';
-import Logonombre from './Logonombre'
+import Logonombre from './Logonombre';
+import './Head.css';
 
-function Head() {
+const Head = () => {
   return (
-    <Navbar collapseOnSelect expand="lg" className="bg-body-tertiary">
+    <Navbar expand="lg" className="navbar-custom" fixed="top">
       <Container>
-        <Navbar.Brand href="#home">
-            <Logo w='50' h='50' />
-            <Logonombre w='150' h='50' />
+        {/* Logo y nombre de la marca */}
+        <Navbar.Brand href="/" className="d-flex align-items-center">
+          <Logo w="50" h="50" />
+          <Logonombre w="150" h="50" />
         </Navbar.Brand>
-        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-        <Navbar.Collapse id="responsive-navbar-nav">
-          <Nav className="me-auto">
-            {/**
-            <Nav.Link href="#features">Features</Nav.Link>
-            <Nav.Link href="#pricing">Pricing</Nav.Link>
-             */}
-            <NavDropdown title="Features" id="collapsible-nav-dropdown">
-              <NavDropdown.Item href="#action/3.1">Enfermedad 1</NavDropdown.Item>
+
+        {/* Botón de hamburguesa para pantallas pequeñas */}
+        <Navbar.Toggle aria-controls="navbar-nav" className="navbar-toggler-custom" />
+
+        {/* Contenido colapsable */}
+        <Navbar.Collapse id="navbar-nav">
+          <Nav className="ms-auto mb-2 mb-lg-0">
+            <Nav.Item>
+              <NavLink className="nav-link" to="/" end>
+                Home
+              </NavLink>
+            </Nav.Item>
+            <Nav.Item>
+              <NavLink className="nav-link" to="/quiz">
+                Quiz
+              </NavLink>
+            </Nav.Item>
+            <Nav.Item>
+              <NavLink className="nav-link" to="/about">
+                About
+              </NavLink>
+            </Nav.Item>
+
+            {/* Menú desplegable de Features */}
+            <NavDropdown title="Features" id="features-dropdown" className="nav-link">
+              <NavDropdown.Item href="#enfermedad1">Enfermedad 1</NavDropdown.Item>
               <NavDropdown.Divider />
-              <NavDropdown.Item href="#action/3.2">
-              Enfermedad 2
-              </NavDropdown.Item>
+              <NavDropdown.Item href="#enfermedad2">Enfermedad 2</NavDropdown.Item>
               <NavDropdown.Divider />
-              <NavDropdown.Item href="#action/3.3">Enfermedad 3</NavDropdown.Item>
+              <NavDropdown.Item href="#enfermedad3">Enfermedad 3</NavDropdown.Item>
               <NavDropdown.Divider />
-              <NavDropdown.Item href="#action/3.4">
-              Enfermedad 4
-              </NavDropdown.Item>
+              <NavDropdown.Item href="#enfermedad4">Enfermedad 4</NavDropdown.Item>
             </NavDropdown>
-          </Nav>
-          <Nav>
-            <Nav.Link href="#deets">Hacer quiz</Nav.Link>
+
+            {/* Botón Sign Up dentro del Nav */}
+            <Nav.Item>
+              <NavLink
+                to="/signup"
+                className="btn btn-primary btn-gradient ms-lg-3 mt-3 mt-lg-0"
+              >
+                Sign Up
+              </NavLink>
+            </Nav.Item>
           </Nav>
         </Navbar.Collapse>
       </Container>
     </Navbar>
   );
-}
+};
 
 export default Head;

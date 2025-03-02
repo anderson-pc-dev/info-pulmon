@@ -1,19 +1,22 @@
-import 'bootstrap/dist/css/bootstrap.min.css'
 import { createRoot } from 'react-dom/client'
-import { BrowserRouter , Routes, Route } from 'react-router'
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import './index.css'
-//import App from './App.jsx'
+import { BrowserRouter, Route, Routes } from 'react-router'
+import Home from './pages/home/Home.jsx';
+import Quiz from './pages/quiz/Quiz.jsx';
+import About from './pages/about/About.jsx';
+import Layout from './layout/layout.jsx';
 
-//paginas
-import Layout from './layout/layout.jsx'
-import Home from './pages/home/Home.jsx'
-
-createRoot(document.getElementById('root')).render(
+createRoot(document.getElementById("root")).render(
+  // <App />
   <BrowserRouter>
-    <Routes>
-      <Route element={<Layout/>} >
-        <Route path='/' element={<Home/>} />
-      </Route>
-    </Routes>
+    <Layout>
+      <Routes>
+        <Route index path="/" element={<Home />} />
+        <Route path="/quiz" element={<Quiz />} />
+        <Route path="/about" element={<About />} />
+      </Routes>
+    </Layout>
   </BrowserRouter>
-)
+);

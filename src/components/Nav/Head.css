@@ -1,0 +1,161 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+
+/* Estilos generales del navbar */
+.navbar {
+  background: #212529 !important;
+  padding: 1rem 0;
+  height: 80px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+  font-family: 'Poppins', sans-serif; 
+  position: fixed; 
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000; 
+}
+
+/* Contenedor del navbar */
+.navbar .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+}
+
+/* Logo y nombre de la marca */
+.navbar-brand {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-brand .brand-text {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #fff;
+  margin-left: 0.5rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); 
+}
+
+/* Enlaces de navegación */
+.navbar-nav {
+  display: flex;
+  align-items: center;
+  gap: 1.8rem; 
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.nav-link {
+  color: #fff !important;
+  font-weight: 500;
+  padding: 0.5rem 0; 
+  position: relative;
+  transition: all 0.3s ease;
+  text-transform: uppercase; 
+  font-size: 0.9rem; 
+}
+
+.nav-link:hover {
+  color: #f3f3f3 !important;
+  transform: translateY(-2px); 
+}
+
+.nav-link.active {
+  color: #ffffff !important;
+  border-bottom: 2px solid #ffffff; 
+}
+
+/* Efecto de subrayado al pasar el mouse */
+.nav-link::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  background: #ffffff;
+  left: 0;
+  bottom: -4px;
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.nav-link:hover::after {
+  transform: scaleX(1); 
+}
+
+/* Botón Sign Up */
+.btn-gradient {
+  background: linear-gradient(45deg, #ff6b6b, #ffa5a5);
+  border: none;
+  color: #fff;
+  font-weight: 600;
+  padding: 0.5rem 1.5rem;
+  border-radius: 25px; 
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(255, 107, 107, 0.2); 
+  text-transform: uppercase; 
+  font-size: 0.9rem; 
+}
+
+.btn-gradient:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4); 
+}
+
+/* Menú desplegable */
+.nav-dropdown .dropdown-menu {
+  background: #343a40; 
+  border: none;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.nav-dropdown .dropdown-item {
+  color: #fff !important;
+  padding: 0.5rem 1rem;
+  transition: all 0.3s ease;
+  font-size: 0.9rem; 
+}
+
+.nav-dropdown .dropdown-item:hover {
+  background: #ff6b6b; 
+  color: #fff !important;
+}
+
+.nav-dropdown .dropdown-divider {
+  border-color: rgba(255, 255, 255, 0.1); 
+}
+
+/* Asegurar que el contenido no se solape con el header */
+.main-content {
+  padding-top: 80px;
+}
+
+/* Estilos para el botón de hamburguesa */
+.navbar-toggler-custom {
+  border: none;
+  outline: none;
+  padding: 0.5rem;
+}
+
+/* Estilos para el menú colapsable */
+.navbar-collapse {
+  justify-content: flex-end;
+}
+
+/* Ajustes para pantallas pequeñas */
+@media (max-width: 992px) {
+  .navbar-nav {
+    background: #212529; 
+    padding: 1rem;
+    border-radius: 0.5rem;
+    margin-top: 1rem;
+  }
+
+  .nav-link {
+    margin: 0.5rem 0; 
+  }
+
+  .btn-gradient {
+    margin-top: 1rem; 
+  }
+}

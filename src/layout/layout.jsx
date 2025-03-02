@@ -1,14 +1,13 @@
-import { Outlet } from "react-router"
-import Head from "../components/Nav/Head"
-const Layout = () => {
-    return (
-        <>
-            <Head/>
-            <main className="">
-                <Outlet/>
-            </main>
-        </>
-    )
-}
+import Head from "../components/Nav/Head";
+import "./Layout.css"
 
-export default Layout
+const Layout = ({ children }) => {
+  return (
+    <div className="layout">
+      <Head />
+      <main className="layout-content">{children}</main>
+    </div>
+  );
+};
+
+export default Layout;
