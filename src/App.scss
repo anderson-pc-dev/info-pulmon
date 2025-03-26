@@ -1,0 +1,15 @@
+@import './shared/font';
+@import './shared/variables';
+@import '../node_modules/bootstrap/scss/bootstrap';
+
+html {
+  scroll-behavior: smooth;
+}
+
+#root {
+    font-family: $font-family-base;
+    background-color: #FFFFFF;
+    color: $body-color;
+    height: 100dvh;
+}
+

@@ -1,3 +1,4 @@
+// eslint-disable-next-line react/prop-types
 const Logonombre = ({w=844, h=666}) => {
     return(
         <>

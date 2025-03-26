@@ -1,5 +1,6 @@
-import Head from "../components/Nav/Head";
-import "./Layout.css"
+/* eslint-disable react/prop-types */
+import Head from "../components/nav/Head";
+import "./Layout.scss"
 
 const Layout = ({ children }) => {
   return (

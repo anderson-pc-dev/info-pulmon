@@ -1,0 +1,19 @@
+// Tipografía
+$font-family-base: 'Inter', sans-serif;
+
+// Colores base
+$body-color: #000000; 
+$primary: #2AABEC; 
+$secondary: #BDC3C7; 
+
+// Colores personalizados adicionales
+$info: #5DADE2;
+$light: #F3FBFF;
+$dark: #005089; 
+$success: #E2F5FF; 
+$warning: #28c2dd; 
+
+// Otros
+$link-color: $primary;
+$link-hover-color: darken($primary, 10%);
+
