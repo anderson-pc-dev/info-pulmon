@@ -1,0 +1,174 @@
+// Variables de color y tipografía
+$primary-color: #2c3e50;
+$secondary-color: #3498db;
+$accent-color: #e74c3c;
+$light-color: #ecf0f1;
+$dark-color: #34495e;
+$text-color: #333;
+$font-primary: 'Roboto', sans-serif;
+$font-secondary: 'Open Sans', sans-serif;
+
+// Mixins útiles
+@mixin card-shadow {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+@mixin transition($property: all, $duration: 0.3s) {
+  transition: $property $duration ease-in-out;
+}
+
+// Estilos base
+.que-es-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: $font-primary;
+  color: $text-color;
+  line-height: 1.6;
+}
+
+.que-es-title {
+  text-align: center;
+  color: $primary-color;
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+  position: relative;
+  padding-bottom: 1rem;
+  font-weight: 700;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 4px;
+    background: $secondary-color;
+    border-radius: 2px;
+  }
+}
+
+.que-es-content {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  align-items: flex-start;
+}
+
+.que-es-text {
+  flex: 1;
+  min-width: 300px;
+}
+
+.que-es-subtitle {
+  color: $dark-color;
+  font-size: 1.8rem;
+  margin: 2rem 0 1rem;
+  font-weight: 600;
+  border-left: 5px solid $accent-color;
+  padding-left: 1rem;
+}
+
+.que-es-list {
+  padding-left: 1.5rem;
+  margin: 1.5rem 0;
+
+  li {
+    margin-bottom: 0.8rem;
+    position: relative;
+    padding-left: 1.5rem;
+
+    &::before {
+      content: '•';
+      color: $secondary-color;
+      font-size: 1.5rem;
+      position: absolute;
+      left: 0;
+      top: -2px;
+    }
+  }
+}
+
+.que-es-causes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin: 2rem 0;
+}
+
+.cause-item {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  @include card-shadow;
+  @include transition;
+  border-top: 4px solid $secondary-color;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  h3 {
+    color: $primary-color;
+    margin-bottom: 0.5rem;
+    font-size: 1.3rem;
+  }
+
+  p {
+    color: lighten($text-color, 20%);
+    font-size: 0.95rem;
+  }
+}
+
+.que-es-image {
+  flex: 1;
+  min-width: 300px;
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+  @include card-shadow;
+  @include transition;
+
+  &:hover {
+    transform: scale(1.02);
+  }
+
+  img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 8px 8px 0 0;
+  }
+}
+
+.image-caption {
+  background: $primary-color;
+  color: white;
+  padding: 0.8rem;
+  text-align: center;
+  font-size: 0.9rem;
+  margin: 0;
+  border-radius: 0 0 8px 8px;
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .que-es-title {
+    font-size: 2rem;
+  }
+
+  .que-es-subtitle {
+    font-size: 1.5rem;
+  }
+
+  .que-es-content {
+    flex-direction: column;
+  }
+
+  .que-es-image {
+    order: -1;
+    margin-bottom: 2rem;
+  }
+}

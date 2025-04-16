@@ -1,0 +1,78 @@
+import { useState, useEffect } from 'react';
+import { NavLink, Outlet, useLocation } from 'react-router';
+import './epoc.scss';
+import EPOCImg from '../../../assets/EPOC2.png';
+
+const Epoc = () => {
+  const location = useLocation();
+  const [showContent, setShowContent] = useState(false);
+
+  useEffect(() => {
+    // Verificar si estamos en una ruta anidada (no en la raíz)
+    const isNestedRoute = location.pathname !== 'epoc' && !location.pathname.endsWith('epoc');
+    setShowContent(isNestedRoute);
+    
+    // Scroll suave al contenido cuando se muestra
+    if (isNestedRoute) {
+      setTimeout(() => {
+        const contentElement = document.querySelector('.epoc-outlet-wrapper');
+        if (contentElement) {
+          contentElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 300); // Espera a que la animación comience
+    }
+  }, [location.pathname]);
+
+  return (
+    <div className="epoc-container">
+      <div className="epoc-top-section">
+        <div className="epoc-sidebar">
+          <h2>EPOC</h2>
+          <NavLink 
+            to="que-es" 
+            className={({ isActive }) => 
+              isActive ? "epoc-button selected" : "epoc-button"
+            }
+          >
+            ¿Qué es la enfermedad?
+          </NavLink>
+          <NavLink 
+            to="sintomas" 
+            className={({ isActive }) => 
+              isActive ? "epoc-button selected" : "epoc-button"
+            }
+          >
+            Síntomas
+          </NavLink>
+          <NavLink 
+            to="tratamiento" 
+            className={({ isActive }) => 
+              isActive ? "epoc-button selected" : "epoc-button"
+            }
+          >
+            Tratamiento
+          </NavLink>
+          <NavLink 
+            to="prevencion" 
+            className={({ isActive }) => 
+              isActive ? "epoc-button selected" : "epoc-button"
+            }
+          >
+            Prevención y cuidados
+          </NavLink>
+        </div>
+        <div className="epoc-image-container">
+          <img src={EPOCImg} alt="Pulmones con EPOC" className="epoc-main-image" />
+        </div>
+      </div>
+      
+      {showContent && (
+        <div className="epoc-outlet-wrapper">
+          <Outlet />
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default Epoc;

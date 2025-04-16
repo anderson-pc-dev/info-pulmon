@@ -1,0 +1,437 @@
+@import '../../shared/variables';
+@import '../../shared/_font.scss';
+
+// Variables
+$text-light: #fff;
+$text-muted: #ccc;
+$border-radius-card: 15px;
+$border-radius-button: 25px;
+$transition-time: 0.3s;
+
+// Mixins
+@mixin fadeInAnimation($duration: 1s) {
+  animation: fadeIn $duration ease-in-out;
+}
+
+@mixin fadeInUpAnimation($duration: 1s) {
+  animation: fadeInUp $duration ease-in-out;
+}
+
+@mixin cardHoverEffect {
+  transform: translateY(-10px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+}
+
+@mixin buttonHoverEffect {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px #3f9ab666;
+}
+
+@mixin backgroundPattern {
+  background: radial-gradient(
+    circle, 
+    rgba(255, 255, 255, 0.1) 1px, 
+    transparent 1px
+  );
+  background-size: 20px 20px;
+  opacity: 0.3;
+}
+
+@mixin cardCircleEffect($position: 'top') {
+  content: '';
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 50%;
+  z-index: 0;
+
+  @if $position == 'top' {
+    top: -50px;
+    right: -50px;
+  } @else {
+    bottom: -50px;
+    left: -50px;
+  }
+}
+
+// Animations
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Hero Section
+.hero-section {
+  background: linear-gradient(135deg, #ffffff);
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0 20px;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    @include backgroundPattern;
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+  }
+
+  .hero-content {
+    max-width: 800px;
+    z-index: 1;
+    
+    .welcome-text {
+      margin-bottom: 1.5rem;
+      
+      h2 {
+        @extend .inter-bold;
+        font-size: 2.0rem;
+        @include fadeInAnimation(1.5s);
+        margin-bottom: 0.5rem;
+        color: $body-color;
+      }
+      
+      .app-title {
+        @extend .inter-black;
+        font-size: 7.5rem;
+        margin: 0;
+        @include fadeInAnimation(1.5s);
+        color: $primary;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      }
+    }
+  }
+
+  .hero-title {
+    @extend .inter-light;
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+    color: $body-color;
+    @include fadeInAnimation(1.5s);
+    line-height: 1.3;
+  }
+
+  .google-signin-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    background: $primary;
+    color: #ffffff;
+    border: none;
+    padding: 0.75rem 2rem;
+    border-radius: $border-radius-button;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    margin: 0 auto;
+    transition: all $transition-time ease;
+    text-decoration: none;
+    @include fadeInAnimation(2s);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    
+    &:hover {
+      @include buttonHoverEffect;
+    }
+    
+    .google-icon {
+      width: 20px;
+      height: 20px;
+    }
+  }
+}
+
+// Info Section
+.info-section {
+  background: $primary;
+  padding: 4rem 0;
+
+  .info-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #ffffff;
+    @extend .inter-black;
+    text-align: center;
+    margin-bottom: 2rem;
+    @include fadeInAnimation;
+  }
+
+  .info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    padding: 0 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .info-card {
+    background:  #ffffff;
+    padding: 2rem;
+    border-radius: $border-radius-card;
+    text-align: center;
+    transition: transform $transition-time ease, box-shadow $transition-time ease;
+    @include fadeInUpAnimation;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    position: relative;
+    overflow: hidden;
+
+    .icon {
+      width: 300px;  // Tamaño deseado
+      height: 300px; // Mantener igual que width para proporción
+      object-fit: contain; // Para mantener la proporción
+      margin: 0 auto 1rem; // Centrar y espacio debajo
+    }
+
+    &::before {
+      @include cardCircleEffect('top');
+    }
+
+    &::after {
+      @include cardCircleEffect('bottom');
+    }
+
+    &:hover {
+      @include cardHoverEffect;
+    }
+
+    h3 {
+      font-size: 2.0rem;
+      @extend .inter-bold;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    p {
+      font-size: 1rem;
+      @extend .inter-light;
+      color: $body-color;
+      font-weight: 400;
+      position: relative;
+      z-index: 1;
+    }
+  }
+}
+
+// Nueva Sección de Enfermedades
+.diseases-section {
+  background: #f8f9fa;
+  padding: 4rem 0;
+  
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  .section-title {
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 2.5rem;
+    color: #2c3e50;
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .disease-card {
+    background: white;
+    border-radius: 15px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+    
+    &:hover {
+      transform: translateY(-5px);
+    }
+
+    .disease-header {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+
+      .disease-icon {
+        width: 80px;
+        height: 80px;
+        object-fit: contain;
+        border-radius: 50%;
+        background: rgba(70, 130, 180, 0.1);
+        padding: 12px;
+        border: 2px solid #4682b4;
+      }
+
+      h3 {
+        font-family: 'Inter', sans-serif;
+        font-weight: 600;
+        color: #2c3e50;
+        font-size: 1.8rem;
+        margin: 0;
+      }
+    }
+
+    p {
+      font-family: 'Inter', sans-serif;
+      color: #555;
+      margin-bottom: 1.5rem;
+      line-height: 1.6;
+    }
+
+    .symptoms {
+      background: rgba(70, 130, 180, 0.05);
+      padding: 1.2rem;
+      border-radius: 10px;
+      border-left: 4px solid #4682b4;
+      
+      h4 {
+        font-family: 'Inter', sans-serif;
+        font-weight: 600;
+        font-size: 1.2rem;
+        color: #2c3e50;
+        margin-bottom: 0.8rem;
+      }
+
+      ul {
+        padding-left: 1.5rem;
+        
+        li {
+          font-family: 'Inter', sans-serif;
+          color: #555;
+          margin-bottom: 0.5rem;
+          line-height: 1.5;
+        }
+      }
+    }
+  }
+
+  .learn-more-btn {
+    display: inline-block;
+    background: #4682b4;
+    color: white;
+    padding: 0.8rem 2rem;
+    border-radius: 25px;
+    text-decoration: none;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    margin: 2rem auto 0;
+    transition: all 0.3s ease;
+    
+    &:hover {
+      background: #3a6d99;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(70, 130, 180, 0.3);
+    }
+  }
+}
+
+
+
+// CTA Section
+.cta-section {
+  background: $primary;
+  padding: 4rem 0;
+  text-align: center;
+
+  .cta-content {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  .cta-image, .icon {
+    width: 100%;
+    max-width: 300px;
+    margin-bottom: 2rem;
+    border-radius: $border-radius-card;
+  }
+
+  .cta-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: $text-light;
+    @extend .inter-bold;
+    margin-bottom: 1rem;
+  }
+
+  h2 {
+    @extend .inter-bold;
+    font-size: 3.0rem;
+    margin-bottom: 1.8rem;
+    color: $light;
+  }
+
+  .cta-description {
+    font-size: 1.25rem;
+    font-weight: 400;
+    color: $text-light;
+    margin-bottom: 2rem;
+  }
+
+  .cta-button {
+    background: $text-light;
+    border: none;
+    color: $body-color;
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 0.75rem 2rem;
+    border-radius: $border-radius-button;
+    cursor: pointer;
+    transition: all $transition-time ease;
+    text-decoration: none;
+    display: inline-block;
+
+    &:hover {
+      @include buttonHoverEffect;
+    }
+  }
+}
+
+// Responsive Styles
+@media (max-width: 768px) {
+  .hero-section {
+    .hero-title {
+      font-size: 2rem;
+    }
+
+    .hero-description {
+      font-size: 1rem;
+    }
+  }
+
+  .info-section, .cta-section {
+    .info-title, .cta-title {
+      font-size: 2rem;
+    }
+
+    .info-card {
+      h3 {
+        font-size: 1.25rem;
+      }
+
+      p {
+        font-size: 0.9rem;
+      }
+    }
+  }
+}

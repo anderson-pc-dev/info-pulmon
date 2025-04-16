@@ -1,0 +1,180 @@
+@import '../../shared/font'; // Importamos los estilos de fuente
+@import '../../shared/variables'; // Importamos las variables de color y tipografía
+
+/* Variables */
+$navbar-bg: #212529;
+$dropdown-bg: #343a40;
+$white: #ffffff;
+$shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.1);
+$shadow-gradient: 0 4px 6px #0099ffa9;
+$transition-time: 0.3s;
+$border-radius-button: 25px;
+
+/* Estilos generales del navbar */
+.navbar {
+  @extend .inter-regular;
+  background: $white !important;
+  padding: 1rem 0;
+  height: 80px;
+  box-shadow: $shadow-sm;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+}
+
+/* Contenedor del navbar */
+.navbar .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+}
+
+/* Logo y nombre de la marca */
+.navbar-brand {
+  display: flex;
+  align-items: center;
+
+  .brand-text {
+    @extend .inter-bold;
+    font-size: 1.5rem;
+    color: $body-color;
+    margin-left: 0.5rem;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+}
+
+/* Enlaces de navegación */
+.navbar-nav {
+  display: flex;
+  align-items: center;
+  gap: 1.8rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.nav-link {
+  @extend .inter-regular;
+  color: $body-color !important;
+  padding: 0.5rem 0;
+  position: relative;
+  transition: all $transition-time ease;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+  letter-spacing: 0.5px;
+
+  &:hover {
+    color: darken($body-color, 10%) !important;
+    transform: translateY(-2px);
+  }
+
+  &.active {
+    color: $body-color !important;
+    border-bottom: 2px solid $body-color;
+  }
+
+  /* Efecto de subrayado al pasar el mouse */
+  &::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    background: $white;
+    left: 0;
+    bottom: -4px;
+    transform: scaleX(0);
+    transition: transform $transition-time ease;
+  }
+
+  &:hover::after {
+    transform: scaleX(1);
+  }
+}
+
+/* Botón Sign Up */
+.btn-head {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    background: $primary;
+    color: #ffffff;
+    border: none;
+    padding: 0.75rem 2rem;
+    border-radius: $border-radius-button;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    margin: 0 auto;
+    transition: all $transition-time ease;
+    text-decoration: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+  &:hover {
+    transform: translateY(-2px);
+  }
+}
+
+/* Menú desplegable */
+.nav-dropdown {
+  .dropdown-menu {
+    background: $light;
+    border: none;
+    box-shadow: $light;
+  }
+
+  .dropdown-item {
+    @extend .inter-regular;
+    color: $white !important;
+    padding: 0.5rem 1rem;
+    transition: all $transition-time ease;
+    font-size: 0.9rem;
+
+    &:hover {
+      background: $primary;
+      color: $white !important;
+    }
+  }
+
+  .dropdown-divider {
+    border-color: rgb(255, 255, 255);
+  }
+}
+
+/* Asegurar que el contenido no se solape con el header */
+.main-content {
+  padding-top: 80px;
+}
+
+/* Estilos para el botón de hamburguesa */
+.navbar-toggler-custom {
+  border: none;
+  outline: none;
+  padding: 0.5rem;
+}
+
+/* Estilos para el menú colapsable */
+.navbar-collapse {
+  justify-content: flex-end;
+}
+
+/* Ajustes para pantallas pequeñas */
+@media (max-width: 992px) {
+  .navbar-nav {
+    background: $navbar-bg;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    margin-top: 1rem;
+  }
+
+  .nav-link {
+    margin: 0.5rem 0;
+  }
+
+  .btn-gradient {
+    margin-top: 1rem;
+  }
+}
