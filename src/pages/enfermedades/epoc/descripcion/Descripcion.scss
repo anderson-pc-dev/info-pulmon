@@ -1,12 +1,12 @@
+@import '../../../../shared/variables';
+@import '../../../../shared/_font.scss';
+
 // Variables de color y tipografía
-$primary-color: #2c3e50;
 $secondary-color: #3498db;
 $accent-color: #e74c3c;
 $light-color: #ecf0f1;
 $dark-color: #34495e;
 $text-color: #333;
-$font-primary: 'Roboto', sans-serif;
-$font-secondary: 'Open Sans', sans-serif;
 
 // Mixins útiles
 @mixin card-shadow {
@@ -19,91 +19,121 @@ $font-secondary: 'Open Sans', sans-serif;
 
 // Estilos base
 .que-es-container {
-  max-width: 1200px;
+  max-width: 1800px;
   margin: 0 auto;
-  padding: 2rem;
-  font-family: $font-primary;
-  color: $text-color;
+  padding: clamp(1rem, 3vw, 2rem);
   line-height: 1.6;
+  box-sizing: border-box;
+}
+
+.que-es-header {
+  margin-bottom: clamp(1.5rem, 4vw, 3rem);
+  text-align: center;
 }
 
 .que-es-title {
-  text-align: center;
-  color: $primary-color;
-  font-size: 2.5rem;
+  color: $light;
+  font-size: clamp(1.8rem, 4vw, 2.5rem);
+  padding: clamp(0.8rem, 2vw, 1rem);
+  @extend .inter-black;
+  background: $primary;
+  border-radius: 10px;
+  margin-top: clamp(-3rem, -5vw, -5rem);
   margin-bottom: 2rem;
+}
+
+.que-es-sections {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.5rem, 4vw, 3rem);
+}
+
+// Sección de Descripción
+.description-section {
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(1rem, 3vw, 2rem);
+  align-items: flex-start;
+}
+
+.section-content {
+  flex: 1;
+  min-width: min(100%, 800px);
+}
+
+.section-title {
+  @extend .inter-bold;
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  margin-bottom: clamp(1rem, 2vw, 1.5rem);
+  font-weight: 600;
+  color: $body-color;
   position: relative;
-  padding-bottom: 1rem;
-  font-weight: 700;
+  padding-bottom: 0.5rem;
 
   &::after {
     content: '';
     position: absolute;
     bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 100px;
-    height: 4px;
-    background: $secondary-color;
-    border-radius: 2px;
+    left: 0;
+    width: min(100%, 300px);
+    height: 3px;
+    background: $dark;
   }
 }
 
-.que-es-content {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 2rem;
-  align-items: flex-start;
-}
-
 .que-es-text {
-  flex: 1;
-  min-width: 300px;
+  color: $body-color;
+  font-size: clamp(1rem, 1.5vw, 1.2rem);
+  line-height: 1.5;
+  @extend .inter-regular;
 }
 
-.que-es-subtitle {
-  color: $dark-color;
-  font-size: 1.8rem;
-  margin: 2rem 0 1rem;
-  font-weight: 600;
-  border-left: 5px solid $accent-color;
+.subsection-title {
+  color: $body-color;
+  font-size: clamp(1.2rem, 2vw, 1.5rem);
+  margin: clamp(1rem, 2vw, 1.5rem) 0 clamp(0.8rem, 1.5vw, 1rem);
+  @extend .inter-bold;
+  font-weight: 500;
+  border-left: 4px solid $dark;
   padding-left: 1rem;
 }
 
 .que-es-list {
-  padding-left: 1.5rem;
-  margin: 1.5rem 0;
+  padding-left: clamp(1rem, 2vw, 1.5rem);
+  margin: clamp(1rem, 2vw, 1.5rem) 0;
 
   li {
     margin-bottom: 0.8rem;
     position: relative;
+    @extend .inter-regular;
     padding-left: 1.5rem;
-
-    &::before {
-      content: '•';
-      color: $secondary-color;
-      font-size: 1.5rem;
-      position: absolute;
-      left: 0;
-      top: -2px;
-    }
+    font-size: clamp(1rem, 1.5vw, 1.1rem);
   }
+}
+
+// Sección de Causas
+.causes-section {
+  border-radius: 10px;
+  margin-top: 1rem;
 }
 
 .que-es-causes {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1.5rem;
-  margin: 2rem 0;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+  gap: clamp(1rem, 3vw, 2rem);
+  margin: clamp(1rem, 3vw, 2rem) 0;
 }
 
 .cause-item {
   background: white;
-  padding: 1.5rem;
-  border-radius: 8px;
+  padding: clamp(1.2rem, 2vw, 1.8rem);
+  border-radius: 10px;
   @include card-shadow;
   @include transition;
   border-top: 4px solid $secondary-color;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 
   &:hover {
     transform: translateY(-5px);
@@ -111,64 +141,65 @@ $font-secondary: 'Open Sans', sans-serif;
   }
 
   h3 {
-    color: $primary-color;
-    margin-bottom: 0.5rem;
-    font-size: 1.3rem;
+    color: $light;
+    margin-bottom: 0.8rem;
+    font-size: clamp(1.2rem, 2vw, 1.4rem);
+    font-weight: 600;
   }
 
   p {
-    color: lighten($text-color, 20%);
-    font-size: 0.95rem;
+    color: lighten($text-color, 15%);
+    font-size: clamp(0.9rem, 1.5vw, 1rem);
+    margin-bottom: 0.5rem;
+    line-height: 1.5;
+  }
+
+  .cause-detail {
+    margin-top: auto;
+    padding-top: 1rem;
+    font-size: clamp(0.85rem, 1.2vw, 0.95rem);
+    color: lighten($text-color, 25%);
+    border-top: 1px dashed rgba($secondary-color, 0.3);
   }
 }
 
-.que-es-image {
+// Modelo 3D
+.que-es-3d-model {
   flex: 1;
-  min-width: 300px;
+  min-width: min(100%, 600px);
+  height: clamp(300px, 60vw, 800px);
   position: relative;
-  border-radius: 8px;
+  border-radius: 12px;
   overflow: hidden;
-  @include card-shadow;
-  @include transition;
-
-  &:hover {
-    transform: scale(1.02);
-  }
-
-  img {
-    width: 100%;
-    height: auto;
-    display: block;
-    border-radius: 8px 8px 0 0;
-  }
+  background: #ffffff;
+  border: 3px solid $dark;
+  margin-top: clamp(1rem, 3vw, 50px);
 }
 
-.image-caption {
-  background: $primary-color;
-  color: white;
-  padding: 0.8rem;
-  text-align: center;
-  font-size: 0.9rem;
-  margin: 0;
-  border-radius: 0 0 8px 8px;
-}
-
-// Responsive
-@media (max-width: 768px) {
-  .que-es-title {
-    font-size: 2rem;
-  }
-
-  .que-es-subtitle {
-    font-size: 1.5rem;
-  }
-
-  .que-es-content {
+// Ajustes responsive mejorados
+@media (max-width: 992px) {
+  .description-section {
     flex-direction: column;
   }
+  .que-es-3d-model {
+    width: 100%;
+    min-width: auto;
+    height: 400px;
+  }
+}
 
-  .que-es-image {
-    order: -1;
-    margin-bottom: 2rem;
+@media (max-width: 768px) {
+  .section-title::after {
+    width: 200px;
+  }
+}
+
+@media (max-width: 480px) {
+  .section-title::after {
+    width: 150px;
+  }
+  
+  .que-es-list li {
+    padding-left: 1rem;
   }
 }

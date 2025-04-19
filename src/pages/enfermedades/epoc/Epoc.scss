@@ -1,49 +1,52 @@
 @import '../../../shared/variables';
 @import '../../../shared/_font.scss';
 
-
 .epoc-container {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
     width: 100%;
     background-color: #f2f9ff;
-    padding: 6.0rem;
+    padding: 4rem;
     box-sizing: border-box;
-  }
-  
-  .epoc-top-section {
+}
+
+.epoc-top-section {
     display: flex;
     width: 100%;
     max-width: 1400px;
     margin: 0 auto;
     gap: 2rem;
-  }
-  
-  .epoc-sidebar {
+    padding: 2rem 0;
+    box-sizing: border-box;
+}
+
+.epoc-sidebar {
     background-color: $success;
-    padding: 2.5rem;
+    padding: 2rem;
     border-radius: 1.5rem;
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
-    width: 620px;
-    height: 810px;
+    flex: 1;
+    min-width: 300px;
+    max-width: 620px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     overflow-y: auto;
-  }
-  
-  .epoc-sidebar h2 {
-    font-size: 5rem;
+    box-sizing: border-box;
+}
+
+.epoc-sidebar h2 {
+    font-size: clamp(2.5rem, 5vw, 5rem);
     @extend .inter-black;
     color: $dark;
     margin-bottom: 1.5rem;
     text-align: center;
-  }
-  
-  .epoc-image-container {
+}
+
+.epoc-image-container {
     flex: 1;
-    height: 810px;
+    min-height: 300px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -52,43 +55,47 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     background-color: white;
     padding: 1rem;
-  }
-  
-  .epoc-main-image {
-    height: 100%;
-    width: 100%;
+    box-sizing: border-box;
+}
+
+.epoc-main-image {
+    max-height: 100%;
+    max-width: 100%;
     object-fit: contain;
     border-radius: 1rem;
-  }
-  
-  .epoc-outlet-wrapper {
+    width: auto;
+    height: auto;
+}
+
+.epoc-outlet-wrapper {
     width: 100%;
-    max-width: 1800px;
-    margin: 2rem auto 0;
+    max-width: 2000px;
+    margin: 1rem auto 0;
     background-color: white;
     border-radius: 1.5rem;
-    padding: 3rem;
+    padding: 2rem;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     animation: fadeInUp 0.5s ease-out;
-  }
-  
-  @keyframes fadeInUp {
+    box-sizing: border-box;
+}
+
+@keyframes fadeInUp {
     from {
-      opacity: 0;
-      transform: translateY(20px);
+        opacity: 0;
+        transform: translateY(20px);
     }
     to {
-      opacity: 1;
-      transform: translateY(0);
+        opacity: 1;
+        transform: translateY(0);
     }
-  }
-  
-  .epoc-button {
+}
+
+.epoc-button {
     background-color: $primary;
     border: none;
-    padding: 1.8rem;
+    padding: clamp(1.2rem, 2vw, 1.8rem);
     @extend .inter-black;
-    font-size: 2.1rem;
+    font-size: clamp(1.5rem, 2vw, 2.1rem);
     color: white;
     border-radius: 0.75rem;
     cursor: pointer;
@@ -97,73 +104,60 @@
     text-decoration: none;
     display: block;
     width: 100%;
-  }
-  
-  .epoc-button:hover {
+    box-sizing: border-box;
+}
+
+.epoc-button:hover {
     background-color: $dark;
     transform: translateY(-3px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-  }
-  
-  .epoc-button.selected {
+}
+
+.epoc-button.selected {
     background-color: #003366;
     box-shadow: 0 6px 8px rgba(0, 0, 0, 0.25);
     font-weight: bold;
     transform: scale(1.02);
-  }
-  
-  /* Responsive Design */
-  @media (max-width: 1200px) {
-    .epoc-sidebar,
-    .epoc-image-container {
-      height: 700px;
-    }
-  }
-  
-  @media (max-width: 1024px) {
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
     .epoc-top-section {
-      flex-direction: column;
+        flex-direction: column;
+        gap: 1.5rem;
     }
     
     .epoc-sidebar {
-      width: 100%;
-      height: auto;
+        max-width: 100%;
+        width: 100%;
     }
     
     .epoc-image-container {
-      height: 500px;
-      width: 100%;
+        min-height: 50vh;
     }
-    
-    .epoc-outlet-wrapper.visible {
-      padding: 2rem;
-    }
-  }
-  
-  @media (max-width: 768px) {
+}
+
+@media (max-width: 768px) {
     .epoc-container {
-      padding: 1rem;
-      gap: 1rem;
+        padding: 1rem;
     }
     
     .epoc-sidebar {
-      padding: 1.5rem;
-      
-      h2 {
-        font-size: 3rem;
-      }
+        padding: 1.5rem;
+    }
+    
+    .epoc-outlet-wrapper {
+        padding: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .epoc-sidebar h2 {
+        font-size: 2rem;
     }
     
     .epoc-button {
-      padding: 1.2rem;
-      font-size: 1.5rem;
+        padding: 1rem;
+        font-size: 1.2rem;
     }
-    
-    .epoc-outlet-wrapper.visible {
-      padding: 1.5rem;
-    }
-    
-    .epoc-image-container {
-      height: 300px;
-    }
-  }
+}
