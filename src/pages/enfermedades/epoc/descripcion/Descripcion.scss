@@ -1,0 +1,205 @@
+@import '../../../../shared/variables';
+@import '../../../../shared/_font.scss';
+
+// Variables de color y tipografía
+$secondary-color: #3498db;
+$accent-color: #e74c3c;
+$light-color: #ecf0f1;
+$dark-color: #34495e;
+$text-color: #333;
+
+// Mixins útiles
+@mixin card-shadow {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+@mixin transition($property: all, $duration: 0.3s) {
+  transition: $property $duration ease-in-out;
+}
+
+// Estilos base
+.que-es-container {
+  max-width: 1800px;
+  margin: 0 auto;
+  padding: clamp(1rem, 3vw, 2rem);
+  line-height: 1.6;
+  box-sizing: border-box;
+}
+
+.que-es-header {
+  margin-bottom: clamp(1.5rem, 4vw, 3rem);
+  text-align: center;
+}
+
+.que-es-title {
+  color: $light;
+  font-size: clamp(1.8rem, 4vw, 2.5rem);
+  padding: clamp(0.8rem, 2vw, 1rem);
+  @extend .inter-black;
+  background: $primary;
+  border-radius: 10px;
+  margin-top: clamp(-3rem, -5vw, -5rem);
+  margin-bottom: 2rem;
+}
+
+.que-es-sections {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.5rem, 4vw, 3rem);
+}
+
+// Sección de Descripción
+.description-section {
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(1rem, 3vw, 2rem);
+  align-items: flex-start;
+}
+
+.section-content {
+  flex: 1;
+  min-width: min(100%, 800px);
+}
+
+.section-title {
+  @extend .inter-bold;
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  margin-bottom: clamp(1rem, 2vw, 1.5rem);
+  font-weight: 600;
+  color: $body-color;
+  position: relative;
+  padding-bottom: 0.5rem;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: min(100%, 300px);
+    height: 3px;
+    background: $dark;
+  }
+}
+
+.que-es-text {
+  color: $body-color;
+  font-size: clamp(1rem, 1.5vw, 1.2rem);
+  line-height: 1.5;
+  @extend .inter-regular;
+}
+
+.subsection-title {
+  color: $body-color;
+  font-size: clamp(1.2rem, 2vw, 1.5rem);
+  margin: clamp(1rem, 2vw, 1.5rem) 0 clamp(0.8rem, 1.5vw, 1rem);
+  @extend .inter-bold;
+  font-weight: 500;
+  border-left: 4px solid $dark;
+  padding-left: 1rem;
+}
+
+.que-es-list {
+  padding-left: clamp(1rem, 2vw, 1.5rem);
+  margin: clamp(1rem, 2vw, 1.5rem) 0;
+
+  li {
+    margin-bottom: 0.8rem;
+    position: relative;
+    @extend .inter-regular;
+    padding-left: 1.5rem;
+    font-size: clamp(1rem, 1.5vw, 1.1rem);
+  }
+}
+
+// Sección de Causas
+.causes-section {
+  border-radius: 10px;
+  margin-top: 1rem;
+}
+
+.que-es-causes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+  gap: clamp(1rem, 3vw, 2rem);
+  margin: clamp(1rem, 3vw, 2rem) 0;
+}
+
+.cause-item {
+  background: white;
+  padding: clamp(1.2rem, 2vw, 1.8rem);
+  border-radius: 10px;
+  @include card-shadow;
+  @include transition;
+  border-top: 4px solid $secondary-color;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  h3 {
+    color: $light;
+    margin-bottom: 0.8rem;
+    font-size: clamp(1.2rem, 2vw, 1.4rem);
+    font-weight: 600;
+  }
+
+  p {
+    color: lighten($text-color, 15%);
+    font-size: clamp(0.9rem, 1.5vw, 1rem);
+    margin-bottom: 0.5rem;
+    line-height: 1.5;
+  }
+
+  .cause-detail {
+    margin-top: auto;
+    padding-top: 1rem;
+    font-size: clamp(0.85rem, 1.2vw, 0.95rem);
+    color: lighten($text-color, 25%);
+    border-top: 1px dashed rgba($secondary-color, 0.3);
+  }
+}
+
+// Modelo 3D
+.que-es-3d-model {
+  flex: 1;
+  min-width: min(100%, 600px);
+  height: clamp(300px, 60vw, 800px);
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #ffffff;
+  border: 3px solid $dark;
+  margin-top: clamp(1rem, 3vw, 50px);
+}
+
+// Ajustes responsive mejorados
+@media (max-width: 992px) {
+  .description-section {
+    flex-direction: column;
+  }
+  .que-es-3d-model {
+    width: 100%;
+    min-width: auto;
+    height: 400px;
+  }
+}
+
+@media (max-width: 768px) {
+  .section-title::after {
+    width: 200px;
+  }
+}
+
+@media (max-width: 480px) {
+  .section-title::after {
+    width: 150px;
+  }
+  
+  .que-es-list li {
+    padding-left: 1rem;
+  }
+}

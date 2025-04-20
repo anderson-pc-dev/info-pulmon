@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 const Logofull = ({w=844, h=666}) => {
     return(
         <>

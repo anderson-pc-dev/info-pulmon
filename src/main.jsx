@@ -1,19 +1,15 @@
-import 'bootstrap/dist/css/bootstrap.min.css'
+import { BrowserRouter } from 'react-router'
 import { createRoot } from 'react-dom/client'
-import { BrowserRouter , Routes, Route } from 'react-router'
-import './index.css'
-//import App from './App.jsx'
+import { StrictMode } from 'react';
+import App from './App';
 
-//paginas
-import Layout from './layout/layout.jsx'
-import Home from './pages/home/Home.jsx'
+import './App.scss'
 
-createRoot(document.getElementById('root')).render(
-  <BrowserRouter>
-    <Routes>
-      <Route element={<Layout/>} >
-        <Route path='/' element={<Home/>} />
-      </Route>
-    </Routes>
-  </BrowserRouter>
-)
+
+createRoot(document.getElementById("root")).render(
+  <StrictMode>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </StrictMode>
+);
