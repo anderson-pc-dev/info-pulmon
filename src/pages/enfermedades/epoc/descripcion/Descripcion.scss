@@ -66,19 +66,19 @@ $text-color: #333;
   font-size: clamp(1.5rem, 3vw, 2rem);
   margin-bottom: clamp(1rem, 2vw, 1.5rem);
   font-weight: 600;
-  color: $body-color;
+  color: #2c3e50;
   position: relative;
   padding-bottom: 0.5rem;
 
-  &::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: min(100%, 300px);
-    height: 3px;
-    background: $dark;
-  }
+  // &::after {
+  //   content: '';
+  //   position: absolute;
+  //   bottom: 0;
+  //   left: 0;
+  //   width: min(100%, 450px);
+  //   height: 3px;
+  //   background: $dark;
+  // }
 }
 
 .que-es-text {
@@ -141,7 +141,7 @@ $text-color: #333;
   }
 
   h3 {
-    color: $light;
+    color: $secondary-color;
     margin-bottom: 0.8rem;
     font-size: clamp(1.2rem, 2vw, 1.4rem);
     font-weight: 600;
@@ -155,7 +155,7 @@ $text-color: #333;
   }
 
   .cause-detail {
-    margin-top: auto;
+    //margin-top: auto;
     padding-top: 1rem;
     font-size: clamp(0.85rem, 1.2vw, 0.95rem);
     color: lighten($text-color, 25%);
