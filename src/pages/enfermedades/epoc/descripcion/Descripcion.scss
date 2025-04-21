@@ -1,182 +1,313 @@
 @import '../../../../shared/variables';
 @import '../../../../shared/_font.scss';
 
-// Variables de color y tipografía
-$secondary-color: #3498db;
-$accent-color: #e74c3c;
-$light-color: #ecf0f1;
-$dark-color: #34495e;
-$text-color: #333;
 
-// Mixins útiles
 @mixin card-shadow {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
 }
 
-@mixin transition($property: all, $duration: 0.3s) {
+@mixin transition($property: all, $duration: 0.2s) {
   transition: $property $duration ease-in-out;
 }
 
 // Estilos base
 .que-es-container {
-  max-width: 1800px;
+  max-width: 1600px;
   margin: 0 auto;
-  padding: clamp(1rem, 3vw, 2rem);
-  line-height: 1.6;
+  padding: clamp(0.8rem, 2.5vw, 1.5rem);
+  line-height: 1.5;
   box-sizing: border-box;
 }
 
 .que-es-header {
-  margin-bottom: clamp(1.5rem, 4vw, 3rem);
+  margin-bottom: clamp(1rem, 3vw, 2rem);
   text-align: center;
 }
 
 .que-es-title {
   color: $light;
-  font-size: clamp(1.8rem, 4vw, 2.5rem);
-  padding: clamp(0.8rem, 2vw, 1rem);
-  @extend .inter-black;
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  padding: clamp(0.6rem, 1.5vw, 0.8rem);
+  @extend .inter-bold;
   background: $primary;
-  border-radius: 10px;
-  margin-top: clamp(-3rem, -5vw, -5rem);
-  margin-bottom: 2rem;
+  border-radius: 8px;
+  margin-top: clamp(-2rem, -4vw, -3rem);
+  margin-bottom: 1.5rem;
 }
 
 .que-es-sections {
   display: flex;
   flex-direction: column;
-  gap: clamp(1.5rem, 4vw, 3rem);
+  gap: clamp(1rem, 3vw, 2rem);
 }
 
 // Sección de Descripción
 .description-section {
   display: flex;
   flex-wrap: wrap;
-  gap: clamp(1rem, 3vw, 2rem);
+  gap: clamp(0.8rem, 2.5vw, 1.5rem);
   align-items: flex-start;
 }
 
 .section-content {
   flex: 1;
-  min-width: min(100%, 800px);
+  min-width: min(100%, 700px);
 }
 
 .section-title {
   @extend .inter-bold;
-  font-size: clamp(1.5rem, 3vw, 2rem);
-  margin-bottom: clamp(1rem, 2vw, 1.5rem);
+  font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+  margin-bottom: clamp(0.8rem, 1.5vw, 1.2rem);
   font-weight: 600;
   color: $body-color;
   position: relative;
-  padding-bottom: 0.5rem;
+  padding-bottom: 0.4rem;
 
   &::after {
     content: '';
     position: absolute;
     bottom: 0;
     left: 0;
-    width: min(100%, 300px);
-    height: 3px;
+    width: min(100%, 250px);
+    height: 2px;
     background: $dark;
   }
 }
 
 .que-es-text {
   color: $body-color;
-  font-size: clamp(1rem, 1.5vw, 1.2rem);
-  line-height: 1.5;
+  font-size: clamp(0.9rem, 1.3vw, 1rem);
+  line-height: 1.4;
   @extend .inter-regular;
 }
 
 .subsection-title {
   color: $body-color;
-  font-size: clamp(1.2rem, 2vw, 1.5rem);
-  margin: clamp(1rem, 2vw, 1.5rem) 0 clamp(0.8rem, 1.5vw, 1rem);
+  font-size: clamp(1rem, 1.8vw, 1.3rem);
+  margin: clamp(0.8rem, 1.5vw, 1.2rem) 0 clamp(0.6rem, 1.2vw, 0.8rem);
   @extend .inter-bold;
   font-weight: 500;
-  border-left: 4px solid $dark;
-  padding-left: 1rem;
+  border-left: 3px solid $dark;
+  padding-left: 0.8rem;
 }
 
 .que-es-list {
-  padding-left: clamp(1rem, 2vw, 1.5rem);
-  margin: clamp(1rem, 2vw, 1.5rem) 0;
+  padding-left: clamp(0.8rem, 1.5vw, 1.2rem);
+  margin: clamp(0.8rem, 1.5vw, 1.2rem) 0;
 
   li {
-    margin-bottom: 0.8rem;
+    margin-bottom: 0.6rem;
     position: relative;
     @extend .inter-regular;
-    padding-left: 1.5rem;
-    font-size: clamp(1rem, 1.5vw, 1.1rem);
+    padding-left: 1.2rem;
+    font-size: clamp(0.9rem, 1.3vw, 1rem);
   }
 }
 
 // Sección de Causas
 .causes-section {
-  border-radius: 10px;
-  margin-top: 1rem;
+  border-radius: 8px;
+  margin: 1.5rem 0;
+  background: linear-gradient(to bottom, rgba($light, 0.3), rgba($light, 0.1));
+  
+  &__header {
+    text-align: center;
+    margin-bottom: clamp(1.5rem, 4vw, 2rem);
+    
+    h2 {
+      color: $body-color;
+      font-size: clamp(1.4rem, 2.5vw, 2rem);
+      @extend .inter-bold;
+      position: relative;
+      display: inline-block;
+      
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: -8px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 60px;
+        height: 2px;
+        background: $primary;
+        border-radius: 2px;
+      }
+    }
+  }
 }
 
 .que-es-causes {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
   gap: clamp(1rem, 3vw, 2rem);
-  margin: clamp(1rem, 3vw, 2rem) 0;
+  padding: 0 clamp(0.8rem, 4vw, 2rem);
 }
 
 .cause-item {
   background: white;
-  padding: clamp(1.2rem, 2vw, 1.8rem);
+  padding: clamp(1.2rem, 2.5vw, 1.5rem);
   border-radius: 10px;
   @include card-shadow;
-  @include transition;
-  border-top: 4px solid $secondary-color;
+  @include transition(all 0.2s ease-in-out);
+  border-top: 4px solid $primary;
   display: flex;
   flex-direction: column;
   height: 100%;
+  position: relative;
+  overflow: hidden;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: $primary;
+    transform: scaleX(0);
+    transform-origin: left;
+    @include transition(transform 0.2s ease);
+  }
 
   &:hover {
     transform: translateY(-5px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+    
+    &::before {
+      transform: scaleX(1);
+    }
   }
 
   h3 {
-    color: $light;
+    color: $body-color;
     margin-bottom: 0.8rem;
-    font-size: clamp(1.2rem, 2vw, 1.4rem);
+    font-size: clamp(1rem, 1.5vw, 1.4rem);
+    @extend .inter-bold;
     font-weight: 600;
+    position: relative;
+    padding-bottom: 0.4rem;
   }
 
   p {
-    color: lighten($text-color, 15%);
-    font-size: clamp(0.9rem, 1.5vw, 1rem);
-    margin-bottom: 0.5rem;
+    color: lighten($body-color, 15%);
+    @extend .inter-regular;
+    font-size: clamp(0.9rem, 1.2vw, 1rem);
+    margin-bottom: 0.8rem;
     line-height: 1.5;
+  }
+
+  .card-image {
+    height: 180px;
+    overflow: hidden;
+    border-radius: 6px;
+    margin-bottom: 1rem;
+    position: relative;
+    
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      @include transition(transform 0.4s ease, filter 0.2s ease);
+      filter: brightness(0.95);
+    }
+    
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 30%;
+      background: linear-gradient(to top, rgba($dark, 0.15), transparent);
+    }
+  }
+
+  &:hover .card-image img {
+    transform: scale(1.05);
+    filter: brightness(1);
   }
 
   .cause-detail {
     margin-top: auto;
     padding-top: 1rem;
-    font-size: clamp(0.85rem, 1.2vw, 0.95rem);
-    color: lighten($text-color, 25%);
-    border-top: 1px dashed rgba($secondary-color, 0.3);
+    font-size: clamp(0.85rem, 1.1vw, 1rem);
+    color: $body-color;
+    @extend .inter-regular;
+    border-top: 1px dashed rgba($primary, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  &:hover .cause-detail::after {
+    transform: translateX(3px);
+  }
+}
+
+// Sección de Estadísticas
+.estadisticas-content {
+  .intro-text {
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+    line-height: 1.6;
+  }
+
+  .estadisticas-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin: 2rem 0;
+  }
+
+  .estadistica-item {
+    display: flex;
+    gap: 1rem;
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+
+    &:hover {
+      transform: translateY(-5px);
+    }
+  }
+
+  .estadistica-text {
+    h3 {
+      color: #2c3e50;
+      margin-top: 0;
+      margin-bottom: 0.8rem;
+      font-size: 1.2rem;
+    }
+
+    p {
+      margin: 0;
+      line-height: 1.5;
+      color: #555;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .estadisticas-grid {
+      grid-template-columns: 1fr;
+    }
   }
 }
 
 // Modelo 3D
 .que-es-3d-model {
   flex: 1;
-  min-width: min(100%, 600px);
-  height: clamp(300px, 60vw, 800px);
+  min-width: min(100%, 500px);
+  height: clamp(250px, 50vw, 600px);
   position: relative;
-  border-radius: 12px;
+  border-radius: 10px;
   overflow: hidden;
   background: #ffffff;
-  border: 3px solid $dark;
-  margin-top: clamp(1rem, 3vw, 50px);
+  border: 2px solid $dark;
+  margin-top: clamp(0.8rem, 2.5vw, 40px);
 }
 
-// Ajustes responsive mejorados
 @media (max-width: 992px) {
   .description-section {
     flex-direction: column;
@@ -184,22 +315,22 @@ $text-color: #333;
   .que-es-3d-model {
     width: 100%;
     min-width: auto;
-    height: 400px;
+    height: 350px;
   }
 }
 
 @media (max-width: 768px) {
   .section-title::after {
-    width: 200px;
+    width: 180px;
   }
 }
 
 @media (max-width: 480px) {
   .section-title::after {
-    width: 150px;
+    width: 120px;
   }
   
   .que-es-list li {
-    padding-left: 1rem;
+    padding-left: 0.8rem;
   }
 }
