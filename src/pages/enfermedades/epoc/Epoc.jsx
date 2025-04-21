@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { NavLink, Outlet, useLocation } from 'react-router';
-import './epoc.scss';
+import './Epoc.scss';
 import EPOCImg from '../../../assets/EPOC2.png';
 
 const Epoc = () => {
