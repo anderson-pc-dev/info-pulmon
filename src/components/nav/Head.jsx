@@ -1,7 +1,7 @@
 import { NavLink } from 'react-router';
-import { Navbar, Nav, NavDropdown, Container } from 'react-bootstrap'; 
+import { Navbar, Nav, Container } from 'react-bootstrap'; 
 import Logo from '../logos/Logo';
-import Logonombre from '../logos/Logonombre';
+import Logonombre from '../logos/LogoNombre';
 import './Head.scss';
 
 const Head = () => {

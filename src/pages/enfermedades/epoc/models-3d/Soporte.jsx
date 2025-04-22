@@ -3,7 +3,7 @@ const Soporte = () => {
       <mesh
         rotation-x={-Math.PI / 2}
         receiveShadow={true}
-        position-y={-7.5}
+        position-y={-12}
         position-x={0}
         position-z={-9}
       >

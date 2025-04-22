@@ -50,7 +50,7 @@ const Lights = () => {
         position={[0, 15, 10]}
         intensity={5}
         color={"#ffdd57"} // amarillo
-        ref={directionalLightRef}
+        //ref={directionalLightRef}
         castShadow={true}
         shadow-mapSize-width={2048} // Mejor calidad de sombra (opcional)
         shadow-mapSize-height={2048}

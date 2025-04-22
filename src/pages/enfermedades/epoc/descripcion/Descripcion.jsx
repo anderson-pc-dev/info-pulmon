@@ -72,21 +72,17 @@ const Descripcion = () => {
               <Canvas
                 camera={{ position: [0, 1, 5], fov: 50 }}
                 shadows={true}>
-                <Perf position="top-right" />
                 <OrbitControls
-                  /*target={[0, 1, 0]}
-                  enableZoom
-                  enablePan
-                  minDistance={3}
-                  maxDistance={10}
-                  enableDamping
-                  dampingFactor={0.05}*/
+                  enableRotate={true}    // Permite rotación
+                  enableZoom={true}      // Permite zoom
+                  enablePan={false}     // Desactiva el movimiento panorámico
+                  target={[0, -6.5, -8]} // Centra los controles en la posición del modelo
                 />
                 <Lights />
                 <Soporte />
                 <LungModel
                   scale={0.9}
-                  position={[0, -6.5, -8]}
+                  position={[0, -10.5, -8]}
                   rotation={[0, -0.1, 0]}
                 />
               </Canvas>

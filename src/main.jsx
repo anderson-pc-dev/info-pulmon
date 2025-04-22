@@ -7,9 +7,8 @@ import './App.scss'
 
 
 createRoot(document.getElementById("root")).render(
-  <StrictMode>
+  
     <BrowserRouter>
       <App />
     </BrowserRouter>
-  </StrictMode>
 );

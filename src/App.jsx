@@ -8,11 +8,16 @@ import Enfermedades from './pages/enfermedades/Enfermedades.jsx';
 import Epoc from './pages/enfermedades/epoc/Epoc.jsx';
 import Asma from './pages/enfermedades/asma/Asma.jsx';
 import Fibrosis from './pages/enfermedades/fibrosis/Fibrosis.jsx';
-import Tuberculosis from './pages/enfermedades/tuberculosis/Tuberculosis.jsx';
 import Description from './pages/enfermedades/epoc/descripcion/Descripcion.jsx';
 import Sintomas from './pages/enfermedades/epoc/sintomas/Sintomas.jsx';
 import Tratamiento from './pages/enfermedades/epoc/tratamiento/Tratamiento.jsx';
 import Prevencion from './pages/enfermedades/epoc/prevencion/Prevencion.jsx';
+
+import Tuberculosis from './pages/enfermedades/tuberculosis/Tuberculosis.jsx';
+import TbcDescription from './pages/enfermedades/tuberculosis/descripcion/Descripcion.jsx';
+import TbcSintomas from './pages/enfermedades/tuberculosis/sintomas/Sintomas.jsx';
+import TbcTratamiento from './pages/enfermedades/tuberculosis/tratamiento/Tratamiento.jsx';
+import TbcPrevencion from './pages/enfermedades/tuberculosis/prevencion/Prevencion.jsx';
 
 function App() {
   return (
@@ -30,7 +35,12 @@ function App() {
         </Route>
         <Route path="/asma" element={<Asma />} />
         <Route path="/fibrosis" element={<Fibrosis />} />
-        <Route path="/tuberculosis" element={<Tuberculosis />} />
+        <Route path="/tuberculosis" element={<Tuberculosis />} >
+          <Route path="que-es" element={<TbcDescription />} />
+          <Route path="sintomas" element={<TbcSintomas />} />
+          <Route path="tratamiento" element={<TbcTratamiento />} />
+          <Route path="prevencion" element={<TbcPrevencion />} />
+        </Route>
       </Routes>
     </Layout>    
   );
