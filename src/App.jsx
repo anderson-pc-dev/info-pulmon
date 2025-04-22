@@ -7,11 +7,16 @@ import Quiz from './pages/quiz/Quiz.jsx';
 import Enfermedades from './pages/enfermedades/Enfermedades.jsx';
 import Epoc from './pages/enfermedades/epoc/Epoc.jsx';
 import Asma from './pages/enfermedades/asma/Asma.jsx';
-import Fibrosis from './pages/enfermedades/fibrosis/Fibrosis.jsx';
 import Description from './pages/enfermedades/epoc/descripcion/Descripcion.jsx';
 import Sintomas from './pages/enfermedades/epoc/sintomas/Sintomas.jsx';
 import Tratamiento from './pages/enfermedades/epoc/tratamiento/Tratamiento.jsx';
 import Prevencion from './pages/enfermedades/epoc/prevencion/Prevencion.jsx';
+
+import AsmaDescription from './pages/enfermedades/asma/descripcion/Descripcion.jsx';
+import AsmaSintomas from './pages/enfermedades/asma/sintomas/Sintomas.jsx';
+import AsmaTratamiento from './pages/enfermedades/asma/tratamiento/Tratamiento.jsx';
+import AsmaPrevencion from './pages/enfermedades/asma/prevencion/Prevencion.jsx';
+
 
 import Tuberculosis from './pages/enfermedades/tuberculosis/Tuberculosis.jsx';
 import TbcDescription from './pages/enfermedades/tuberculosis/descripcion/Descripcion.jsx';
@@ -33,8 +38,12 @@ function App() {
           <Route path="tratamiento" element={<Tratamiento />} />
           <Route path="prevencion" element={<Prevencion />} />
         </Route>
-        <Route path="/asma" element={<Asma />} />
-        <Route path="/fibrosis" element={<Fibrosis />} />
+        <Route path="/asma" element={<Asma />} >
+          <Route path="que-es" element={<AsmaDescription />} />
+          <Route path="sintomas" element={<AsmaSintomas />} />
+          <Route path="tratamiento" element={<AsmaTratamiento />} />
+          <Route path="prevencion" element={<AsmaPrevencion />} />
+        </Route>
         <Route path="/tuberculosis" element={<Tuberculosis />} >
           <Route path="que-es" element={<TbcDescription />} />
           <Route path="sintomas" element={<TbcSintomas />} />
@@ -42,7 +51,7 @@ function App() {
           <Route path="prevencion" element={<TbcPrevencion />} />
         </Route>
       </Routes>
-    </Layout>    
+    </Layout>
   );
 }
 

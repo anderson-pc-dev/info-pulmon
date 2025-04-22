@@ -23,7 +23,7 @@ const Tuberculosis = () => {
         }
       }, 300); // Espera a que la animación comience
     }
-  }, [location.pathname]);
+  }, [location, location.pathname]);
     return (
       <div className="epoc-container">
         <div className="epoc-top-section">

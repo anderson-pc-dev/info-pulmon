@@ -1,4 +1,3 @@
-import React from 'react';
 import './Descripcion.scss'; 
 import { Canvas } from '@react-three/fiber';
 import LungModel from "../models-3d/LungTrasparent";
