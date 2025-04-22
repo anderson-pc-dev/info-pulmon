@@ -1,4 +1,4 @@
-import { Route, Routes } from 'react-router';
+import { Navigate, Route, Routes } from 'react-router';
 
 import About from './pages/about/About.jsx';
 import Home from './pages/home/Home.jsx';
@@ -33,18 +33,21 @@ function App() {
         <Route path="/about" element={<About />} />
         <Route path="/enfermedades" element={<Enfermedades />} />
         <Route path="/epoc" element={<Epoc />} >
+          <Route index element={<Navigate to="que-es" replace />} />
           <Route path="que-es" element={<Description />} />
           <Route path="sintomas" element={<Sintomas />} />
           <Route path="tratamiento" element={<Tratamiento />} />
           <Route path="prevencion" element={<Prevencion />} />
         </Route>
         <Route path="/asma" element={<Asma />} >
+          <Route index element={<Navigate to="que-es" replace />} />
           <Route path="que-es" element={<AsmaDescription />} />
           <Route path="sintomas" element={<AsmaSintomas />} />
           <Route path="tratamiento" element={<AsmaTratamiento />} />
           <Route path="prevencion" element={<AsmaPrevencion />} />
         </Route>
         <Route path="/tuberculosis" element={<Tuberculosis />} >
+          <Route index element={<Navigate to="que-es" replace />} />
           <Route path="que-es" element={<TbcDescription />} />
           <Route path="sintomas" element={<TbcSintomas />} />
           <Route path="tratamiento" element={<TbcTratamiento />} />

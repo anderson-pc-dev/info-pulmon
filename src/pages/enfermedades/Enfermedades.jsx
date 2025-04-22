@@ -1,6 +1,5 @@
-import React from 'react';
 import './Enfermedades.scss';
-import { Outlet, NavLink } from 'react-router';
+import { NavLink } from 'react-router';
 
 import TuberculosisImg from '../../assets/tuberculosis2.png';
 import EPOCImg from '../../assets/EPOC2.png';
@@ -26,7 +25,7 @@ const Enfermedades = () => {
             </div>
             <div className="card-content">
               <h2>Tuberculosis</h2>
-              <NavLink to="/tuberculosis" className="learn-more-btn">
+              <NavLink to="/tuberculosis/que-es" className="learn-more-btn">
                 Ver detalles →
               </NavLink>
             </div>
@@ -38,7 +37,7 @@ const Enfermedades = () => {
             </div>
             <div className="card-content">
               <h2>EPOC</h2>
-              <NavLink to="/epoc" className="learn-more-btn">
+              <NavLink to="/epoc/que-es" className="learn-more-btn">
                 Ver detalles →
               </NavLink>
             </div>
@@ -50,7 +49,7 @@ const Enfermedades = () => {
             </div>
             <div className="card-content">
               <h2>Asma</h2>
-              <NavLink to="/asma" className="learn-more-btn">
+              <NavLink to="/asma/que-es" className="learn-more-btn">
                 Ver detalles →
               </NavLink>
             </div>
@@ -62,7 +61,7 @@ const Enfermedades = () => {
             </div>
             <div className="card-content">
               <h2>Fibrosis Pulmonar</h2>
-              <NavLink to="/fibrosis" className="learn-more-btn">
+              <NavLink to="/fibrosis/que-es" className="learn-more-btn">
                 Ver detalles →
               </NavLink>
             </div>
