@@ -2,7 +2,6 @@ import React from 'react';
 import './Enfermedades.scss';
 import { Outlet, NavLink } from 'react-router';
 
-// Importar imágenes (asegúrate de tener estas imágenes en tu carpeta assets)
 import TuberculosisImg from '../../assets/tuberculosis2.png';
 import EPOCImg from '../../assets/EPOC2.png';
 import AsmaImg from '../../assets/asma2.png';

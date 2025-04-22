@@ -247,9 +247,11 @@
 // Sección de Estadísticas
 .estadisticas-content {
   .intro-text {
-    font-size: 1.1rem;
-    margin-bottom: 2rem;
-    line-height: 1.6;
+    color: lighten($body-color, 15%);
+    @extend .inter-regular;
+    font-size: clamp(0.9rem, 1.2vw, 1rem);
+    margin-bottom: 0.8rem;
+    line-height: 1.5;
   }
 
   .estadisticas-grid {
@@ -268,24 +270,24 @@
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     transition: transform 0.3s ease;
 
-    &:hover {
-      transform: translateY(-5px);
-    }
   }
 
   .estadistica-text {
     h3 {
-      color: #2c3e50;
-      margin-top: 0;
+      color: lighten($body-color, 15%);
+      @extend .inter-bold;
+      font-size: clamp(0.9rem, 1.2vw, 1rem);
       margin-bottom: 0.8rem;
-      font-size: 1.2rem;
+      line-height: 1.5;
     }
 
     p {
-      margin: 0;
+      color: lighten($body-color, 15%);
+      @extend .inter-regular;
+      font-size: clamp(0.9rem, 1.2vw, 1rem);
+      margin-bottom: 0.8rem;
       line-height: 1.5;
-      color: #555;
-    }
+      }
   }
 
   @media (max-width: 768px) {
