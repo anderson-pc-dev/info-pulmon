@@ -2,7 +2,6 @@
 @import '../../shared/_font.scss';
 
 // Variables
-$text-light: #fff;
 $text-muted: #ccc;
 $border-radius-card: 15px;
 $border-radius-button: 25px;
@@ -98,13 +97,14 @@ $transition-time: 0.3s;
   .hero-content {
     max-width: 800px;
     z-index: 1;
+    width: 90%;
     
     .welcome-text {
       margin-bottom: 1.5rem;
       
       h2 {
         @extend .inter-bold;
-        font-size: 2.0rem;
+        font-size: clamp(1.5rem, 4vw, 2rem); 
         @include fadeInAnimation(1.5s);
         margin-bottom: 0.5rem;
         color: $body-color;
@@ -112,7 +112,7 @@ $transition-time: 0.3s;
       
       .app-title {
         @extend .inter-black;
-        font-size: 7.5rem;
+        font-size: 7.5rem;font-size: clamp(3.5rem, 10vw, 7.5rem);
         margin: 0;
         @include fadeInAnimation(1.5s);
         color: $primary;
@@ -369,7 +369,7 @@ $transition-time: 0.3s;
   .cta-title {
     font-size: 2.5rem;
     font-weight: 700;
-    color: $text-light;
+    color: $light;
     @extend .inter-bold;
     margin-bottom: 1rem;
   }
@@ -384,12 +384,12 @@ $transition-time: 0.3s;
   .cta-description {
     font-size: 1.25rem;
     font-weight: 400;
-    color: $text-light;
+    color: $light;
     margin-bottom: 2rem;
   }
 
   .cta-button {
-    background: $text-light;
+    background: $light;
     border: none;
     color: $body-color;
     font-size: 1rem;

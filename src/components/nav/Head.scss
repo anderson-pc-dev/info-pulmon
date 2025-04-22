@@ -2,7 +2,6 @@
 @import '../../shared/variables'; // Importamos las variables de color y tipografía
 
 /* Variables */
-$navbar-bg: #212529;
 $dropdown-bg: #343a40;
 $white: #ffffff;
 $shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -164,7 +163,7 @@ $border-radius-button: 25px;
 /* Ajustes para pantallas pequeñas */
 @media (max-width: 992px) {
   .navbar-nav {
-    background: $navbar-bg;
+    background: $success;
     padding: 1rem;
     border-radius: 0.5rem;
     margin-top: 1rem;
