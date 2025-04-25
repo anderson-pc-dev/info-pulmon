@@ -10,7 +10,6 @@
   transition: $property $duration ease-in-out;
 }
 
-// Estilos base
 .que-es-container {
   max-width: 1600px;
   margin: 0 auto;
@@ -33,6 +32,17 @@
   border-radius: 8px;
   margin-top: clamp(-2rem, -4vw, -3rem);
   margin-bottom: 1.5rem;
+}
+
+.description-image {
+  flex: 0 0 40%;
+  max-width: 400px;
+  margin-top: 1rem;
+
+  img {
+    width: 100%;
+    height: auto;
+  }
 }
 
 .que-es-sections {
@@ -297,27 +307,9 @@
   }
 }
 
-// Modelo 3D
-.que-es-3d-model {
-  flex: 1;
-  min-width: min(100%, 500px);
-  height: clamp(250px, 50vw, 600px);
-  position: relative;
-  border-radius: 10px;
-  overflow: hidden;
-  background: #ffffff;
-  border: 2px solid $dark;
-  margin-top: clamp(0.8rem, 2.5vw, 40px);
-}
-
 @media (max-width: 992px) {
   .description-section {
     flex-direction: column;
-  }
-  .que-es-3d-model {
-    width: 100%;
-    min-width: auto;
-    height: 350px;
   }
 }
 

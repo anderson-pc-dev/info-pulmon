@@ -196,10 +196,10 @@ $transition-time: 0.3s;
     overflow: hidden;
 
     .icon {
-      width: 300px;  // Tamaño deseado
-      height: 300px; // Mantener igual que width para proporción
-      object-fit: contain; // Para mantener la proporción
-      margin: 0 auto 1rem; // Centrar y espacio debajo
+      width: 300px;  
+      height: 300px; 
+      object-fit: contain; 
+      margin: 0 auto 1rem; 
     }
 
     &::before {
@@ -246,10 +246,10 @@ $transition-time: 0.3s;
   }
 
   .section-title {
-    font-family: 'Inter', sans-serif;
+    @extend .inter-black;
     font-weight: 700;
     font-size: 2.5rem;
-    color: #2c3e50;
+    color: $body-color;
     text-align: center;
     margin-bottom: 3rem;
   }
@@ -261,10 +261,7 @@ $transition-time: 0.3s;
     margin-bottom: 2rem;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease;
-    
-    &:hover {
-      transform: translateY(-5px);
-    }
+  
 
     .disease-header {
       display: flex;
@@ -279,21 +276,21 @@ $transition-time: 0.3s;
         border-radius: 50%;
         background: rgba(70, 130, 180, 0.1);
         padding: 12px;
-        border: 2px solid #4682b4;
+        border: 2px solid $dark;
       }
 
       h3 {
-        font-family: 'Inter', sans-serif;
+        @extend .inter-bold;
         font-weight: 600;
-        color: #2c3e50;
+        color: $body-color;
         font-size: 1.8rem;
         margin: 0;
       }
     }
 
     p {
-      font-family: 'Inter', sans-serif;
-      color: #555;
+      @extend .inter-regular;
+      color: $body-color;
       margin-bottom: 1.5rem;
       line-height: 1.6;
     }
@@ -302,13 +299,13 @@ $transition-time: 0.3s;
       background: rgba(70, 130, 180, 0.05);
       padding: 1.2rem;
       border-radius: 10px;
-      border-left: 4px solid #4682b4;
+      border-left: 4px solid $dark;
       
       h4 {
-        font-family: 'Inter', sans-serif;
+        @extend .inter-bold;
         font-weight: 600;
         font-size: 1.2rem;
-        color: #2c3e50;
+        color: $body-color;
         margin-bottom: 0.8rem;
       }
 
@@ -316,8 +313,8 @@ $transition-time: 0.3s;
         padding-left: 1.5rem;
         
         li {
-          font-family: 'Inter', sans-serif;
-          color: #555;
+          @extend .inter-regular;
+          color: $body-color;
           margin-bottom: 0.5rem;
           line-height: 1.5;
         }
@@ -327,18 +324,18 @@ $transition-time: 0.3s;
 
   .learn-more-btn {
     display: inline-block;
-    background: #4682b4;
+    background: $primary;
     color: white;
     padding: 0.8rem 2rem;
     border-radius: 25px;
     text-decoration: none;
-    font-family: 'Inter', sans-serif;
+    @extend .inter-black;
     font-weight: 600;
     margin: 2rem auto 0;
     transition: all 0.3s ease;
     
     &:hover {
-      background: #3a6d99;
+      background: $primary;
       transform: translateY(-2px);
       box-shadow: 0 4px 10px rgba(70, 130, 180, 0.3);
     }

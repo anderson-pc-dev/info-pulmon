@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { NavLink, Outlet, useLocation } from 'react-router';
 import './Epoc.scss';
 import EPOCImg from '../../../assets/EPOC2.png';
+import LungModel from './models-3d/LungTrasparent';
 
 const Epoc = () => {
   const location = useLocation();
@@ -62,8 +63,13 @@ const Epoc = () => {
           </NavLink>
         </div>
         <div className="epoc-image-container">
-          <img src={EPOCImg} alt="Pulmones con EPOC" className="epoc-main-image" />
-        </div>
+          {(() => {
+              if (location.pathname === '/epoc/que-es') {
+                return <LungModel />;
+              }
+              return null;
+            })()}
+          </div>
       </div>
       
       {showContent && (

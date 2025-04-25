@@ -3,20 +3,8 @@ import './Descripcion.scss';
 import TabaquismoImg from '../../../../assets/Tabaquismo.jpg';
 import ContaminacionImg from '../../../../assets/Contaminacion.jpg';
 import GeneticoImg from '../../../../assets/Genetico.jpg';
-import { Canvas } from '@react-three/fiber';
-import LungModel from "../models-3d/LungTrasparent";
-import {
-  Loader,
-  //BakeShadows,
-  //ContactShadows,
-  OrbitControls,
-  //SoftShadows,
-} from "@react-three/drei";
-import { Suspense } from "react";
-import { Perf } from "r3f-perf";
-import Lights from '../lights/Lights';  
-import Soporte from '../models-3d/Soporte'; // Importa el componente Soporte
 import GraficoEPOC from './GraficoEPOC';
+import PulmonEPOCImg from '../../../../assets/EPOC3.png';
 
 const Descripcion = () => {
   return (
@@ -43,16 +31,6 @@ const Descripcion = () => {
               la contaminación ambiental, el uso prolongado de biomasa para cocinar o calefaccionar en espacios mal ventilados, y 
               la exposición a productos químicos o polvos en el entorno laboral.
               </p>
-              <p>
-              El diagnóstico de la EPOC se realiza principalmente mediante una prueba de función pulmonar conocida como espirometría, 
-              que mide la cantidad de aire que una persona puede exhalar y la velocidad con la que lo hace. Este examen permite evaluar 
-              el grado de obstrucción y establecer un plan de tratamiento adecuado.
-              </p>
-              <p>Es importante destacar que la EPOC no es una enfermedad única, sino un término general que agrupa dos condiciones pulmonares crónicas 
-                que frecuentemente coexisten y afectan la capacidad respiratoria del paciente, <strong>las cuales podemos vizualizarlas en el modelo 3D</strong> y
-                son:
-              </p>
-
               <h3 className="subsection-title">Condiciones que abarca la EPOC</h3>
               <ul className="copd-conditions">
                 <li>
@@ -66,28 +44,9 @@ const Descripcion = () => {
               </ul>
             </div>
           </div>
-
-          <div className="que-es-3d-model">
-            <Suspense fallback={<Loader />}>
-              <Canvas
-                camera={{ position: [0, 1, 5], fov: 50 }}
-                shadows={true}>
-                <OrbitControls
-                  enableRotate={true}    // Permite rotación
-                  enableZoom={true}      // Permite zoom
-                  enablePan={false}     // Desactiva el movimiento panorámico
-                  target={[0, -6.5, -8]} // Centra los controles en la posición del modelo
-                />
-                <Lights />
-                <Soporte />
-                <LungModel
-                  scale={0.9}
-                  position={[0, -10.5, -8]}
-                  rotation={[0, -0.1, 0]}
-                />
-              </Canvas>
-            </Suspense>
-          </div>
+          <div className="description-image">
+                <img src={PulmonEPOCImg} alt="Pulmón afectado por EPOC" />
+            </div>
         </section>
 
         <section className="informacionEstadistica-section">
@@ -133,7 +92,7 @@ const Descripcion = () => {
                   <div className="estadistica-icon">🔹</div>
                   <div className="estadistica-text">
                     <h3>Tabaquismo: el principal culpable</h3>
-                    <p>El tabaquismo está directamente asociado con más del 70% de los casos de EPOC. No obstante, no es el único factor: personas expuestas a humo de 
+                    <p>El tabaquismo está directamente asociado con más del 80% de los casos de EPOC. No obstante, no es el único factor: personas expuestas a humo de 
                       biomasa o contaminación también tienen mayor riesgo.</p>
                   </div>
                 </div>
@@ -172,12 +131,10 @@ const Descripcion = () => {
                 <h3>Tabaquismo</h3>
                 <p>Principal causa (80-90% de los casos)</p>
                 <p className="cause-detail">
-                Es la causa más frecuente de EPOC, siendo responsable de aproximadamente el 80-90% de los casos. 
+                
                 El humo del tabaco contiene miles de sustancias químicas, muchas de ellas tóxicas e irritantes. 
                 Al inhalarlas de forma repetida, estas sustancias dañan progresivamente las vías respiratorias y los alvéolos pulmonares, 
-                lo que genera una inflamación crónica, destrucción del tejido pulmonar y un estrechamiento de las vías aéreas. 
-                Esto afecta la capacidad del pulmón para intercambiar gases de forma adecuada, provocando dificultad para respirar y tos persistente. 
-                No solo el fumador activo está en riesgo, también los fumadores pasivos pueden desarrollar EPOC al estar expuestos de forma continua al humo del tabaco.
+                lo que genera una inflamación crónica, destrucción del tejido pulmonar
                 </p>
 
               </div>
@@ -189,10 +146,7 @@ const Descripcion = () => {
                 <p>Exposición prolongada a humos y partículas</p>
                 <p className="cause-detail">
                 La exposición prolongada a contaminantes del aire, tanto en el entorno laboral como en el doméstico, también puede contribuir al desarrollo de la EPOC. 
-                Entre estos contaminantes se encuentran el humo de leña utilizado para cocinar o calentar hogares sin una ventilación adecuada, el polvo industrial, 
-                los humos de combustión y los gases tóxicos. Este tipo de exposición es más común en países en vías de desarrollo o en zonas rurales, donde el uso de biomasa 
-                como fuente de energía es frecuente. Las partículas contaminantes inhaladas provocan inflamación crónica de las vías respiratorias, daño estructural y 
-                reducción progresiva de la función pulmonar.
+                Entre estos contaminantes se encuentran el humo de leña utilizado para cocinar o calentar hogares sin una ventilación adecuada, el polvo industrial y los gases tóxicos.
                 </p>
               </div>
               <div className="cause-item">
@@ -204,8 +158,6 @@ const Descripcion = () => {
                 <p className="cause-detail">
                 Aunque representa un pequeño porcentaje de los casos, algunas personas pueden desarrollar EPOC debido a una predisposición genética. La causa genética más 
                 conocida es la deficiencia de alfa-1 antitripsina, una proteína que protege al tejido pulmonar del daño causado por enzimas liberadas durante procesos inflamatorios.
-                 Las personas con esta deficiencia presentan un mayor riesgo de desarrollar EPOC a una edad temprana, especialmente si fuman o están expuestas a 
-                 contaminantes ambientales. Este tipo de EPOC puede ser difícil de diagnosticar si no se considera la historia familiar y genética del paciente.
                 </p>
               </div>
             </div>
