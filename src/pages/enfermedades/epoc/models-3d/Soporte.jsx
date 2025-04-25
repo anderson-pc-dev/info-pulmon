@@ -5,11 +5,11 @@ const Soporte = () => {
         receiveShadow={true}
         position-y={-12}
         position-x={0}
-        position-z={-9}
+        position-z={-11}
       >
-        <circleGeometry args={[12, 32]} /> 
+        <circleGeometry args={[16, 32]} /> 
         <meshStandardMaterial 
-          color="#FF5733" 
+          color={ "#FFFFFF" } 
           roughness={0.8} 
           metalness={1} 
         />

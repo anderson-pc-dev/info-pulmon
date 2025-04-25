@@ -11,7 +11,7 @@ const Lights = () => {
   return (
     <>
       {/* Luz ambiental suave para rellenar sombras */}
-      <ambientLight intensity={2} color="#F5FEDC" />
+      <ambientLight intensity={2} color="#FFFFFF" />
       
       {/* Luz principal (fría) 
       <spotLight
@@ -48,8 +48,8 @@ const Lights = () => {
 
       <directionalLight
         position={[0, 15, 10]}
-        intensity={5}
-        color={"#ffdd57"} // amarillo
+        intensity={8}
+        color={"#FFFFFF"} 
         //ref={directionalLightRef}
         castShadow={true}
         shadow-mapSize-width={2048} // Mejor calidad de sombra (opcional)
