@@ -13,7 +13,7 @@ const Tuberculosis = () => {
     // Verificar si estamos en una ruta anidada (no en la raíz)
     const isNestedRoute = location.pathname !== 'tuberculosis' && !location.pathname.endsWith('tuberculosis');
     setShowContent(isNestedRoute);
-    console.log(location);
+  
     // Scroll suave al contenido cuando se muestra
     if (isNestedRoute) {
       setTimeout(() => {
@@ -63,7 +63,6 @@ const Tuberculosis = () => {
             </NavLink>
           </div>
           <div className="epoc-image-container">
-            {/* <img src={EPOCImg} alt="Pulmones con EPOC" className="epoc-main-image" /> */}
             {(() => {
               if (location.pathname === '/tuberculosis/que-es') {
                 return <ModelQueEs />;

@@ -1,10 +1,9 @@
 import { useGLTF, Loader, OrbitControls } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import { Suspense } from "react";
-import { Perf } from "r3f-perf";
 import Lights from "./LightQueEs";
 import Recipient from "./RecipientQueEs"; // Importa el componente Recipient
-import Staging from "./StagingQueEs";
+
 //Modelo 3d "QUE ES LA TUBERCULOSIS"
 const Model = (props) => {
     const { nodes, materials } = useGLTF("/models-3d/tbc-que-es.glb");
@@ -51,11 +50,10 @@ const Model = (props) => {
 }
 useGLTF.preload("/models-3d/tbc-que-es.glb");
 const PiantModel = (props) => {
-  console.log("PiantModel montado");
   return (
     <Suspense fallback={<Loader />}>
       <Canvas camera={{ position: [0, 10, 20] }} shadows={true}>
-        <Perf />
+        {/* <Perf /> */}
         <OrbitControls target={[0, 10, 10]} />
         <Lights />
         {/* <Staging /> */}

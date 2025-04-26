@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unknown-property */
 import { useEffect, useRef } from 'react'
 import { useGLTF, useAnimations } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber';
@@ -9,7 +10,6 @@ import {
   //SoftShadows,
 } from "@react-three/drei";
 import { Suspense } from "react";
-import { Perf } from "r3f-perf";
 import Lights from '../lights/Lights';  
 import Soporte from '../models-3d/Soporte'; // Importa el componente Soporte
 

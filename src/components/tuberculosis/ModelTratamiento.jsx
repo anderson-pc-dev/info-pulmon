@@ -45,7 +45,7 @@ const PiantModel = (props) => {
   return (
     <Suspense fallback={<Loader />}>
       <Canvas camera={{ position: [0, 10, 20] }} shadows={true}>
-        <Perf />
+        {/* <Perf /> */}
         <OrbitControls target={[0, 10, 10]} />
         <Lights />
         {/* <Staging /> */}

@@ -1,7 +1,7 @@
+import './Epoc.scss';
+
 import { useState, useEffect } from 'react';
 import { NavLink, Outlet, useLocation } from 'react-router';
-import './Epoc.scss';
-import EPOCImg from '../../../assets/EPOC2.png';
 import LungModel from './models-3d/LungTrasparent';
 
 const Epoc = () => {

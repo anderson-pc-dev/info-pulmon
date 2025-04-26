@@ -5,6 +5,7 @@ import Home from './pages/home/Home.jsx';
 import Layout from './layout/Layout.jsx';
 import Quiz from './pages/quiz/Quiz.jsx';
 import Enfermedades from './pages/enfermedades/Enfermedades.jsx';
+
 import Epoc from './pages/enfermedades/epoc/Epoc.jsx';
 import Asma from './pages/enfermedades/asma/Asma.jsx';
 import Description from './pages/enfermedades/epoc/descripcion/Descripcion.jsx';

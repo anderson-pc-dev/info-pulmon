@@ -1,5 +1,4 @@
-import React from 'react';
-import './Home.scss'; 
+import './Home.scss';
 import { NavLink } from 'react-router';
 import LeafIcon from '../../assets/virus.png';
 import PawIcon from '../../assets/heart.png';
@@ -8,7 +7,6 @@ import LightbulbIcon from '../../assets/document.png';
 import CtaImage from '../../assets/pregunta.png';
 import tuberculosis from '../../assets/tuberculosis.jpg';
 import AsmaImg from '../../assets/asma.jpg';
-import FibrosisImg from '../../assets/fibrosis.jpg';
 import EPOCImg from '../../assets/epoc.png';
 
 const Home = () => {
@@ -16,12 +14,35 @@ const Home = () => {
     <div className="home-page">
       {/* Sección Hero */}
       <section className="hero-section">
+        <div className="animated-bubbles">
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+
+
         <div className="hero-content">
-        <div className="welcome-text">
+          <div className="welcome-text">
             <h2>Bienvenido a</h2>
             <h1 className="app-title">INFOPULMÓN</h1>
           </div>
-          
+
           <h2 className="hero-title">
             Tu Salud en 3D: Explora y Aprende sobre<br />
             Enfermedades de los Pulmones y cómo<br />
@@ -68,7 +89,7 @@ const Home = () => {
       <section className="diseases-section">
         <div className="container">
           <h2 className="section-title">Principales Enfermedades Pulmonares</h2>
-          
+
           <div className="disease-card">
             <div className="disease-header">
               <img src={tuberculosis} alt="Tuberculosis" className="disease-icon" />
@@ -103,22 +124,6 @@ const Home = () => {
 
           <div className="disease-card">
             <div className="disease-header">
-              <img src={FibrosisImg} alt="Fibrosis Pulmonar" className="disease-icon" />
-              <h3>Fibrosis Pulmonar</h3>
-            </div>
-            <p>La fibrosis pulmonar es una enfermedad crónica y progresiva que causa cicatrización en los pulmones.</p>
-            <div className="symptoms">
-              <h4>Síntomas más comunes:</h4>
-              <ul>
-                <li>Fatiga y debilidad</li>
-                <li>Dolor en el pecho</li>
-                <li>Deformación en forma de palillo de tambor</li>
-              </ul>
-            </div>
-          </div>
-
-          <div className="disease-card">
-            <div className="disease-header">
               <img src={EPOCImg} alt="EPOC" className="disease-icon" />
               <h3>EPOC</h3>
             </div>
@@ -146,7 +151,7 @@ const Home = () => {
           <img src={CtaImage} alt="Imagen de llamado a la acción" className="cta-image" />
           <h2>Quiz</h2>
           <p className="cta-description">
-            Demuestra lo que has aprendido sobre las enfermedades pulmonares y cómo prevenirlas. 
+            Demuestra lo que has aprendido sobre las enfermedades pulmonares y cómo prevenirlas.
             ¡Completa nuestro quiz y descubre cuánto sabes!
           </p>
           <NavLink to="/quiz" className="cta-button">
