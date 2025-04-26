@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unknown-property */
 import { useGLTF, Loader, OrbitControls } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import { Suspense } from "react";
@@ -41,7 +42,6 @@ const Model = (props) => {
 useGLTF.preload("/models-3d/tbc-tratamiento.glb");
 
 const PiantModel = (props) => {
-  console.log("PiantModel Tratamieno montado");
   return (
     <Suspense fallback={<Loader />}>
       <Canvas camera={{ position: [0, 10, 20] }} shadows={true}>

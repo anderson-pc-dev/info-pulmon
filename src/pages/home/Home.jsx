@@ -64,7 +64,7 @@ const Home = () => {
               <img src={LeafIcon} alt="Enfermedad" className="icon" />
               <h3>Enfermedades</h3>
               <p>
-                Conoce las enfermedades más comunes en los pulmones.
+                Conoce las enfermedades má¿s comunes en los pulmones.
               </p>
             </div>
             <div className="info-card">
