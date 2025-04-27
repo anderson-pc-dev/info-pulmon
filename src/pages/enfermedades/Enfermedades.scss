@@ -1,130 +1,337 @@
 @import '../../shared/variables';
 @import '../../shared/_font.scss';
 
+// Variables de animación
+$animation-duration: 0.6s;
+$animation-delay-increment: 0.2s;
+
+// Keyframes para animaciones
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-15px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+}
+
+@keyframes moveUpDown {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(10px);
+  }
+}
+
+@keyframes floatParticle {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+    opacity: 0.8;
+  }
+  25% {
+    opacity: 0.6;
+  }
+  50% {
+    transform: translate(100px, -100px) rotate(180deg);
+    opacity: 0.4;
+  }
+  75% {
+    opacity: 0.6;
+  }
+  100% {
+    transform: translate(0, 0) rotate(360deg);
+    opacity: 0.8;
+  }
+}
+
+@keyframes shakeArrow {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(5px);
+  }
+  50% {
+    transform: translateX(0);
+  }
+  75% {
+    transform: translateX(5px);
+  }
+}
+
+@keyframes scrollDown {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+
 .enfermedades-page {
   font-family: $font-family-base;
   color: $body-color;
   background-color: $light;
-  height: 100dvh;
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
+  overflow-x: hidden;
 }
 
 // Hero Section
 .diseases-hero {
-  // background: linear-gradient(135deg, $primary 40%, $dark 100%);
   background-color: $primary;
   color: white;
   display: flex;
   flex-direction: column;
   justify-content: center;
   text-align: center;
-  padding: 4rem 2rem;
+  padding: 6rem 2rem;
   position: relative;
   overflow: hidden;
-  height: 50%;
-
+  min-height: 50vh;
+  
+  // Contenedor de partículas
+  .particles-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: 1;
+    
+    .particle {
+      position: absolute;
+      background-color: rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      animation: floatParticle 20s infinite linear;
+    }
+  }
+  
   .hero-content {
     position: relative;
     z-index: 2;
-
-    h1 {
+    
+    h1.animate-title {
       font-size: 4rem;
       font-weight: 700;
-      margin-bottom: 1rem;
+      margin-bottom: 1.5rem;
+      animation: fadeInUp $animation-duration ease-out forwards;
+      opacity: 0;
     }
-
-    p {
+    
+    p.animate-description {
       font-size: 1.5rem;
       font-weight: 400;
       max-width: 600px;
       margin: 0 auto;
-    }
-
-    .explore-btn {
-      margin-top: 2rem;
-      display: inline-block;
-      background-color: $light;
-      color: $primary;
-      padding: 0.75rem 1.5rem;
-      border-radius: 30px;
-      text-decoration: none;
-      font-weight: 600;
-      transition: background-color 0.3s ease;
-
-      &:hover {
-        background-color: darken($light, 5%);
-      }
+      animation: fadeInUp $animation-duration ease-out forwards;
+      animation-delay: $animation-delay-increment;
+      opacity: 0;
     }
   }
 }
 
 // Grid de Enfermedades
 .diseases {
-  padding: 4rem 2rem;
+  padding: 6rem 2rem;
   background-color: $light;
-
+  
   .container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 3rem;
     justify-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
   }
-
+  
   .disease-card {
     background-color: $primary;
-    border-radius: 1rem;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    border-radius: 1.5rem;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
     overflow: hidden;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), 
+                box-shadow 0.5s ease;
     width: 100%;
-    max-width: 320px;
+    max-width: 350px;
     display: flex;
     flex-direction: column;
-    align-items: center;
-
-    &:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 32px 48px rgba(0, 0, 0, 0.15);
-      color: $dark;
+    opacity: 0;
+    transform: translateY(50px);
+    
+    // Clase para la animación de entrada
+    &.show {
+      opacity: 1;
+      transform: translateY(0);
     }
-
+    
+    // Aplicar retraso a cada tarjeta
+    &:nth-child(1) { transition-delay: 0.1s; }
+    &:nth-child(2) { transition-delay: 0.3s; }
+    &:nth-child(3) { transition-delay: 0.5s; }
+    
+    &:hover {
+      transform: translateY(-10px) scale(1.03);
+      box-shadow: 0 32px 60px rgba(0, 0, 0, 0.18);
+      
+      .card-image img {
+        transform: scale(1.1);
+      }
+      
+      .arrow-icon {
+        animation: shakeArrow 1s infinite;
+      }
+    }
+    
     .card-image {
       width: 100%;
-      height: 200px;
+      height: 220px;
       overflow: hidden;
       display: flex;
       align-items: center;
       justify-content: center;
       background-color: $light;
-
+      
       img {
         max-height: 100%;
         max-width: 100%;
-        object-fit: cover;
+        object-fit: contain;
+        transition: transform 0.8s cubic-bezier(0.165, 0.84, 0.44, 1);
       }
     }
-
+    
     .card-content {
-      padding: 1.5rem;
+      padding: 2rem 1.5rem;
       text-align: center;
       color: $body-color;
-
+      
       h2 {
-        font-size: 2rem;
-        margin-bottom: 0.5rem;
+        font-size: 2.2rem;
+        margin-bottom: 1rem;
         color: $light;
+        font-weight: 700;
       }
-
+      
       .learn-more-btn {
         text-decoration: none;
         font-weight: 600;
         color: $light;
-        transition: color 0.2s ease;
-
+        transition: color 0.3s ease;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        
         &:hover {
-          color: $dark;
+          color: darken($light, 10%);
         }
+        
+        .details-link {
+          display: flex;
+          align-items: center;
+          font-size: 1.1rem;
+          margin-top: 0.5rem;
+          
+          .arrow-icon {
+            margin-left: 8px;
+            transition: transform 0.3s ease;
+          }
+        }
+      }
+    }
+  }
+}
+
+// Media queries para responsividad
+@media (max-width: 768px) {
+  .diseases-hero {
+    padding: 4rem 1.5rem;
+    
+    .hero-content {
+      h1.animate-title {
+        font-size: 3rem;
+      }
+      
+      p.animate-description {
+        font-size: 1.2rem;
+      }
+    }
+  }
+  
+  .diseases {
+    padding: 4rem 1.5rem;
+    
+    .container {
+      gap: 2rem;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .diseases-hero {
+    padding: 3rem 1rem;
+    
+    .hero-content {
+      h1.animate-title {
+        font-size: 2.5rem;
+      }
+      
+      p.animate-description {
+        font-size: 1rem;
+      }
+    }
+  }
+  
+  .disease-card {
+    .card-content {
+      h2 {
+        font-size: 1.8rem;
       }
     }
   }

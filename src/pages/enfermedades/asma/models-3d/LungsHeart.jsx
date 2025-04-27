@@ -2,8 +2,8 @@
 import { Suspense, useEffect, useRef } from 'react'
 import { useGLTF, useAnimations, OrbitControls, Loader } from '@react-three/drei'
 import Soporte from '../../epoc/models-3d/Soporte'
-import Lights from '../../epoc/lights/Lights'
 import { Canvas } from '@react-three/fiber'
+import LightsLungHeart from './LightsLungHeart'
 
 export function LungsHeart(props) {
     const group = useRef()
@@ -221,19 +221,19 @@ export default function Scene() {
     return (
         <Suspense fallback={<Loader />}>
             <Canvas
-                camera={{ position: [0, -11.6, 3], fov: 16 }} // más atrás en Z
+                camera={{ position: [0, -11.6, 3], fov: 16 }}
                 shadows={true}>
                 <OrbitControls
                     enableRotate={true}
-                    enableZoom={true}
+                    enableZoom={false}
                     enablePan={false}
-                    target={[0, -11.6, 0]} // exactamente donde está el modelo
+                    target={[0, -11.6, 0]}
                 />
-                <Lights />
+                <LightsLungHeart />
                 <Soporte />
                 <LungsHeart
                     scale={1.0}
-                    position={[0, -11.95, 0]} // más cerca del soporte
+                    position={[0, -11.95, 0]}
                     rotation={[0, 0, 0]} 
                 />
             </Canvas>

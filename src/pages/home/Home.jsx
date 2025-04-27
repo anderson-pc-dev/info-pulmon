@@ -10,6 +10,15 @@ import AsmaImg from '../../assets/asma.jpg';
 import EPOCImg from '../../assets/epoc.png';
 
 const Home = () => {
+
+  // Función para desplazarse a la sección de información
+  const scrollToInfo = () => {
+    const infoSection = document.querySelector('.info-section');
+    if (infoSection) {
+      infoSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <div className="home-page">
       {/* Sección Hero */}
@@ -52,6 +61,12 @@ const Home = () => {
             <img src={GoogleIcon} alt="Google logo" className="google-icon" />
             Registrate con Google
           </NavLink>
+        </div>
+
+        {/* Botón para desplazarse hacia abajo */}
+        <div className="scroll-down-button" onClick={scrollToInfo}>
+          <span className="scroll-arrow"></span>
+          {/* <span className="scroll-text">Descubre más</span> */}
         </div>
       </section>
 
