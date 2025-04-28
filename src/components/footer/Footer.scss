@@ -133,6 +133,10 @@
   &-legal {
     display: flex;
     gap: 1.5rem;
+
+    li {
+      list-style: none;
+    }
     
     a {
       @extend .inter-regular;
