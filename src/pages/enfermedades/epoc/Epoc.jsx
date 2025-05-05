@@ -3,6 +3,7 @@ import './Epoc.scss';
 import { useState, useEffect } from 'react';
 import { NavLink, Outlet, useLocation } from 'react-router';
 import LungModel from './models-3d/LungTrasparent';
+import BodyCough from './models-3d/BodyCough';
 
 const Epoc = () => {
   const location = useLocation();
@@ -20,7 +21,7 @@ const Epoc = () => {
         if (contentElement) {
           contentElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
-      }, 300); // Espera a que la animación comience
+      }, 300);
     }
   }, [location.pathname]);
 
@@ -66,6 +67,9 @@ const Epoc = () => {
           {(() => {
               if (location.pathname === '/epoc/que-es') {
                 return <LungModel />;
+              }
+              if (location.pathname === '/epoc/sintomas') {
+                return <BodyCough />;
               }
               return null;
             })()}
