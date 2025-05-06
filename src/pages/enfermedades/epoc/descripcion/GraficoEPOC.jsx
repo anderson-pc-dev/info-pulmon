@@ -89,9 +89,6 @@ const GraficoEPOC = () => {
   return (
     <div className="grafico-container">
       <Bar data={data} options={options} />
-      <p className="grafico-fuente">
-        Fuente: Datos estimados basados en informes de la Organización Mundial de la Salud (2022)
-      </p>
     </div>
   );
 };

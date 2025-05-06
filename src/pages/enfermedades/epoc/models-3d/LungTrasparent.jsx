@@ -11,7 +11,7 @@ import {
 } from "@react-three/drei";
 import { Suspense } from "react";
 import Lights from '../lights/Lights';  
-import Soporte from '../models-3d/Soporte'; // Importa el componente Soporte
+import Soporte from '../models-3d/Soporte'; 
 
 function LungModel(props) {
   const group = useRef()

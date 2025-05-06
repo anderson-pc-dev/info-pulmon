@@ -44,8 +44,7 @@ const Footer = () => {
                 <div className="footer-bottom">
                     <p>&copy; {currentYear} InfoPulmon. Todos los derechos reservados.</p>
                     <div className="footer-legal">
-                        {/* Meme phrase */}
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit...</p>
+                        <li><a target='_blank' href='https://github.com/anderson-pc-dev/info-pulmon'>Link del repositorio</a></li>
                     </div>
                 </div>
             </Container>

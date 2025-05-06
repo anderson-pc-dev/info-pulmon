@@ -1,7 +1,7 @@
 @import '../../../../shared/variables';
 @import '../../../../shared/_font.scss';
 
-
+// Mixins
 @mixin card-shadow {
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
 }
@@ -10,6 +10,7 @@
   transition: $property $duration ease-in-out;
 }
 
+// Contenedor principal
 .que-es-container {
   max-width: 1600px;
   margin: 0 auto;
@@ -18,6 +19,7 @@
   box-sizing: border-box;
 }
 
+// Header
 .que-es-header {
   margin-bottom: clamp(1rem, 3vw, 2rem);
   text-align: center;
@@ -34,226 +36,24 @@
   margin-bottom: 1.5rem;
 }
 
-.description-image {
-  flex: 0 0 40%;
-  max-width: 400px;
-  margin-top: 1rem;
-
-  img {
-    width: 100%;
-    height: auto;
-  }
-}
-
+// Secciones principales
 .que-es-sections {
   display: flex;
   flex-direction: column;
-  gap: clamp(1rem, 3vw, 2rem);
+  gap: clamp(1.5rem, 3vw, 2.5rem);
 }
 
-// Sección de Descripción
-.description-section {
-  display: flex;
-  flex-wrap: wrap;
-  gap: clamp(0.8rem, 2.5vw, 1.5rem);
-  align-items: flex-start;
-}
-
-.section-content {
-  flex: 1;
-  min-width: min(100%, 700px);
-}
-
-.section-title {
-  @extend .inter-bold;
-  font-size: clamp(1.2rem, 2.5vw, 1.6rem);
-  margin-bottom: clamp(0.8rem, 1.5vw, 1.2rem);
-  font-weight: 600;
-  color: #2c3e50;
-  position: relative;
-  padding-bottom: 0.4rem;
-
-  &::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: min(100%, 250px);
-    height: 2px;
-    background: $dark;
-  }
-}
-
-.que-es-text {
+// Sección de descripción
+.descripcion-asma {
+  font-size: clamp(1rem, 1.3vw, 1.1rem);
+  line-height: 1.6;
   color: $body-color;
-  font-size: clamp(0.9rem, 1.3vw, 1rem);
-  line-height: 1.4;
   @extend .inter-regular;
+  max-width: 900px;
+  margin: 0 auto;
 }
 
-.subsection-title {
-  color: $body-color;
-  font-size: clamp(1rem, 1.8vw, 1.3rem);
-  margin: clamp(0.8rem, 1.5vw, 1.2rem) 0 clamp(0.6rem, 1.2vw, 0.8rem);
-  @extend .inter-bold;
-  font-weight: 500;
-  border-left: 3px solid $dark;
-  padding-left: 0.8rem;
-}
-
-.que-es-list {
-  padding-left: clamp(0.8rem, 1.5vw, 1.2rem);
-  margin: clamp(0.8rem, 1.5vw, 1.2rem) 0;
-
-  li {
-    margin-bottom: 0.6rem;
-    position: relative;
-    @extend .inter-regular;
-    padding-left: 1.2rem;
-    font-size: clamp(0.9rem, 1.3vw, 1rem);
-  }
-}
-
-// Sección de Causas
-.causes-section {
-  border-radius: 8px;
-  margin: 1.5rem 0;
-  background: linear-gradient(to bottom, rgba($light, 0.3), rgba($light, 0.1));
-  
-  &__header {
-    text-align: center;
-    margin-bottom: clamp(1.5rem, 4vw, 2rem);
-    
-    h2 {
-      color: $body-color;
-      font-size: clamp(1.4rem, 2.5vw, 2rem);
-      @extend .inter-bold;
-      position: relative;
-      display: inline-block;
-      
-      &::after {
-        content: '';
-        position: absolute;
-        bottom: -8px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 60px;
-        height: 2px;
-        background: $primary;
-        border-radius: 2px;
-      }
-    }
-  }
-}
-
-.que-es-causes {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
-  gap: clamp(1rem, 3vw, 2rem);
-  padding: 0 clamp(0.8rem, 4vw, 2rem);
-}
-
-.cause-item {
-  background: white;
-  padding: clamp(1.2rem, 2.5vw, 1.5rem);
-  border-radius: 10px;
-  @include card-shadow;
-  @include transition(all 0.2s ease-in-out);
-  border-top: 4px solid $primary;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  position: relative;
-  overflow: hidden;
-  
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 4px;
-    background: $primary;
-    transform: scaleX(0);
-    transform-origin: left;
-    @include transition(transform 0.2s ease);
-  }
-
-  &:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
-    
-    &::before {
-      transform: scaleX(1);
-    }
-  }
-
-  h3 {
-    color: $body-color;
-    margin-bottom: 0.8rem;
-    font-size: clamp(1rem, 1.5vw, 1.4rem);
-    @extend .inter-bold;
-    font-weight: 600;
-    position: relative;
-    padding-bottom: 0.4rem;
-  }
-
-  p {
-    color: lighten($body-color, 15%);
-    @extend .inter-regular;
-    font-size: clamp(0.9rem, 1.2vw, 1rem);
-    margin-bottom: 0.8rem;
-    line-height: 1.5;
-  }
-
-  .card-image {
-    height: 180px;
-    overflow: hidden;
-    border-radius: 6px;
-    margin-bottom: 1rem;
-    position: relative;
-    
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      @include transition(transform 0.4s ease, filter 0.2s ease);
-      filter: brightness(0.95);
-    }
-    
-    &::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 30%;
-      background: linear-gradient(to top, rgba($dark, 0.15), transparent);
-    }
-  }
-
-  &:hover .card-image img {
-    transform: scale(1.05);
-    filter: brightness(1);
-  }
-
-  .cause-detail {
-    //margin-top: auto;
-    padding-top: 1rem;
-    font-size: clamp(0.85rem, 1.1vw, 1rem);
-    color: $body-color;
-    @extend .inter-regular;
-    border-top: 1px dashed rgba($primary, 0.3);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  
-  &:hover .cause-detail::after {
-    transform: translateX(3px);
-  }
-}
-
+// Características del asma
 .caracteristicas-asma {
   display: flex;
   justify-content: center;
@@ -262,44 +62,48 @@
   margin-top: 2rem;
   
   .caracteristica {
-    background: $primary;
-    padding: 1rem;
-    border-radius: 8px;
+    background: $light; // Fondo más claro para mejor contraste
+    padding: 1.5rem;
+    border-radius: 12px;
     max-width: 320px;
     flex: 1 1 300px;
     text-align: center;
     @include card-shadow;
     @include transition();
+    border-top: 4px solid $primary;
 
     img {
-      width: 250px;
-      height: 250px;
+      width: 220px;
+      height: 220px;
       object-fit: contain;
-      margin-bottom: 1rem;
+      margin-bottom: 1.2rem;
     }
 
     p {
       font-size: clamp(0.9rem, 1.2vw, 1rem);
-      color: $body-color;
+      color: $body-color; // Color de texto más oscuro para mejor contraste
       @extend .inter-regular;
       line-height: 1.7;
-      color: $light;
       text-align: left;
-      font-weight: 500;
 
       span {
-        color: $dark;
+        color: $primary; // Destacado en color primario
         font-weight: 700;
+        @extend .inter-bold;
+        display: block;
+        margin-bottom: 0.5rem;
+        font-size: 1.1em;
       }
     }
 
     &:hover {
       transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
     }
   }
 }
 
-
+// Causas del asma
 .causas-asma {
   background: linear-gradient(to bottom, rgba($light, 0.5), rgba($light, 0.2));
   padding: clamp(1.5rem, 4vw, 3rem);
@@ -333,7 +137,7 @@
 }
 
 .causa {
-  background: white;
+  background: $light;
   padding: clamp(1rem, 2.5vw, 2rem);
   border-radius: 10px;
   @include card-shadow;
@@ -363,6 +167,7 @@
 
       strong {
         color: $primary;
+        font-weight: 600;
       }
     }
   }
@@ -370,6 +175,18 @@
   &:hover {
     transform: translateY(-4px);
     box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1);
-    border-left-color: $dark;
+    border-left-color: darken($primary, 10%);
+  }
+}
+
+// Responsive ajustes adicionales
+@media (max-width: 768px) {
+  .caracteristicas-asma .caracteristica {
+    flex: 1 1 100%;
+    max-width: 100%;
+  }
+  
+  .causa {
+    padding: 1rem;
   }
 }

@@ -60,60 +60,9 @@ const Descripcion = () => {
               <div className="grafico-seccion">
                 <GraficoEPOC />
               </div>
-              <div className="estadisticas-grid">
-                <div className="estadistica-item">
-                  <div className="estadistica-icon">🔹</div>
-                  <div className="estadistica-text">
-                    <h3>Una de las principales causas de muerte a nivel mundial</h3>
-                    <p>Según la Organización Mundial de la Salud (OMS), la EPOC ocupa el tercer lugar entre las principales causas de muerte en el mundo, solo detrás de enfermedades cardiovasculares y accidentes cerebrovasculares.</p>
-                  </div>
-                </div>
-
-                <div className="estadistica-item">
-                  <div className="estadistica-icon">🔹</div>
-                  <div className="estadistica-text">
-                    <h3>Prevalencia global en aumento</h3>
-                    <p>Se calcula que más de 300 millones de personas viven con EPOC en todo el mundo, y esta cifra continúa creciendo debido al envejecimiento de 
-                      la población y la exposición continua a factores de riesgo.</p>
-                  </div>
-                </div>
-
-                <div className="estadistica-item">
-                  <div className="estadistica-icon">🔹</div>
-                  <div className="estadistica-text">
-                    <h3>Desigualdad en el impacto</h3>
-                    <p>Cerca del 90% de las muertes relacionadas con la EPOC ocurren en países de ingresos bajos y medianos, donde el acceso a diagnóstico temprano, 
-                      tratamiento adecuado y servicios de salud preventiva es limitado.</p>
-                  </div>
-                </div>
-
-                <div className="estadistica-item">
-                  <div className="estadistica-icon">🔹</div>
-                  <div className="estadistica-text">
-                    <h3>Tabaquismo: el principal culpable</h3>
-                    <p>El tabaquismo está directamente asociado con más del 80% de los casos de EPOC. No obstante, no es el único factor: personas expuestas a humo de 
-                      biomasa o contaminación también tienen mayor riesgo.</p>
-                  </div>
-                </div>
-
-                <div className="estadistica-item">
-                  <div className="estadistica-icon">🔹</div>
-                  <div className="estadistica-text">
-                    <h3>Diagnóstico subestimado</h3>
-                    <p>Se estima que hasta el 50% de los casos de EPOC no están diagnosticados, especialmente en etapas tempranas, ya que los síntomas suelen confundirse 
-                      con signos normales del envejecimiento.</p>
-                  </div>
-                </div>
-
-                <div className="estadistica-item">
-                  <div className="estadistica-icon">🔹</div>
-                  <div className="estadistica-text">
-                    <h3>Cargas económicas y sociales</h3>
-                    <p>La EPOC representa una carga significativa para los sistemas de salud debido a su tratamiento crónico, hospitalizaciones frecuentes y disminución 
-                      en la calidad de vida del paciente.</p>
-                  </div>
-                </div>
-              </div>
+              <p className="estadisticas-text">
+                Fuente: Datos estimados basados en informes de la Organización Mundial de la Salud (2022)
+                </p>
             </div>
           </div>
         </section>

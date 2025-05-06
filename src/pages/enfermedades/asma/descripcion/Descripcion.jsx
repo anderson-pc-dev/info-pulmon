@@ -9,15 +9,12 @@ const Descripcion = () => {
       <header className="que-es-header">
         <h1 className="que-es-title">¿Qué es el Asma?</h1>
       </header>
-
-
       <div className="que-es-sections">
         <section className="descripcion-asma">
           <p>
             El asma es una enfermedad crónica que afecta las vías respiratorias, específicamente los bronquios, que son los conductos que llevan el aire hacia los pulmones. Esta condición se caracteriza por:
           </p>
         </section>
-
         <section className="caracteristicas-asma">
           <div className="caracteristica">
             <img src={InflamacionCronica} alt="Inflamación crónica" />
@@ -25,14 +22,12 @@ const Descripcion = () => {
               <span>Inflamación crónica:</span> Las vías respiratorias se inflaman y se vuelven más sensibles a ciertos estímulos, como alérgenos, irritantes o infecciones.
             </p>
           </div>
-
           <div className="caracteristica">
             <img src={HiperreactividadBronquial} alt="Hiperreactividad bronquial" />
             <p>
               <span>Hiperreactividad bronquial:</span> Las vías respiratorias reaccionan de manera exagerada a factores desencadenantes, lo que provoca su estrechamiento.
             </p>
           </div>
-
           <div className="caracteristica">
             <img src={ObstruccionAire} alt="Obstrucción variable del flujo de aire" />
             <p>
@@ -40,10 +35,8 @@ const Descripcion = () => {
             </p>
           </div>
         </section>
-
         <section className="causas-asma">
           <h2>Causas</h2>
-
           <div className="causa">
             <h3>1. Factores genéticos:</h3>
             <ul>
@@ -55,7 +48,6 @@ const Descripcion = () => {
               </li>
             </ul>
           </div>
-
           <div className="causa">
             <h3>2. Factores ambientales:</h3>
             <ul>
@@ -65,7 +57,6 @@ const Descripcion = () => {
               <li>Clima y condiciones meteorológicas</li>
             </ul>
           </div>
-
           <div className="causa">
             <h3>3. Factores relacionados con el estilo de vida:</h3>
             <ul>
