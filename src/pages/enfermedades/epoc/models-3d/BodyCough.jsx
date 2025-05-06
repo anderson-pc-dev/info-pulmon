@@ -166,7 +166,7 @@ export default function Scene() {
           shadows={true}
         >
           <OrbitControls
-            enableRotate={false}
+            enableRotate={true}
             enableZoom={false}       
             enablePan={false}      
             target={[0, 0, 0]}   
@@ -175,7 +175,7 @@ export default function Scene() {
 
           />
           <Lights />
-          <Text text={"Presiona la tecla 'C'"} />
+          <Text/>
           <Soporte/>
           <Staging/>
           <BodyCough

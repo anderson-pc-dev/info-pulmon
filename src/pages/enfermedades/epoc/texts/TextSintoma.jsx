@@ -1,18 +1,18 @@
-import {Html} from '@react-three/drei'
+import { Html } from '@react-three/drei'
 import "./TextSintoma.scss"
 
-const TextSintoma = ({text}) => {
+const TextSintoma = () => {
     return (
         <Html
-        center
-        zIndexRange={[100, 0]}
-        position={[0, 5, -21]}
-        transform
-        distanceFactor={10}
-        wrapperClass='text-sintoma'
+            position={[-5, 6.5, -21]}
+            transform
+            zIndexRange={[100, 0]}
+            distanceFactor={5}
+            wrapperClass='text-instructions'
         >
-            <h1>{text}</h1>
+            <div className="instruction-text">Presiona [C] para  mostrar un mensaje y haz click para cambiar la escena</div>
         </Html>
+        
     );
 };
 

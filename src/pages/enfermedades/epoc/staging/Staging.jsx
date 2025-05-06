@@ -81,7 +81,13 @@ const Staging = () => {
         mieCoefficient: 0.1,
         mieDirectionalG: 0.8
       },
-      starsProps: null,
+      starsProps: {
+        radius: 150,
+        depth: 50,
+        count: 10000,
+        factor: 2,
+        fade: true
+      },
       name: "Cielo tormentoso"
     }
   ]

@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { NavLink, Outlet, useLocation } from 'react-router';
 import LungModel from './models-3d/LungTrasparent';
 import BodyCough from './models-3d/BodyCough';
+import Text from './texts/TextSintoma';
 
 const Epoc = () => {
   const location = useLocation();
@@ -71,6 +72,7 @@ const Epoc = () => {
               if (location.pathname === '/epoc/sintomas') {
                 return <BodyCough />;
               }
+              
               return null;
             })()}
           </div>
