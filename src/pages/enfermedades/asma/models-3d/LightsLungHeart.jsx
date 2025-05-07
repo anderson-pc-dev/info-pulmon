@@ -20,7 +20,7 @@ const Lights = () => {
                 angle={Math.PI / 4}
                 penumbra={0.5}
                 decay={1}
-                color="#a0c4ff" 
+                color="#a0c4ff"
                 castShadow
                 shadow-mapSize={1024}
                 shadow-camera-near={0.5}
@@ -37,7 +37,7 @@ const Lights = () => {
                 angle={Math.PI / 3}
                 penumbra={0.75}
                 decay={1}
-                color="#ffd6a5" 
+                color="#ffd6a5"
                 castShadow={true}
                 shadow-mapSize={512}
             />
@@ -48,11 +48,11 @@ const Lights = () => {
                 intensity={8}
                 color={"#FFFFFF"}
                 castShadow={true}
-                shadow-mapSize-width={2048} 
+                shadow-mapSize-width={2048}
                 shadow-mapSize-height={2048}
-                shadow-camera-near={0.1} 
-                shadow-camera-far={100} 
-                shadow-camera-left={-20} 
+                shadow-camera-near={0.1}
+                shadow-camera-far={100}
+                shadow-camera-left={-20}
                 shadow-camera-right={20}
                 shadow-camera-top={20}
                 shadow-camera-bottom={-20}

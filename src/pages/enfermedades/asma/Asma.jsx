@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { NavLink, Outlet, useLocation } from 'react-router';
 import LungsHeart from './models-3d/LungsHeart';
+import BreathingHard from './models-3d/BreathingHard';
 // import BreathingHard from './models-3d/BreathingHard';
 
 
@@ -64,6 +65,9 @@ const Asma = () => {
           {(() => {
             if (location.pathname === '/asma/que-es') {
               return <LungsHeart />;
+            }
+            if (location.pathname === '/asma/sintomas') {
+              return <BreathingHard />;
             }
             return null;
           })()}
