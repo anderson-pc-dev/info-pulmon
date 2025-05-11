@@ -23,7 +23,7 @@ const Recipient = () => {
       <Stars
           radius={100} // Radius of the sphere in which stars are placed
           depth={50} // Depth of the star field, creating a layered effect
-          count={2000} // Total number of stars in the scene
+          count={1000} // Total number of stars in the scene
           factor={4} // Star size factor, affecting how large they appear
           saturation={0} // Color saturation of the stars, 0 means grayscale
           fade // Enables fading effect for a more realistic sky

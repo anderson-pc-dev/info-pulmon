@@ -8,6 +8,7 @@ import Recipient from "./RecipientSintomas"; // Importa el componente Recipient
 import Staging from "./StagingQueEs";
 import TextMark from "./TextClick"; // Importa el componente Text
 import Text3Dinfo from "./Text3Dinfo"; // Importa el componente Text3Dinfo
+import ManejoCamara from "./ManejoCamara"; // Importa el componente ManejoCamara
 //Modelo 3d "QUE ES LA TUBERCULOSIS"
 const Model = (props) => {
     const group = useRef()
@@ -205,23 +206,6 @@ function useKeyPressP(callback) {
     };
   }, [callback]);
 }
-
-const ManejoCamara = ({sm}) => {
-  const { camera } = useThree();
-  //console.log("sm", sm);
-  useEffect(() => {
-    if (!sm) {
-      camera.position.set(10, 10, 10); // Cambia la posición de la cámara
-      camera.lookAt(25, 0, 100); // Apunta hacia un punto específico
-    } else {
-      camera.position.set(0, 10, 20); // Cambia la posición de la cámara
-      camera.lookAt(0, 8, 0); // Apunta hacia el modelo
-    }
-    camera.updateProjectionMatrix(); // Actualiza la proyección de la cámara
-  }, [sm, camera]);
-  return null;
-}
-
 const PiantModelSintomas = (props) => {
   const [showMessage, setShowMessage] = useState(true)
   const [mensajeinformativo, setMensajeinformativo] = useState(``)
