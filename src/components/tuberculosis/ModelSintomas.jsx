@@ -1,16 +1,29 @@
 /* eslint-disable react/no-unknown-property */
 import { useGLTF, Loader, OrbitControls, useAnimations  } from "@react-three/drei";
-import { Canvas } from "@react-three/fiber";
-import { Suspense, useRef } from "react";
+import { Canvas, useThree } from "@react-three/fiber";
+import { Suspense, useRef, useEffect, useState, use } from "react";
 import { Perf } from "r3f-perf";
 import Lights from "./LightSintomas";
 import Recipient from "./RecipientSintomas"; // Importa el componente Recipient
 import Staging from "./StagingQueEs";
+import TextMark from "./TextClick"; // Importa el componente Text
+import Text3Dinfo from "./Text3Dinfo"; // Importa el componente Text3Dinfo
 //Modelo 3d "QUE ES LA TUBERCULOSIS"
 const Model = (props) => {
     const group = useRef()
-    const { nodes, materials, animations } = useGLTF("/models-3d/tbc-sintomas.glb");
+    const { nodes, materials, animations } = useGLTF("/models-3d/tbc-sintomas-2.glb");
     const { actions } = useAnimations(animations, group)
+    // console.log("animations", actions);
+    // console.log("nodes", nodes);
+    useEffect(() => {
+      const action = actions.Beating;
+      if (action) {
+        //console.log("action", action);
+        action.play();
+        return () => action.stop();
+      }
+    }, [actions.Beating]);
+    
     return (
       <group ref={group} {...props} dispose={null}>
         <group name="Scene">
@@ -27,6 +40,8 @@ const Model = (props) => {
             receiveShadow
             geometry={nodes.Heart.geometry}
             material={materials.Material_Heart}
+            morphTargetDictionary={nodes.Heart.morphTargetDictionary}
+            morphTargetInfluences={nodes.Heart.morphTargetInfluences}
           />
           <mesh
             name="Paorta"
@@ -34,6 +49,8 @@ const Model = (props) => {
             receiveShadow
             geometry={nodes.Paorta.geometry}
             material={materials.Material_Paorta}
+            morphTargetDictionary={nodes.Paorta.morphTargetDictionary}
+            morphTargetInfluences={nodes.Paorta.morphTargetInfluences}
           />
           <mesh
             name="Airways"
@@ -173,12 +190,67 @@ const Model = (props) => {
     )
 }
 useGLTF.preload("/models-3d/tbc-sintomas.glb");
+function useKeyPressP(callback) {
+  useEffect(() => {
+    function handleKeyDown(event) {
+      if (event.key === 'p' || event.key === 'P') {
+        callback();
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [callback]);
+}
+
+const ManejoCamara = ({sm}) => {
+  const { camera } = useThree();
+  //console.log("sm", sm);
+  useEffect(() => {
+    if (!sm) {
+      camera.position.set(10, 10, 10); // Cambia la posición de la cámara
+      camera.lookAt(25, 0, 100); // Apunta hacia un punto específico
+    } else {
+      camera.position.set(0, 10, 20); // Cambia la posición de la cámara
+      camera.lookAt(0, 8, 0); // Apunta hacia el modelo
+    }
+    camera.updateProjectionMatrix(); // Actualiza la proyección de la cámara
+  }, [sm, camera]);
+  return null;
+}
+
 const PiantModelSintomas = (props) => {
+  const [showMessage, setShowMessage] = useState(true)
+  const [mensajeinformativo, setMensajeinformativo] = useState(``)
+  const handleQuestionClick = () => {
+    //alert("¡Has hecho clic en el signo de pregunta!");
+    setShowMessage(prev => !prev);
+    cambiarMensaje();
+  };
+  const cambiarMensaje = () => {
+    //console.log("showMessage", showMessage);
+    if (showMessage) {
+      setMensajeinformativo("Cuando el bacilo de la tuberculosis (Mycobacterium tuberculosis) entra al pulmón, generalmente lo hace a través del aire al inhalar gotículas contaminadas. Una vez en los pulmones, la bacteria es captada por unas células del sistema inmunológico llamadas macrófagos. Aunque estos intentan destruirla, el bacilo puede sobrevivir dentro de ellos y comenzar a multiplicarse. Esto provoca una respuesta inmunitaria que forma estructuras llamadas granulomas, donde las bacterias quedan encerradas. En muchos casos, la infección queda controlada en esta fase, pero si el sistema inmunológico no logra contenerla, la bacteria puede seguir propagándose y dañar el tejido pulmonar.");
+    }
+    if (!showMessage) {
+      setMensajeinformativo(``);
+    }
+  }
+  
+  useKeyPressP(() => {
+    setShowMessage(prev => !prev);
+    cambiarMensaje();
+  });
+    
   return (
     <Suspense fallback={<Loader />}>
       <Canvas camera={{ position: [0, 10, 20] }} shadows={true}>
         {/* <Perf /> */}
         <OrbitControls target={[0, 10, 10]} />
+        <ManejoCamara sm={showMessage}/>
         <Lights />
         {/* <Staging /> */}
         <Model scale={5} 
@@ -197,6 +269,10 @@ const PiantModelSintomas = (props) => {
             color="#000000"
           /> 
           <SoftShadows size={20} samples={4} focus={2} />*/}
+          <TextMark onClick={handleQuestionClick} texto={mensajeinformativo} />
+          <Text3Dinfo
+            onClick={handleQuestionClick}
+          />
       </Canvas>
     </Suspense>
   );
