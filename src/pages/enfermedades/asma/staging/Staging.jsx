@@ -1,6 +1,6 @@
 import {
     Sky,
-    Sparkles,
+    // Sparkles,
     Stars,
     // Environment,
   } from "@react-three/drei";
@@ -31,7 +31,7 @@ import {
         opacity={0.9} // Opacity, default: 1
         color={new Color("#ff9966")} // Color, default: white (sunset orange)
       /> */}
-      <Sparkles
+      {/* <Sparkles
         count={256} // Number of particles (default: 100)
         speed={1.5} // Speed of particles (default: 1)
         opacity={1} // Opacity of particles (default: 1)
@@ -39,7 +39,7 @@ import {
         size={4} // Size of particles (default: randomized between 0 and 1)
         scale={[10, 10, 10]} // The space the particles occupy (default: 1)
         noise={1} // Movement factor (default: 1)
-      />
+      /> */}
       <Sky
         sunPosition={[0, 0, -1]} // Places the sun below the horizon
         inclination={0.2} // Adjusts the inclination to simulate the sunset

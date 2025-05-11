@@ -59,6 +59,8 @@
     background-color: white;
     padding: 1rem;
     box-sizing: border-box;
+    position: relative;
+    z-index: 1;
 }
 
 .epoc-main-image {

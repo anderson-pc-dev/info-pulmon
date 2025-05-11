@@ -1,10 +1,11 @@
 /* eslint-disable react/no-unknown-property */
 import { Suspense, useEffect, useRef } from 'react'
-import { useGLTF, useAnimations, OrbitControls, Loader } from '@react-three/drei'
+import { useGLTF, useAnimations, OrbitControls, Loader, Html } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber'
 import Base from '../../asma/models-3d/Base'
 import Lights from './LightsBreathingHard'
 import Staging from '../staging/Staging'
+import './BreathingHard.scss'
 
 export function BreathingHard(props) {
   const group = useRef()
@@ -19,6 +20,20 @@ export function BreathingHard(props) {
   return (
     <group ref={group} {...props} dispose={null}>
       <group name="Scene">
+        <Html
+          position={[0, 8, -15]}
+          distanceFactor={12}
+          transform
+          className="breathing-label"
+        >
+          <div className="asma-message">
+            <h2>Dificultad para respirar</h2>
+            <p>
+              Uno de los síntomas comunes del asma es la sensación de no poder tomar suficiente aire.
+              Esto puede causar ansiedad y malestar.
+            </p>
+          </div>
+        </Html>
         <group name="Avatar" rotation={[Math.PI / 2, 0, 0]} scale={0.73}>
           <skinnedMesh
             name="Body"
@@ -93,29 +108,46 @@ export function BreathingHard(props) {
 useGLTF.preload('/models-3d/BreathingHard.glb')
 
 export default function Scene() {
-  return (
-    <Suspense fallback={<Loader />}>
-      <Canvas
-        camera={{ position: [0, -13, 9], fov: 60 }}
-        shadows={true}>
-        <OrbitControls
-          enableRotate={false}
-          enableZoom={true}
-          enablePan={false}
-          target={[0, -11, -20]}
-          maxPolarAngle={Math.PI / 2}
-          minPolarAngle={0}
-        />
-        <Lights />
-        <Staging />
-        <Base />
+  const controlsRef = useRef()
 
-        <BreathingHard
-          scale={2.2}
-          position={[0, -12, 5]}
-          rotation={[0, 0, 0]}
-        />
-      </Canvas>
-    </Suspense>
+  const resetCamera = () => {
+    if (controlsRef.current) {
+      controlsRef.current.reset() 
+    }
+  }
+
+  return (
+    <>
+      <button className="asma-toggle-btn" onClick={resetCamera}>
+        Restablecer cámara
+      </button>
+      <Suspense fallback={<Loader />}>
+        <Canvas frameloop="always" camera={{ position: [0, -13, 11], fov: 65 }} shadows={true}>
+          <OrbitControls
+            ref={controlsRef}
+            enableRotate={true}
+            enableZoom={true}
+            enablePan={false}
+            target={[0, -10, -20]}
+            maxPolarAngle={Math.PI / 2}
+            minPolarAngle={0}
+            onChange={() => {
+              if (!controlsRef.current.__hasSavedState) {
+                controlsRef.current.saveState()
+                controlsRef.current.__hasSavedState = true 
+              }
+            }}
+          />
+          <Lights />
+          <Staging />
+          <Base />
+          <BreathingHard
+            scale={2.5}
+            position={[0, -12, 5]}
+            rotation={[0, 0, 0]}
+          />
+        </Canvas>
+      </Suspense>
+    </>
   );
 }
