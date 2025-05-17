@@ -1,31 +1,52 @@
 /* eslint-disable react/no-unknown-property */
-import { Suspense, useEffect, useRef } from 'react'
-import { useGLTF, useAnimations, OrbitControls, Loader } from '@react-three/drei'
+import { Suspense, useEffect, useRef, useState } from 'react'
+import { useGLTF, useAnimations, OrbitControls, Loader, Text } from '@react-three/drei'
 import Soporte from '../../epoc/models-3d/Soporte'
-import { Canvas } from '@react-three/fiber'
+import { Canvas, useFrame } from '@react-three/fiber'
 import LightsLungHeart from './LightsLungHeart'
 
 export function LungsHeart(props) {
     const group = useRef()
     const { nodes, materials, animations } = useGLTF('/models-3d/Body.glb')
     const { actions } = useAnimations(animations, group)
+    const [playing, setPlaying] = useState(true)
+    const [rotationY, setRotationY] = useState(0)
 
     useEffect(() => {
-        actions.Diaphragm.play()
-        actions.Heart.play()
-        actions.LeftLung.play()
-        actions.RightLung.play()
-
-        return () => {
-            actions.Diaphragm.stop()
-            actions.Heart.stop()
-            actions.LeftLung.stop()
-            actions.RightLung.stop()
+        const handleKeyDown = (event) => {
+            console.log(event.code)
+            if (event.code === 'KeyP') {
+                setPlaying(prev => !prev)
+            }
         }
-    }, [actions])
+
+        window.addEventListener('keydown', handleKeyDown)
+        return () => window.removeEventListener('keydown', handleKeyDown)
+    }, [])
+
+    useEffect(() => {
+        const anims = ['Diaphragm', 'Heart', 'LeftLung', 'RightLung']
+        anims.forEach(name => {
+            const action = actions[name]
+            if (action) {
+                playing ? action.play() : action.stop()
+            }
+        })
+    }, [actions, playing])
+
+    // Evento de click para rotar el modelo
+    const handleClick = () => {
+        setRotationY(prev => prev + Math.PI / 12) // gira 15 grados
+    }
+
+    useFrame(() => {
+        if (group.current) {
+            group.current.rotation.y = rotationY
+        }
+    })
 
     return (
-        <group ref={group} {...props} dispose={null}>
+        <group ref={group} {...props} dispose={null} onClick={handleClick}>
             <group name="Scene">
                 <group name="Heart">
                     <mesh
@@ -220,24 +241,23 @@ useGLTF.preload('/models-3d/Body.glb')
 export default function Scene() {
     return (
         <Suspense fallback={<Loader />}>
-            <Canvas
-                camera={{ position: [0, -11.6, 3], fov: 16 }}
-                shadows={true}>
-                <OrbitControls
-                    enableRotate={true}
-                    enableZoom={false}
-                    enablePan={false}
-                    target={[0, -11.6, 0]}
-                />
+            <Canvas camera={{ position: [0, -11.6, 3], fov: 40 }} shadows={true}>
+                <OrbitControls enableRotate enableZoom={false} enablePan={false} target={[0, -11.6, 0]} />
                 <LightsLungHeart />
                 <Soporte />
-                <LungsHeart
-                    scale={1.0}
-                    position={[0, -11.95, 0]}
-                    rotation={[0, 0, 0]} 
-                />
+                <LungsHeart scale={2.0} position={[0, -11.95, 0]} rotation={[0, 0, 0]} />
+                <Text
+                    position={[0, -10.8, 0]}
+                    fontSize={0.15}
+                    color="#2AABEC"
+                    
+                    anchorX="center"
+                    anchorY="middle"
+                >
+                    Presiona &quot;P&quot; para pausar/reanudar
+                </Text>
             </Canvas>
         </Suspense>
-    );
+    )
 }
 

@@ -240,8 +240,8 @@ $animation-delay-increment: 0.2s;
       background-color: $light;
       
       img {
-        max-height: 100%;
-        max-width: 100%;
+        max-height: 90%;
+        max-width: 90%;
         object-fit: contain;
         transition: transform 0.8s cubic-bezier(0.165, 0.84, 0.44, 1);
       }

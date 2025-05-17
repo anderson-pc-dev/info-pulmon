@@ -48,7 +48,7 @@ const Sintomas = () => {
               <li>Son ruidos silbantes o chillidos que ocurren al respirar, especialmente al exhalar.
                 Se deben a que las vías respiratorias están estrechas e inflamadas.</li>
               <li>Pueden aumentar con infecciones respiratorias o exposición a alérgenos como polvo, humo o polen.</li>
-              <li> No siempre es un dolor intenso, pero puede sentirse como una sensación de "apretón" o congestión.</li>
+              <li> No siempre es un dolor intenso, pero puede sentirse como una sensación de &quot;apretón&quot; o congestión.</li>
               <li>Se agrava durante crisis respiratorias o infecciones pulmonares.</li>
             </ul>
           </div>
