@@ -5,7 +5,7 @@ const SoporteBody = () => {
         receiveShadow={true}      
         position={[0, -1.5, 0]}      
       >
-        <circleGeometry args={[6, 32]} />  
+        <circleGeometry args={[15, 32]} />  
         <shadowMaterial
           roughness={0.8}
           metalness={1}

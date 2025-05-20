@@ -4,7 +4,8 @@ import { useState, useEffect } from 'react';
 import { NavLink, Outlet, useLocation } from 'react-router';
 import LungModel from './models-3d/LungTrasparent';
 import BodyCough from './models-3d/BodyCough';
-import Text from './texts/TextSintoma';
+import Vaccine from './models-3d/Vaccine';  
+import LungBronchi from './models-3d/LungBronchi';
 
 const Epoc = () => {
   const location = useLocation();
@@ -69,8 +70,14 @@ const Epoc = () => {
               if (location.pathname === '/epoc/que-es') {
                 return <LungModel />;
               }
-              if (location.pathname === '/epoc/sintomas') {
+              else if (location.pathname === '/epoc/sintomas') {
                 return <BodyCough />;
+              }
+              else if (location.pathname === '/epoc/tratamiento') {
+                return <Vaccine />;
+              }
+              else if (location.pathname === '/epoc/prevencion') {
+                return <LungBronchi />;
               }
               
               return null;
