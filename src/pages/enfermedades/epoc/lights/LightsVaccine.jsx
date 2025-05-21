@@ -1,11 +1,8 @@
 import { useRef } from "react";
-import { useFrame } from "@react-three/fiber";
 import { useHelper } from "@react-three/drei";
 import { DirectionalLightHelper } from "three";
 
 const LightsVaccine = () => {
-  const spotLightRef = useRef();
-  const spotLightRef2 = useRef();
   const directionalLightRef = useRef();
   useHelper(directionalLightRef, DirectionalLightHelper);
   return (
@@ -15,9 +12,9 @@ const LightsVaccine = () => {
     
 
       <directionalLight
-        position={[5, 20, -8]} 
+        position={[22, 24, -8]} 
         intensity={7}
-        //ref={directionalLightRef}
+        ref={directionalLightRef}
         castShadow={true}
         shadow-mapSize-width={2048} // Mejor calidad de sombra (opcional)
         shadow-mapSize-height={2048}

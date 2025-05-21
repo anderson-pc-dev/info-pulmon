@@ -10,8 +10,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@react-three/cannon": "^6.6.0",
     "@react-three/drei": "^10.0.7",
     "@react-three/fiber": "^9.1.2",
+    "@react-three/rapier": "^2.1.0",
     "@types/three": "^0.175.0",
     "bootstrap": "^5.3.3",
     "bootstrap-icons": "^1.11.3",

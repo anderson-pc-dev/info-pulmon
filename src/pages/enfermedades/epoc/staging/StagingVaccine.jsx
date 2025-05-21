@@ -4,9 +4,8 @@ const StagingVaccine = () => {
   return (
     <Environment
       files="../../../hdris/hospital/hospital_room_4k.hdr"
-      background
-      preset={null}
-      resolution={1024}
+      background={true}   
+      resolution={1024}   
     />
   );
 };

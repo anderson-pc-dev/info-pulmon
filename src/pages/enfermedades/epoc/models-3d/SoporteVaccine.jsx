@@ -1,11 +1,14 @@
+import { RigidBody } from "@react-three/rapier";
+
 const SoporteVaccine = () => {
     return (
+      <RigidBody>
       <mesh
         rotation-x={-Math.PI / 2}  
         receiveShadow={true}      
-        position={[0, -7, -2]}      
+        position={[0, -11, -2]}      
       >
-        <circleGeometry args={[20, 32]} />
+        <circleGeometry args={[72, 62]} />
         <shadowMaterial
           roughness={0.8}
           metalness={1}
@@ -13,6 +16,7 @@ const SoporteVaccine = () => {
           opacity={0.8}  
         />
       </mesh>
+      </RigidBody>
     );
   };
   
