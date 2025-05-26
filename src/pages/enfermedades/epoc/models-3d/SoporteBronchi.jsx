@@ -3,7 +3,7 @@ const SoporteBronchi = () => {
       <mesh
         rotation-x={-Math.PI / 2}  
         receiveShadow={true}      
-        position={[0, -7, -18]}      
+        position={[0, -9, -18]}      
       >
         <circleGeometry args={[20, 32]} />
         <shadowMaterial

@@ -6,7 +6,7 @@ const SoporteVaccine = () => {
       <mesh
         rotation-x={-Math.PI / 2}  
         receiveShadow={true}      
-        position={[0, -11, -2]}      
+        position={[0, -13, -2]}      
       >
         <circleGeometry args={[72, 62]} />
         <shadowMaterial

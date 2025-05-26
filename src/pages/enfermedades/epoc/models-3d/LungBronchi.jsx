@@ -7,6 +7,8 @@ import {
 import { Suspense, useRef } from "react";
 import Lights from '../lights/LightsBronchi';  
 import Soporte from '../models-3d/SoporteBronchi'; 
+import Staging from '../staging/StagingBronchi';
+import Text from '../texts/TextPrevencion';
 
 function LungBronchi(props) {
   const { nodes, materials } = useGLTF('/models-3d/Lung-Bronchi.glb')
@@ -15,7 +17,7 @@ function LungBronchi(props) {
   // Animación de rotación
   useFrame((state, delta) => {
     if (groupRef.current) {
-      groupRef.current.rotation.y += delta * 0.5 // Rotación a 0.5 radianes por segundo
+      groupRef.current.rotation.y += delta * 0.5 
     }
   })
   return (
@@ -60,22 +62,24 @@ export default function Scene() {
     return (
       <Suspense fallback={<Loader />}>
         <Canvas
-          camera={{ position: [0, 0, 8], fov: 70 }}  // Cámara más cercana y centrada
+          camera={{ position: [0, 0, 10], fov: 90 }}  
           shadows={true}
         >
           <OrbitControls
             enableRotate={true}
             enableZoom={true}       
             enablePan={false}      
-            target={[0, 0, -15]}    // El objetivo de la cámara está en el centro
-            maxPolarAngle={Math.PI} // Permite rotación completa
+            target={[0, 0, -15]}    
+            maxPolarAngle={Math.PI} 
             minPolarAngle={0}    
           />
           <Lights />
+          <Staging />
+          <Text/>
           <Soporte/>
           <LungBronchi
-            scale={0.5}            // Escala reducida para que quede bien en vista
-            position={[0, -3, -10]}  // Posición centrada
+            scale={0.6}            
+            position={[0, -4.5, -10]}  
             rotation={[0, 0, 0]}  
           />
         </Canvas>

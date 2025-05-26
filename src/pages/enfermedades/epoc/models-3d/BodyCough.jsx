@@ -71,7 +71,8 @@ function BodyCough(props) {
           }}>
             Gracias por continuar navegando. A continuación, encontrarás los síntomas más comunes de la EPOC. 
             Esperamos que esta información te sea útil para identificar señales tempranas de la enfermedad y buscar atención médica oportuna si experimenta
-            alguno de los sintomas.
+            alguno de los sintomas. <nr/>
+            <strong>Puedes hacer click en el modelo para cambiar el entorno y puedes presionar la tecla "A" para activar el audio del modelo.</strong>
           </p>
         </div>
       </Html>
@@ -175,7 +176,7 @@ export default function Scene() {
 
           />
           <Lights />
-          <Text/>
+          <Text textSintoma={"Presiona la tecla C"} />
           <Soporte/>
           <Staging/>
           <BodyCough

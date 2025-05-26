@@ -1,0 +1,286 @@
+@import '../../shared/variables';
+@import '../../shared/_font.scss';
+
+.quiz-intro-page {
+  font-family: $font-family-base;
+  color: $body-color;
+  background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  padding-top: 80px;
+}
+
+.quiz-container {
+  max-width: 1000px;
+  width: 100%;
+  background: white;
+  border-radius: 1.5rem;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+  padding: 3rem;
+  text-align: center;
+  animation: fadeIn 0.8s ease-out;
+  margin: 1rem;
+
+  @media (max-width: 768px) {
+    padding: 2rem 1.5rem;
+    margin: 1rem;
+  }
+}
+
+.quiz-header {
+  position: relative;
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: -4rem;
+  
+  .quiz-icon {
+    font-size: 3rem;
+    margin-top: 0.5rem;
+    animation: bounce 2s infinite;
+    order: 2; /* Coloca el icono después del título */
+  }
+}
+
+.quiz-title {
+  color: $light;
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  padding: clamp(0.6rem, 1.5vw, 0.8rem);
+  @extend .inter-bold;
+  background: $primary;
+  border-radius: 8px;
+  margin-top: clamp(-2rem, -4vw, -3rem);
+  margin-bottom: 0.5rem;
+  order: 1; /* Coloca el título primero */
+
+  @media (max-width: 768px) {
+    font-size: 1.8rem;
+  }
+}
+
+.quiz-description {
+  font-size: 1.15rem;
+  line-height: 1.7;
+  margin-bottom: 2.5rem;
+  color: lighten($body-color, 10%);
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+
+  strong {
+    color: $primary;
+    font-weight: 600;
+    background-color: lighten($primary, 45%);
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+  }
+}
+
+.quiz-features {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin: 3rem 0;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}
+
+.feature-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  }
+
+  .feature-icon {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  h3 {
+    color: $primary;
+    margin-bottom: 0.5rem;
+    font-size: 1.2rem;
+  }
+
+  p {
+    color: lighten($body-color, 20%);
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+}
+
+.instructions-section {
+  background-color: lighten($primary, 48%);
+  border-radius: 1rem;
+  padding: 2rem;
+  margin: 3rem 0;
+  text-align: left;
+  border-left: 5px solid $primary;
+
+  h2 {
+    color: $primary;
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    font-weight: 700;
+    
+    .highlight {
+      background-color: $primary;
+      color: white;
+      padding: 0.3rem 0.8rem;
+      border-radius: 20px;
+    }
+  }
+}
+
+.instructions-list {
+  list-style-type: none;
+  padding: 0;
+  max-width: 600px;
+  margin: 0 auto;
+
+  li {
+    margin-bottom: 1rem;
+    padding-left: 2rem;
+    position: relative;
+    line-height: 1.6;
+    color: lighten($body-color, 10%);
+
+    &::before {
+      content: "✓";
+      color: $primary;
+      font-weight: bold;
+      position: absolute;
+      left: 0;
+    }
+
+    strong {
+      color: $primary;
+      font-weight: 600;
+    }
+  }
+}
+
+.quiz-tips {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin: 2.5rem 0;
+
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.tip-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  text-align: left;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  border-top: 3px solid $primary;
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+
+  .tip-icon {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+  }
+
+  p {
+    margin: 0;
+    color: lighten($body-color, 10%);
+    line-height: 1.6;
+  }
+}
+
+.start-quiz-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, $primary 0%, darken($primary, 10%) 100%);
+  color: white;
+  padding: 1.2rem 3rem;
+  border-radius: 50px;
+  font-size: 1.2rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 10px 20px rgba($primary, 0.2);
+  margin-top: 1rem;
+  position: relative;
+  overflow: hidden;
+
+  .button-icon {
+    margin-left: 0.8rem;
+    transition: transform 0.3s ease;
+  }
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 30px rgba($primary, 0.3);
+    
+    .button-icon {
+      transform: translateX(5px);
+    }
+  }
+
+  &:active {
+    transform: translateY(1px);
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(rgba(255,255,255,0.1), rgba(255,255,255,0));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  &:hover::after {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-15px);
+  }
+  60% {
+    transform: translateY(-7px);
+  }
+}

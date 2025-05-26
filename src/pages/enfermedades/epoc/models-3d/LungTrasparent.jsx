@@ -12,6 +12,7 @@ import {
 import { Suspense } from "react";
 import Lights from '../lights/Lights';  
 import Soporte from '../models-3d/Soporte'; 
+import Text from '../texts/TextLungTranspa'; 
 
 function LungModel(props) {
   const group = useRef()
@@ -89,19 +90,20 @@ export default function Scene() {
   return (
     <Suspense fallback={<Loader />}>
       <Canvas
-        camera={{ position: [0, 1, 5], fov: 50 }}
+        camera={{ position: [0, -5, 5], fov: 80 }}
         shadows={true}>
         <OrbitControls
-          enableRotate={true}    // Permite rotación
-          enableZoom={true}      // Permite zoom
-          enablePan={false}     // Desactiva el movimiento panorámico
-          target={[0, -6.5, -8]} // Centra los controles en la posición del modelo
+          enableRotate={true}    
+          enableZoom={true}      
+          enablePan={false}     
+          target={[0, -6.5, -8]} 
         />
         <Lights />
         <Soporte />
+        <Text textSintoma={"Pulmon Sano"}/>
         <LungModel
           scale={0.9}
-          position={[0, -10.5, -8]}
+          position={[0, -12.5, -5]}
           rotation={[0, -0.1, 0]}
         />
       </Canvas>

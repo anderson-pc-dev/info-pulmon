@@ -2,7 +2,6 @@ import './Home.scss';
 import { NavLink } from 'react-router';
 import LeafIcon from '../../assets/virus.png';
 import PawIcon from '../../assets/heart.png';
-import GoogleIcon from '../../assets/google-icon.png';
 import LightbulbIcon from '../../assets/document.png';
 import CtaImage from '../../assets/pregunta.png';
 import tuberculosis from '../../assets/tuberculosis.jpg';
@@ -57,10 +56,6 @@ const Home = () => {
             Enfermedades de los Pulmones y cómo<br />
             Prevenirlas
           </h2>
-          <NavLink to="/about" className="google-signin-btn">
-            <img src={GoogleIcon} alt="Google logo" className="google-icon" />
-            Registrate con Google
-          </NavLink>
         </div>
 
         {/* Botón para desplazarse hacia abajo */}

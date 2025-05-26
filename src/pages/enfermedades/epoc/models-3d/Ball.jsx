@@ -8,7 +8,7 @@ export default function Ball({ position, onCollide, isActive }) {
   useFrame(() => {
     if (ballRef.current && isActive) {
       if (ballRef.current.translation().x > -5) {
-        ballRef.current.applyImpulse({ x: -35, y: 0, z: 0 }, true);
+        ballRef.current.applyImpulse({ x: -55, y: 0, z: 0 }, true);
       }
     }
   });
@@ -43,7 +43,7 @@ export default function Ball({ position, onCollide, isActive }) {
     >
       <mesh castShadow>
         <sphereGeometry args={[3, 32, 32]} />
-        <meshStandardMaterial color="red" />
+        <meshStandardMaterial color="blue" />
       </mesh>
     </RigidBody>
   );
