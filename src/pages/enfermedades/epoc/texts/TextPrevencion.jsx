@@ -1,5 +1,5 @@
 import { Text3D, Center } from "@react-three/drei";
-import aliceFont from "../../../../assets/fonts/BRUNSON_Regular.json";
+import aliceFont from "../../../../assets/fonts/Brunson_Regular.json";
 
 const TextPrevencion = ({ 
   text = "Presiona la tecla C", 
