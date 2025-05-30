@@ -1,61 +1,69 @@
 @import '../../../../shared/_font.scss';
 
-.text-sintoma {
-    perspective: 1000px;
-    transform-style: preserve-3d;
-    width: 100%;
-    text-align: center;
-    padding: 1rem;
-    box-sizing: border-box;
+.text-instructions {
+  position: fixed;
+  top: 1.5vh;
+  left: 1.5vw;
+  right: 1.5vw; 
+  pointer-events: none;
+  z-index: 1000;
+  display: flex;
+  justify-content: flex-start;
+  
+  .instruction-text {
+    @extend .inter-bold;
+    font-weight: 500;
+    color: $body-color;
+    background:$success;
+    padding: clamp(0.5rem, 1.2vw, 1rem) clamp(1rem, 2vw, 1.5rem);
+    border-radius: clamp(0.5rem, 1vw, 1rem);
+    backdrop-filter: blur(8px) saturate(120%);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), 
+                0 1px 2px rgba(255, 255, 255, 0.1) inset;
+    animation: fadeIn 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+    transition: all 0.4s ease-out;
+    max-width: 90%;
+    line-height: 1.4;
     
-    h1 {
-      font-size: clamp(1rem, 7vw, 4rem);
-      font-weight: 900;
-      text-transform: uppercase;
-      @extend .inter-black;
-      color: #fff;
-      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
-      margin: 0;
-      line-height: 1.2;
-      word-wrap: break-word;
-      position: relative;
-      transform: translateZ(20px);
-      
-      &::before,
-      &::after {
-        content: attr(data-text);
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        z-index: -1;
+    font-size: clamp(2rem, 2vw + 0.5rem, 3.8rem);
+    
+
+    @media (hover: hover) {
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2), 
+                    0 1px 3px rgba(255, 255, 255, 0.15) inset;
       }
-      
-      &::before {
-        color: rgba(0, 200, 255, 0.5);
-        transform: translateZ(-15px);
-      }
-      
-      &::after {
-        color: rgba(255, 50, 150, 0.3);
-        transform: translateZ(-30px);
-      }
-      
-      animation: float 6s ease-in-out infinite alternate;
     }
     
-    @media (max-width: 768px) {
-      h1 {
-        font-size: clamp(1.5rem, 6vw, 3rem);
-        
-        &::before {
-          transform: translateZ(-10px);
-        }
-        
-        &::after {
-          transform: translateZ(-20px);
-        }
-      }
+
+    @media (orientation: portrait) {
+      font-size: clamp(2rem, 4vw, 2.5rem);
+      max-width: 95%;
+      white-space: normal;
+      text-align: center;
+      margin: 0 auto;
+      padding: 0.8rem 1.2rem;
+      backdrop-filter: blur(6px);
+    }
+    
+
+    @media (min-width: 2000px) {
+      font-size: 2.5rem;
+      padding: 1rem 2rem;
     }
   }
+}
+
+@keyframes fadeIn {
+  from { 
+    opacity: 0;
+    transform: translateY(-10px) scale(0.98);
+  }
+  to { 
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}

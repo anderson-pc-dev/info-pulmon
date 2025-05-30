@@ -1,0 +1,200 @@
+@import '../../shared/variables';
+@import '../../shared/_font.scss';
+
+$border-radius-card: 15px;
+
+// Mixins
+@mixin flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin transition($property: all, $duration: 0.3s, $easing: ease) {
+  transition: $property $duration $easing;
+}
+
+// Base styles
+.login-container {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+
+  .login-left {
+    width: 50%;
+    background-color: $white;
+    padding: 2rem;
+    @include flex-center;
+    flex-direction: column;
+    position: relative;
+    z-index: 1;
+
+    .logo-section {
+      @include flex-center;
+      flex-direction: column;
+      margin-bottom: 2rem;
+
+      svg, img {
+        margin: 0.5rem 0;
+      }
+    }
+
+    .login-content {
+      max-width: 400px;
+      width: 100%;
+      padding: 0 2rem;
+      text-align: center;
+    }
+
+    .login-title {
+      font-size: 2.2rem;
+      color: $dark;
+      @extend .inter-bold;
+      margin-bottom: 1.5rem;
+      font-weight: 600;
+    }
+
+    .login-slogan {
+      font-size: 1.1rem;
+      color: $body-color;
+      @extend .inter-regular;
+      margin-bottom: 2.5rem;
+      line-height: 1.6;
+    }
+
+    .google-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      background: $primary;
+      color: #ffffff;
+      border: none;
+      padding: 0.75rem 2rem;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: $border-radius-card;
+      cursor: pointer;
+      margin: 0 auto;
+      text-decoration: none;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+      &:hover {
+        border-color: $dark;
+        color: $dark;
+        box-shadow: 0 4px 12px rgba(66, 133, 244, 0.2);
+        
+        .arrow {
+          transform: translateX(5px);
+        }
+      }
+
+      .google-icon {
+        width: 22px;
+        height: 22px;
+        margin-right: 12px;
+      }
+
+      .arrow {
+        margin-left: 8px;
+        @include transition(transform);
+      }
+    }
+  }
+
+  .login-right {
+    width: 50%;
+    position: relative;
+    overflow: hidden;
+    @include flex-center;
+    background: linear-gradient(135deg, $dark 0%, $primary 100%);
+
+    .lungs-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+
+    .image-caption {
+      position: absolute;
+      width: 100%;
+      text-align: center;
+      color: $white;
+    }
+  }
+}
+
+@media (max-width: 992px) {
+  .login-container {
+    flex-direction: column;
+    height: auto;
+    min-height: 100vh;
+
+    .login-left, .login-right {
+      width: 100%;
+      padding: 2rem 1rem;
+    }
+
+    .login-left {
+      order: 1;
+      padding-bottom: 3rem;
+    }
+
+    .login-right {
+      order: 2;
+      min-height: 400px; // Más alto para mostrar mejor el contenido
+      padding: 4rem 1rem;
+
+      .image-content {
+        width: 90%;
+        padding: 1.5rem;
+
+        h2 {
+          font-size: 1.8rem;
+          margin-bottom: 1rem;
+        }
+
+        p {
+          font-size: 1rem;
+          margin-bottom: 1.5rem;
+        }
+      }
+    }
+  }
+}
+
+.profile-img {
+  border: 2px solid white;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+.user-name {
+  color: rgb(0, 0, 0);
+  font-weight: 500;
+}
+
+@media (max-width: 576px) {
+  .login-container {
+    .login-right {
+      min-height: 350px;
+      padding: 3rem 1rem;
+
+      .image-content {
+        h2 {
+          font-size: 1.5rem;
+        }
+
+        p {
+          font-size: 0.9rem;
+        }
+
+        .features-list {
+          .feature-item {
+            font-size: 0.85rem;
+          }
+        }
+      }
+    }
+  }
+}

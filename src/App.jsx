@@ -5,6 +5,9 @@ import Home from './pages/home/Home.jsx';
 import Layout from './layout/Layout.jsx';
 import Quiz from './pages/quiz/Quiz.jsx';
 import Enfermedades from './pages/enfermedades/Enfermedades.jsx';
+import Login from './pages/auth/Login.jsx';
+import Start from './pages/quiz/components/QuizComponent.jsx';
+import Podio from './pages/quiz/components/Leaderboard.jsx';
 
 import Epoc from './pages/enfermedades/epoc/Epoc.jsx';
 import Asma from './pages/enfermedades/asma/Asma.jsx';
@@ -27,35 +30,42 @@ import TbcPrevencion from './pages/enfermedades/tuberculosis/prevencion/Prevenci
 
 function App() {
   return (
-    <Layout>
-      <Routes>
+    <Routes>
+      {/* Ruta de Login fuera del Layout */}
+      <Route path="/login" element={<Login />} />
+      
+      {/* Rutas dentro del Layout */}
+      <Route element={<Layout />}>
         <Route index path="/" element={<Home />} />
         <Route path="/quiz" element={<Quiz />} />
+        <Route path="/quiz/start" element={<Start />} />
+        <Route path="/leaderboard" element={<Podio />} />
+
         <Route path="/about" element={<About />} />
         <Route path="/enfermedades" element={<Enfermedades />} />
-        <Route path="/epoc" element={<Epoc />} >
+        <Route path="/epoc" element={<Epoc />}>
           <Route index element={<Navigate to="que-es" replace />} />
           <Route path="que-es" element={<Description />} />
           <Route path="sintomas" element={<Sintomas />} />
           <Route path="tratamiento" element={<Tratamiento />} />
           <Route path="prevencion" element={<Prevencion />} />
         </Route>
-        <Route path="/asma" element={<Asma />} >
+        <Route path="/asma" element={<Asma />}>
           <Route index element={<Navigate to="que-es" replace />} />
           <Route path="que-es" element={<AsmaDescription />} />
           <Route path="sintomas" element={<AsmaSintomas />} />
           <Route path="tratamiento" element={<AsmaTratamiento />} />
           <Route path="prevencion" element={<AsmaPrevencion />} />
         </Route>
-        <Route path="/tuberculosis" element={<Tuberculosis />} >
+        <Route path="/tuberculosis" element={<Tuberculosis />}>
           <Route index element={<Navigate to="que-es" replace />} />
           <Route path="que-es" element={<TbcDescription />} />
           <Route path="sintomas" element={<TbcSintomas />} />
           <Route path="tratamiento" element={<TbcTratamiento />} />
           <Route path="prevencion" element={<TbcPrevencion />} />
         </Route>
-      </Routes>
-    </Layout>
+      </Route>
+    </Routes>
   );
 }
 

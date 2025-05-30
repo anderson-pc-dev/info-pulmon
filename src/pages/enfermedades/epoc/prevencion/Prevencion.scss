@@ -1,0 +1,259 @@
+@import '../../../../shared/variables';
+@import '../../../../shared/_font.scss';
+
+.prevencion-container {
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: clamp(0.8rem, 2.5vw, 1.5rem);
+  line-height: 1.6;
+  box-sizing: border-box;
+  flex-direction: column;
+  color: $body-color;
+}
+
+.prevencion-header {
+  margin-bottom: clamp(1rem, 3vw, 2rem);
+  text-align: center;
+
+  .prevencion-title {
+    color: $light;
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    padding: clamp(0.6rem, 1.5vw, 0.8rem);
+    @extend .inter-bold;
+    background: $primary;
+    border-radius: 8px;
+    margin-top: clamp(-2rem, -4vw, -3rem);
+    margin-bottom: 1.5rem;
+  }
+}
+
+.intro-section {
+  background: linear-gradient(to bottom, rgba($light, 0.3), rgba($light, 0.1));
+  border-radius: 1px;
+  padding: 2rem;
+
+  .intro-text {
+    @extend .inter-regular;
+    font-size: 1.1rem;
+    color: darken($body-color, 10%);
+    text-align: left;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+}
+
+.section-header {
+  text-align: left;
+  margin: 3rem 0;
+
+  .section-title {
+    @extend .inter-bold;
+    font-size: 1.8rem;
+    color: darken($primary, 15%);
+    margin-bottom: 0.5rem;
+    position: relative;
+    display: inline-block;
+  }
+
+  .section-divider {
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba($primary, 0.3), transparent);
+    margin: 1.5rem 0;
+  }
+}
+
+.medidas-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2.5rem;
+  margin: 2rem 0;
+}
+
+.medida-card {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 2rem;
+  background: white;
+  border-radius: 0.8rem;
+  overflow: hidden;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+  }
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.medida-image-container {
+  overflow: hidden;
+  
+  .medida-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+}
+
+.medida-card:hover .medida-image {
+  transform: scale(1.05);
+}
+
+.medida-content {
+  padding: 1.8rem 1.8rem 1.8rem 0;
+  
+  h3 {
+    @extend .inter-bold;
+    color: darken($primary, 15%);
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .medida-subtitle {
+    @extend .inter-regular;
+    color: lighten($body-color, 15%);
+    font-size: 1rem;
+    margin-bottom: 1.2rem;
+    font-style: italic;
+  }
+
+  .medida-details {
+    p {
+      @extend .inter-regular;
+      margin-bottom: 1.2rem;
+      color: lighten($body-color, 10%);
+    }
+
+    ul {
+      padding-left: 1.2rem;
+      margin-bottom: 1rem;
+
+      li {
+        @extend .inter-regular;
+        margin-bottom: 0.8rem;
+        color: lighten($body-color, 10%);
+        
+        strong {
+          @extend .inter-bold;
+          color: darken($body-color, 10%);
+        }
+      }
+    }
+  }
+}
+
+.diagnostico-section {
+  margin: 4rem 0;
+
+  .diagnostico-content {
+    background: white;
+    border-radius: 0.8rem;
+    padding: 2rem;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+  }
+
+  .recomendacion-item {
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid rgba($primary, 0.1);
+  }
+
+  .recomendacion-subtitle {
+    @extend .inter-bold;
+    color: darken($primary, 10%);
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    position: relative;
+    padding-left: 0rem;
+  }
+
+  p {
+    @extend .inter-regular;
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+    color: lighten($body-color, 10%);
+  }
+
+  ul {
+    padding-left: 1.5rem;
+
+    li {
+      @extend .inter-regular;
+      margin-bottom: 0.8rem;
+      color: lighten($body-color, 10%);
+      
+      strong {
+        @extend .inter-bold;
+        color: darken($body-color, 10%);
+      }
+    }
+  }
+
+  .sub-list {
+    padding-left: 1.5rem;
+    margin-top: 0.5rem;
+    list-style-type: circle;
+  }
+}
+
+.recomendacion-section {
+  background: linear-gradient(135deg, lighten($info, 45%), lighten($info, 35%));
+  border-radius: 0.8rem;
+  padding: 2rem;
+  margin: 3rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  border-left: 5px solid $info;
+
+  .recomendacion-content {
+    display: flex;
+    gap: 1.5rem;
+    align-items: flex-start;
+
+    @media (max-width: 600px) {
+      flex-direction: column;
+    }
+  }
+
+  .recomendacion-icon {
+    font-size: 2rem;
+    margin-top: 0.3rem;
+    color: $info;
+  }
+
+  .recomendacion-title {
+    @extend .inter-bold;
+    font-size: 1.4rem;
+    color: darken($info, 20%);
+    margin-bottom: 0.8rem;
+  }
+
+  p {
+    @extend .inter-regular;
+    color: darken($body-color, 10%);
+    margin-bottom: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .prevencion-header {
+    padding: 2rem 1rem;
+    
+    .prevencion-title {
+      font-size: 1.8rem;
+    }
+  }
+
+  .medida-card {
+    grid-template-columns: 1fr !important;
+    
+    .medida-content {
+      padding: 1.5rem !important;
+    }
+  }
+}

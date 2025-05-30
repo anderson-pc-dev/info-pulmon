@@ -10,12 +10,15 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@react-three/cannon": "^6.6.0",
     "@react-three/drei": "^10.0.7",
     "@react-three/fiber": "^9.1.2",
+    "@react-three/rapier": "^2.1.0",
     "@types/three": "^0.175.0",
     "bootstrap": "^5.3.3",
     "bootstrap-icons": "^1.11.3",
     "chart.js": "^4.4.9",
+    "firebase": "^11.8.1",
     "r3f-perf": "^7.2.3",
     "react": "^19.0.0",
     "react-bootstrap": "^2.10.9",

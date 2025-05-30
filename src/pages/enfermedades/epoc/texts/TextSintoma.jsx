@@ -1,18 +1,20 @@
-import {Html} from '@react-three/drei'
+import { Text } from '@react-three/drei'
 import "./TextSintoma.scss"
+import letra from "../../../../assets/fonts/Brunson.ttf"
 
-const TextSintoma = ({text}) => {
+const TextSintoma = ({textSintoma}) => {
     return (
-        <Html
-        center
-        zIndexRange={[100, 0]}
-        position={[0, 5, -21]}
-        transform
-        distanceFactor={10}
-        wrapperClass='text-sintoma'
-        >
-            <h1>{text}</h1>
-        </Html>
+        <Text
+       position={[0, 2, 0]}
+       color={"orange"}
+       anchorX={"center"}
+       anchorY={"middle"}
+       fontSize={0.5}
+       font= {letra}
+     >
+       {textSintoma}
+     </Text>
+        
     );
 };
 
