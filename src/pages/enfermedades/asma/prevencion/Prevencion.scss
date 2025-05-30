@@ -1,0 +1,275 @@
+@import '../../../../shared/variables';
+@import '../../../../shared/_font.scss';
+
+.prevencion-container {
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: clamp(0.8rem, 2.5vw, 1.5rem);
+  line-height: 1.5;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.prevencion-header {
+  margin-bottom: clamp(1rem, 3vw, 2rem);
+  text-align: center;
+}
+
+.prevencion-title {
+  color: $light;
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  padding: clamp(0.6rem, 1.5vw, 0.8rem);
+  @extend .inter-bold;
+  background: $primary;
+  border-radius: 8px;
+  margin-top: clamp(-2rem, -4vw, -3rem);
+  margin-bottom: 1.5rem;
+}
+
+.prevencion-sections {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(2rem, 4vw, 3rem);
+}
+
+.section-content {
+  flex: 1;
+  min-width: min(100%, 700px);
+}
+
+.section-title {
+  @extend .inter-bold;
+  font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+  margin-bottom: clamp(0.8rem, 1.5vw, 1.2rem);
+  font-weight: 600;
+  color: #2c3e50;
+  position: relative;
+  padding-bottom: 0.4rem;
+}
+
+.prevencion-text {
+  color: $body-color;
+  font-size: clamp(0.9rem, 1.3vw, 1rem);
+  line-height: 1.4;
+  @extend .inter-regular;
+  margin-bottom: 1.5rem;
+}
+
+.info-box-container {
+  display: flex;
+  flex-direction: row;
+  gap: clamp(1.5rem, 4vw, 2.5rem);
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.info-box {
+  background: $light;
+  padding: 1.5rem;
+  border-radius: 10px;
+  flex: 2;
+  border-left: 6px solid $primary;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  ul {
+    padding-left: 1.2rem;
+    list-style-type: disc;
+    margin: 0;
+
+    li {
+      color: $body-color;
+      font-size: clamp(0.9rem, 1.3vw, 1rem);
+      @extend .inter-regular;
+      line-height: 1.6;
+      margin-bottom: 1rem;
+
+      strong {
+        color: $primary;
+        font-weight: 600;
+      }
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+    border-left-color: darken($primary, 10%);
+  }
+
+  &.plan-emergencia {
+    border-left-color: $warning;
+    background-color: lighten($warning, 45%);
+    
+    li strong {
+      color: darken($warning, 15%);
+    }
+
+    &:hover {
+      border-left-color: darken($warning, 10%);
+    }
+  }
+}
+
+.imagen-contenedor {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-width: 280px;
+}
+
+.imagen-placeholder {
+  width: 350px;
+  height: 190px;
+  // background: linear-gradient(135deg, lighten($primary, 35%) 0%, lighten($primary, 25%) 100%);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+  flex-shrink: 0;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+
+  // Diferentes colores para cada sección
+  &.evitar-triggers {
+    background: linear-gradient(135deg, lighten($info, 25%) 0%, lighten($info, 15%) 100%);
+  }
+
+  &.tratamiento-medicamentos {
+    background: linear-gradient(135deg, lighten($success, 15%) 0%, lighten($success, 5%) 100%);
+  }
+
+  &.sintomas-monitoreo {
+    background: linear-gradient(135deg, lighten($warning, 35%) 0%, lighten($warning, 25%) 100%);
+  }
+
+  &.ambiente-saludable {
+    background: linear-gradient(135deg, lighten($secondary, 25%) 0%, lighten($secondary, 15%) 100%);
+  }
+
+  &.salud-general {
+    background: linear-gradient(135deg, lighten($primary, 30%) 0%, lighten($primary, 20%) 100%);
+  }
+
+  &.plan-accion-img {
+    background: linear-gradient(135deg, rgba(255, 193, 7, 0.3) 0%, rgba(255, 193, 7, 0.2) 100%);
+    border: 2px solid rgba(255, 193, 7, 0.4);
+  }
+}
+
+// Sección del Plan de Acción
+.plan-accion-section {
+  background: linear-gradient(135deg, rgba(42, 171, 236, 0.05) 0%, rgba(42, 171, 236, 0.02) 100%);
+  padding: 2rem;
+  border-radius: 15px;
+  border: 2px solid rgba(42, 171, 236, 0.1);
+  margin-top: 2rem;
+}
+
+.plan-accion-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.plan-accion-title {
+  color: $light;
+  font-size: clamp(1.3rem, 2.8vw, 1.8rem);
+  padding: clamp(0.6rem, 1.5vw, 0.8rem);
+  @extend .inter-bold;
+  background: $primary;
+  border-radius: 8px;
+  margin: 0;
+  display: inline-block;
+  width: 100%;
+}
+
+.plan-content {
+  .section-title {
+    color: darken($primary, 10%);
+    margin-top: 0;
+  }
+}
+
+.mensaje-final {
+  background: linear-gradient(135deg, rgba(46, 204, 113, 0.1) 0%, rgba(46, 204, 113, 0.05) 100%);
+  padding: 1.5rem;
+  border-radius: 10px;
+  border-left: 5px solid #2ecc71;
+  margin-top: 2rem;
+  
+  p {
+    margin: 0;
+    color: darken(#2ecc71, 25%);
+    font-size: clamp(1rem, 1.4vw, 1.1rem);
+    @extend .inter-bold;
+    text-align: center;
+    line-height: 1.6;
+  }
+}
+
+// Responsive Design
+@media (max-width: 992px) {
+  .info-box-container {
+    flex-direction: column;
+  }
+  
+  .imagen-contenedor {
+    order: -1;
+    margin-bottom: 1rem;
+  }
+  
+  .imagen-placeholder {
+    width: 250px;
+    height: 160px;
+  }
+}
+
+@media (max-width: 768px) {
+  .prevencion-container {
+    padding: clamp(0.5rem, 2vw, 1rem);
+  }
+  
+  .info-box {
+    padding: 1rem;
+  }
+  
+  .plan-accion-section {
+    padding: 1.5rem;
+  }
+  
+  .imagen-placeholder {
+    width: 220px;
+    height: 140px;
+  }
+}
+
+@media (max-width: 480px) {
+  .info-box ul {
+    padding-left: 1rem;
+  }
+  
+  .info-box ul li {
+    font-size: clamp(0.85rem, 1.2vw, 0.95rem);
+    margin-bottom: 0.8rem;
+  }
+  
+  .prevencion-sections {
+    gap: clamp(1.5rem, 3vw, 2rem);
+  }
+}
+
+.imagen-placeholder img {
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+}

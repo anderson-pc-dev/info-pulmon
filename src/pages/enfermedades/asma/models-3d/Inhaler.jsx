@@ -1,0 +1,123 @@
+/* eslint-disable react/no-unknown-property */
+import { useGLTF } from '@react-three/drei'
+
+
+export function Inhaler(props) {
+  const { nodes, materials } = useGLTF('/models-3d/tradicional-inhaler.glb')
+  return (
+    <group {...props} dispose={null}>
+      <mesh
+        castShadow
+        receiveShadow
+        geometry={nodes.BackAccesory.geometry}
+        material={materials.AccesoryMaterial}
+      />
+      <mesh
+        castShadow
+        receiveShadow
+        geometry={nodes.LittleOutTube.geometry}
+        material={materials.LittleOutTubeMaterial}
+      />
+      <mesh
+        castShadow
+        receiveShadow
+        geometry={nodes.OutTube.geometry}
+        material={materials.AccesoryMaterial}
+      />
+      <mesh
+        castShadow
+        receiveShadow
+        geometry={nodes.FrontAccesory.geometry}
+        material={materials.AccesoryMaterial}
+      />
+      <mesh
+        castShadow
+        receiveShadow
+        geometry={nodes.LargeTube.geometry}
+        material={materials.LargeTubeMaterial}
+      />
+      <mesh
+        castShadow
+        receiveShadow
+        geometry={nodes.MedicineTube.geometry}
+        material={materials.MedicineTubeMaterial}
+      />
+      <mesh
+        castShadow
+        receiveShadow
+        geometry={nodes.Cover.geometry}
+        material={materials.CoverMaterial}
+      />
+      <mesh
+        castShadow
+        receiveShadow
+        geometry={nodes.RightText.geometry}
+        material={materials.AccesoryMaterial}
+      />
+      <mesh
+        castShadow
+        receiveShadow
+        geometry={nodes.LeftText.geometry}
+        material={materials.AccesoryMaterial}
+      />
+      <mesh
+        castShadow
+        receiveShadow
+        geometry={nodes.BackAccesory2.geometry}
+        material={materials.AccesoryMaterial}
+      />
+      <mesh
+        castShadow
+        receiveShadow
+        geometry={nodes.LittleOutTube2.geometry}
+        material={materials.LargeTubeMaterial}
+      />
+      <mesh
+        castShadow
+        receiveShadow
+        geometry={nodes.OutTube2.geometry}
+        material={materials.AccesoryMaterial}
+      />
+      <mesh
+        castShadow
+        receiveShadow
+        geometry={nodes.FrontAccesory2.geometry}
+        material={materials.AccesoryMaterial}
+      />
+      <mesh
+        castShadow
+        receiveShadow
+        geometry={nodes.LargeTube2.geometry}
+        material={materials.LargeTubeMaterial}
+      />
+      <mesh
+        castShadow
+        receiveShadow
+        geometry={nodes.MedicineTube2.geometry}
+        material={materials.MedicineTubeMaterial}
+      />
+      <mesh
+        castShadow
+        receiveShadow
+        geometry={nodes.FrontText.geometry}
+        material={materials.AccesoryMaterial}
+      />
+      <mesh
+        castShadow
+        receiveShadow
+        geometry={nodes.BackText.geometry}
+        material={materials.AccesoryMaterial}
+      />
+      <mesh
+        castShadow
+        receiveShadow
+        geometry={nodes.Cover2.geometry}
+        material={materials.CoverMaterial}
+      />
+    </group>
+  )
+}
+
+useGLTF.preload('/models-3d/tradicional-inhaler.glb')
+
+export default Inhaler;

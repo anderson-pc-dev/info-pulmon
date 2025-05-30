@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import { NavLink, Outlet, useLocation } from 'react-router';
 import LungsHeart from './models-3d/LungsHeart';
 import BreathingHard from './models-3d/BreathingHard';
-// import BreathingHard from './models-3d/BreathingHard';
+import RotateInhaler from './models-3d/RotateInhaler';
+import PillBottle  from './models-3d/PillBottle';
 
 
 const Asma = () => {
@@ -68,6 +69,12 @@ const Asma = () => {
             }
             if (location.pathname === '/asma/sintomas') {
               return <BreathingHard />;
+            }
+            if (location.pathname === '/asma/tratamiento') {
+              return <RotateInhaler />;
+            }
+            if (location.pathname === '/asma/prevencion') {
+              return <PillBottle />;
             }
             return null;
           })()}
