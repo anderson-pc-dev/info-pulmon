@@ -123,7 +123,6 @@ $animation-delay-increment: 0.2s;
   overflow-x: hidden;
 }
 
-// Hero Section
 .diseases-hero {
   background-color: $primary;
   color: white;
@@ -136,7 +135,6 @@ $animation-delay-increment: 0.2s;
   overflow: hidden;
   min-height: 50vh;
   
-  // Contenedor de partículas
   .particles-container {
     position: absolute;
     top: 0;
@@ -178,7 +176,6 @@ $animation-delay-increment: 0.2s;
   }
 }
 
-// Grid de Enfermedades
 .diseases {
   padding: 6rem 2rem;
   background-color: $light;
@@ -206,13 +203,11 @@ $animation-delay-increment: 0.2s;
     opacity: 0;
     transform: translateY(50px);
     
-    // Clase para la animación de entrada
     &.show {
       opacity: 1;
       transform: translateY(0);
     }
     
-    // Aplicar retraso a cada tarjeta
     &:nth-child(1) { transition-delay: 0.1s; }
     &:nth-child(2) { transition-delay: 0.3s; }
     &:nth-child(3) { transition-delay: 0.5s; }
@@ -221,8 +216,10 @@ $animation-delay-increment: 0.2s;
       transform: translateY(-10px) scale(1.03);
       box-shadow: 0 32px 60px rgba(0, 0, 0, 0.18);
       
-      .card-image img {
-        transform: scale(1.1);
+      .card-image {
+        img, .video-container canvas {
+          transform: scale(1.1);
+        }
       }
       
       .arrow-icon {
@@ -238,12 +235,28 @@ $animation-delay-increment: 0.2s;
       align-items: center;
       justify-content: center;
       background-color: $light;
+      position: relative;
       
       img {
         max-height: 90%;
         max-width: 90%;
         object-fit: contain;
         transition: transform 0.8s cubic-bezier(0.165, 0.84, 0.44, 1);
+      }
+      
+      .video-container {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        
+        canvas {
+          width: 100% !important;
+          height: 100% !important;
+          object-fit: cover;
+          transition: transform 0.8s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
       }
     }
     
@@ -288,7 +301,6 @@ $animation-delay-increment: 0.2s;
   }
 }
 
-// Media queries para responsividad
 @media (max-width: 768px) {
   .diseases-hero {
     padding: 4rem 1.5rem;
@@ -310,6 +322,16 @@ $animation-delay-increment: 0.2s;
     .container {
       gap: 2rem;
     }
+    
+    .disease-card {
+      .card-image {
+        height: 180px;
+        
+        .video-container canvas {
+          object-fit: contain;
+        }
+      }
+    }
   }
 }
 
@@ -329,6 +351,10 @@ $animation-delay-increment: 0.2s;
   }
   
   .disease-card {
+    .card-image {
+      height: 150px;
+    }
+    
     .card-content {
       h2 {
         font-size: 1.8rem;

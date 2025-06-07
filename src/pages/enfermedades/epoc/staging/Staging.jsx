@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Sky, Stars, Html } from "@react-three/drei"
+import { Sky, Stars} from "@react-three/drei"
 import { useThree } from '@react-three/fiber'
 
 const Staging = () => {

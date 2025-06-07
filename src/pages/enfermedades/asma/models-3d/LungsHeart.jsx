@@ -1,7 +1,7 @@
 /* eslint-disable react/no-unknown-property */
 import { Suspense, useEffect, useRef, useState } from 'react'
 import { useGLTF, useAnimations, OrbitControls, Loader, Text } from '@react-three/drei'
-import Soporte from '../../epoc/models-3d/Soporte'
+import Soporte from './Soporte'
 import { Canvas, useFrame } from '@react-three/fiber'
 import LightsLungHeart from './LightsLungHeart'
 

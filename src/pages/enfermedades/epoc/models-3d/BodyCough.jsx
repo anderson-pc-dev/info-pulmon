@@ -1,11 +1,7 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useGLTF, useAnimations } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber';
-import {
-  Loader,
-  OrbitControls,
-  Html
-} from "@react-three/drei";
+import {Loader,OrbitControls,Html,PositionalAudio} from "@react-three/drei";
 import { Suspense } from "react";
 import Lights from '../lights/Lights';  
 import Soporte from '../models-3d/SoporteBody'; 
@@ -16,8 +12,25 @@ function BodyCough(props) {
     const group = useRef()
     const { nodes, materials, animations } = useGLTF('/models-3d/Body-Cough.glb')
     const { actions } = useAnimations(animations, group)
+    const [isAudioPlaying, setIsAudioPlaying] = useState(false) 
     const [showMessage, setShowMessage] = useState(false)
-  
+    const audioRef = useRef()
+
+
+
+    const toggleCoughSound = useCallback(() => {
+      if (!audioRef.current) return
+      
+      if (isAudioPlaying) {
+        audioRef.current.stop()
+      } else {
+        audioRef.current.stop() 
+        audioRef.current.play()
+      }
+      
+      setIsAudioPlaying(!isAudioPlaying) 
+    }, [isAudioPlaying])
+
     useEffect(() => {
       const action = actions.Cough;
       if (action) {
@@ -25,24 +38,33 @@ function BodyCough(props) {
         return () => action.stop();
       }
     }, [actions.Cough]);
-  
+
     useEffect(() => {
       const handleKeyDown = (event) => {
-        if (event.key.toLowerCase() === 'c') {
-          setShowMessage(prev => !prev);
+        if (event.key.toLowerCase() === 'a') {
+          toggleCoughSound()
         }
-      };
-  
-      window.addEventListener('keydown', handleKeyDown);
-  
+        if (event.key.toLowerCase() === 'c') {
+          setShowMessage(prev => !prev)
+        }
+      }
+
+      window.addEventListener('keydown', handleKeyDown)
+
       return () => {
-        window.removeEventListener('keydown', handleKeyDown);
-      };
-    }, []);
+        window.removeEventListener('keydown', handleKeyDown)
+      }
+    }, [toggleCoughSound])
   
 
   return (
     <group ref={group} {...props} dispose={null}>
+      <PositionalAudio
+          ref={audioRef}
+          url="/sounds/coughing.mp3" 
+          loop
+          autoplay={false}
+        />
       {showMessage && (
         <Html
         position={[-1.8, -4, -1.5]}

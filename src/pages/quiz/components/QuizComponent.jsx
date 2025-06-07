@@ -22,6 +22,24 @@ const QuizComponent = () => {
   } = useQuizLogic();
 
   const [recentlySaved, setRecentlySaved] = useState(false);
+  const [draggedItem, setDraggedItem] = useState(null);
+  const [orderedItems, setOrderedItems] = useState([]);
+  const [isAnimating, setIsAnimating] = useState(false);
+  const [matchedPairs, setMatchedPairs] = useState({});
+  const [draggedOption, setDraggedOption] = useState(null);
+  const [termMatches, setTermMatches] = useState({});
+  const [draggedTerm, setDraggedTerm] = useState(null);
+  const [blankAnswers, setBlankAnswers] = useState([]);
+
+  const ConfirmButton = ({ onClick, disabled, children, className = '' }) => (
+  <button 
+    onClick={onClick}
+    disabled={disabled}
+    className={`confirm-button hover-scale ${className}`}
+  >
+    {children}
+  </button>
+  );
 
   useEffect(() => {
     if (quizCompleted && user) {
@@ -31,60 +49,154 @@ const QuizComponent = () => {
     }
   }, [quizCompleted, user]);
 
+  const handleOptionDragStart = (option) => {
+    setDraggedOption(option);
+  };
+
+  const handleImageDrop = (imageId) => {
+    if (!draggedOption) return;
+    
+    setMatchedPairs(prev => ({
+      ...prev,
+      [imageId]: draggedOption
+    }));
+    
+    setDraggedOption(null);
+  };
+
+  const handleDragStart = (item) => {
+    setDraggedItem(item);
+    setIsAnimating(true);
+  };
+
+  const handleDrop = (position) => {
+    if (!draggedItem) return;
+    
+    setOrderedItems(prev => {
+      const newOrder = [...prev];
+      const filteredOrder = newOrder.filter(item => item !== draggedItem);
+      filteredOrder.splice(position, 0, draggedItem);
+      return filteredOrder;
+    });
+    
+    setDraggedItem(null);
+    setIsAnimating(false);
+  };
+
+const handleTermDragStart = (termId, term) => {
+  setDraggedTerm({ termId, term });
+};
+
+  const resetOrderQuestion = () => {
+    setOrderedItems([]);
+  };
+  const resetImageSelection = () => {
+    setMatchedPairs({});
+    setDraggedOption(null);
+  };
+
+  const resetTermMatch = () => {
+    setTermMatches({});
+    setDraggedTerm(null);
+  };
+
+  const resetFillBlankMultiple = () => {
+  setBlankAnswers([]);
+};
+
   if (showResults) {
     return (
       <div className="quiz-results">
-        <h2>Resultados del Quiz</h2>
+        <div className="result-header">
+          <h2>Resultados del Quiz</h2>
+          <div className="decoration-circle"></div>
+          <div className="decoration-triangle"></div>
+        </div>
         
         {!user && (
-          <div className="auth-warning">
-            <p>⚠️ No has iniciado sesión. Tu puntuación no se guardará.</p>
-            <p>Inicia sesión para guardar tus resultados y competir en el ranking.</p>
+          <div className="auth-warning pulse">
+            <div className="warning-icon">⚠️</div>
+            <div>
+              <p>No has iniciado sesión. Tu puntuación no se guardará.</p>
+              <p>Inicia sesión para guardar tus resultados y competir en el ranking.</p>
+            </div>
           </div>
         )}
         
         {recentlySaved && (
-          <div className="saved-notification">
-            ✅ Tu puntuación ha sido guardada en tu historial
+          <div className="saved-notification slide-in">
+            <div className="checkmark">✓</div>
+            <span>Tu puntuación ha sido guardada en tu historial</span>
           </div>
         )}
 
         <div className="score-display">
-          <div className="score-circle">
+          <div className={`score-circle ${score >= passingScore ? 'success' : 'fail'}`}>
             <span className="score-percent">
               {Math.round((score / maxScore) * 100)}%
             </span>
-            <span className="score-text">Puntuación</span>
+            <svg className="circle-chart" viewBox="0 0 36 36">
+              <path
+                className="circle-bg"
+                d="M18 2.0845
+                  a 15.9155 15.9155 0 0 1 0 31.831
+                  a 15.9155 15.9155 0 0 1 0 -31.831"
+              />
+              <path
+                className="circle-fill"
+                strokeDasharray={`${(score / maxScore) * 100}, 100`}
+                d="M18 2.0845
+                  a 15.9155 15.9155 0 0 1 0 31.831
+                  a 15.9155 15.9155 0 0 1 0 -31.831"
+              />
+            </svg>
           </div>
           <div className="score-details">
-            <p><strong>Respuestas correctas:</strong> {score / 10} de {totalQuestions}</p>
-            <p><strong>Puntos obtenidos:</strong> {score} de {maxScore}</p>
-            <p className={score >= passingScore ? 'pass-text' : 'fail-text'}>
-              {score >= passingScore ? '¡Felicidades! Has aprobado.' : 'No has alcanzado el puntaje mínimo.'}
+            <p><span className="detail-icon">✅</span> <strong>Respuestas correctas:</strong> {score / 10} de {totalQuestions}</p>
+            <p><span className="detail-icon">⭐</span> <strong>Puntos obtenidos:</strong> {score} de {maxScore}</p>
+            <p className={`result-message ${score >= passingScore ? 'pass-text' : 'fail-text'}`}>
+              {score >= passingScore ? (
+                <>
+                  <span className="celebrate">🎉</span> ¡Felicidades! Has aprobado.
+                </>
+              ) : (
+                <>
+                  <span className="sad-face">😕</span> No has alcanzado el puntaje mínimo.
+                </>
+              )}
             </p>
           </div>
         </div>
         
         <div className="answers-review">
-          <h3>Revisión de respuestas</h3>
+          <h3 className="review-title">
+            <span className="title-decoration"></span>
+            Revisión de respuestas
+            <span className="title-decoration"></span>
+          </h3>
           {Object.entries(userAnswers).map(([questionId, answerData]) => (
-            <div key={questionId} className={`answer-item ${answerData.isCorrect ? 'correct' : 'incorrect'}`}>
-              <p className="question-text"><strong>Pregunta {questionId}:</strong> {answerData.question}</p>
-              <p><strong>Tu respuesta:</strong> {answerData.selectedAnswer}</p>
-              {!answerData.isCorrect && <p><strong>Respuesta correcta:</strong> {answerData.correctAnswer}</p>}
-              <p className="explanation"><strong>Explicación:</strong> {answerData.explanation}</p>
+            <div key={questionId} className={`answer-item ${answerData.isCorrect ? 'correct' : 'incorrect'} fade-in`}>
+              <div className="answer-status">
+                {answerData.isCorrect ? '✓' : '✗'}
+              </div>
+              <div className="answer-content">
+                <p className="question-text"><strong>Pregunta {questionId}:</strong> {answerData.question}</p>
+                <p><strong>Tu respuesta:</strong> {answerData.selectedAnswer}</p>
+                {!answerData.isCorrect && <p><strong>Respuesta correcta:</strong> {answerData.correctAnswer}</p>}
+                <p className="explanation"><strong>Explicación:</strong> {answerData.explanation}</p>
+              </div>
             </div>
           ))}
         </div>
         
         <div className="results-actions">
-            <button onClick={restartQuiz} className="restart-button">
+          <button onClick={restartQuiz} className="restart-button hover-grow">
             Volver a Intentar
-            </button>
-            <NavLink to="/leaderboard" className="start-quiz-button">
+          </button>
+          <NavLink to="/leaderboard" className="leaderboard-button hover-grow">
             Ver podio
-            </NavLink>
-            </div>
+          </NavLink>
+        </div>
       </div>
     );
   }
@@ -93,65 +205,252 @@ const QuizComponent = () => {
     <div className="quiz-container">
       <div className="quiz-header">
         <div className="quiz-progress">
-          <div className="progress-bar" style={{ width: `${progress}%` }}></div>
-          <span>Pregunta {currentQuestionIndex + 1} de {totalQuestions}</span>
+          <div className="progress-bar-container">
+            <div className="progress-bar" style={{ width: `${progress}%` }}></div>
+            <span className="progress-text">Pregunta {currentQuestionIndex + 1} de {totalQuestions}</span>
+          </div>
         </div>
         <div className="quiz-stats">
-          <span className="time-left">⏱️ {timeLeft}</span>
-          <span className="current-score">⭐ {score}</span>
+          <div className="stat-box time-left">
+            <div className="stat-icon">⏱️</div>
+            <div className="stat-value">{timeLeft}</div>
+          </div>
+          <div className="stat-box current-score">
+            <div className="stat-icon">⭐</div>
+            <div className="stat-value">{score}</div>
+          </div>
           {user && (
-            <span className="user-badge">
+            <div className="user-quiz hover-grow">
               <img src={user.photoURL} alt={user.displayName} className="user-avatar" />
-              <span>{user.displayName}</span>
-            </span>
+              <span className="user-name">{user.displayName}</span>
+            </div>
           )}
         </div>
       </div>
 
       <div className="question-container">
-        <h3 className="question-text">{currentQuestion.question}</h3>
+        <h3 className="question-text slide-up">
+          <span className="question-number">{currentQuestionIndex + 1}</span>
+          {currentQuestion.question}
+        </h3>
         
-        {currentQuestion.type === 'multiple-choice' && (
-          <div className="options-container">
-            {currentQuestion.options.map((option, index) => (
-              <button
-                key={index}
-                onClick={() => handleAnswerSelect(option)}
-                className="option-button"
-              >
-                <span className="option-letter">{String.fromCharCode(65 + index)}</span>
-                <span className="option-text">{option}</span>
-              </button>
-            ))}
+        {currentQuestion.type === 'fill-blank-multiple' && (
+          <div className="fill-blank-multiple-container">
+            <div className="blank-inputs-container">
+              {Array(currentQuestion.correctAnswers.length).fill().map((_, index) => (
+                <div key={index} className="blank-input-group">
+                  <input
+                    type="text"
+                    value={blankAnswers[index] || ''}
+                    onChange={(e) => {
+                      const newAnswers = [...blankAnswers];
+                      newAnswers[index] = e.target.value;
+                      setBlankAnswers(newAnswers);
+                    }}
+                    placeholder={currentQuestion.placeholder?.[index] || 'Respuesta'}
+                    className="blank-input"
+                  />
+                  {index < currentQuestion.correctAnswers.length - 1 && (
+                    <span className="separator">,</span>
+                  )}
+                </div>
+              ))}
+            </div>
+            
+            <div className="question-prompt">
+              {currentQuestion.question.split('__________').slice(-1)[0]}
+            </div>
+            
+            <ConfirmButton 
+              onClick={() => {
+                handleAnswerSelect({
+                  answers: blankAnswers,
+                  questionId: currentQuestion.id
+                });
+                resetFillBlankMultiple();
+              }}
+              disabled={blankAnswers.some(answer => !answer.trim())}
+              className="submit-blank hover-scale"
+            >
+              Confirmar
+            </ConfirmButton>
           </div>
         )}
 
-        {currentQuestion.type === 'true-false' && (
-          <div className="true-false-container">
-            {currentQuestion.options.map((option, index) => (
-              <button
-                key={index}
-                onClick={() => handleAnswerSelect(option)}
-                className={`tf-button ${option === 'Verdadero' ? 'true-button' : 'false-button'}`}
-              >
-                {option}
-              </button>
-            ))}
+        {currentQuestion.type === 'image-match' && (
+          <div className="image-match-container">
+            <div className="match-options">
+              {currentQuestion.options.map((option, index) => (
+                <div 
+                  key={index}
+                  className={`match-option ${Object.values(matchedPairs).includes(option) ? 'matched' : ''}`}
+                  draggable={!Object.values(matchedPairs).includes(option)}
+                  onDragStart={() => handleOptionDragStart(option)}
+                >
+                  {option}
+                </div>
+              ))}
+            </div>
+            
+            <div className="image-targets">
+              {currentQuestion.images.map((image) => (
+                <div 
+                  key={image.id}
+                  className="image-target"
+                  onDragOver={(e) => e.preventDefault()}
+                  onDrop={() => handleImageDrop(image.id)}
+                >
+                  <img src={image.url} alt={image.alt} />
+                  <div className="match-result">
+                    {matchedPairs[image.id] && (
+                      <div className="matched-label">
+                        {matchedPairs[image.id]}
+                        <button 
+                          className="remove-match"
+                          onClick={() => {
+                            const newPairs = {...matchedPairs};
+                            delete newPairs[image.id];
+                            setMatchedPairs(newPairs);
+                          }}
+                        >
+                          ×
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+            
+            <ConfirmButton 
+              onClick={() => {
+                handleAnswerSelect({
+                  answer: matchedPairs,
+                  questionId: currentQuestion.id
+                });
+              }}
+              disabled={Object.keys(matchedPairs).length !== currentQuestion.images.length}
+              className="submit-match"
+            >
+              Confirmar asociaciones
+            </ConfirmButton >
           </div>
         )}
 
-        {currentQuestion.type === 'image-selection' && (
-          <div className="image-options-container">
-            {currentQuestion.images.map((image) => (
-              <div 
-                key={image.id} 
-                className="image-option"
-                onClick={() => handleAnswerSelect(image.id)}
-              >
-                <img src={image.url} alt={image.alt} />
-                <span className="image-label">Opción {image.id}</span>
+        {currentQuestion.type === 'term-match' && (
+          <div className="term-match-container">
+            <div className="match-grid">
+              <div className="terms-column">
+                <h4>Términos</h4>
+                <div className="terms-list">
+                  {currentQuestion.pairs.map((pair) => {
+                    const isTermMatched = Object.entries(termMatches).some(
+                      ([termId, description]) => termId === pair.termId
+                    );
+                    return (
+                      <div 
+                        key={pair.termId}
+                        className={`term-item ${isTermMatched ? 'matched' : ''}`}
+                        draggable={!isTermMatched}
+                        onDragStart={() => handleTermDragStart(pair.termId, pair.term)}
+                        onDragEnd={() => setDraggedTerm(null)}
+                      >
+                        {pair.term}
+                        {!isTermMatched && <span className="drag-handle">☰</span>}
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
-            ))}
+              <div className="descriptions-column">
+                <h4>Descripciones</h4>
+                <div className="descriptions-list">
+                  {currentQuestion.pairs.map((pair) => {
+                    const matchedTermId = Object.entries(termMatches).find(
+                      ([termId, description]) => description === pair.description
+                    )?.[0];
+                    
+                    const matchedTerm = matchedTermId 
+                      ? currentQuestion.pairs.find(p => p.termId === matchedTermId)?.term 
+                      : null;
+
+                    return (
+                      <div
+                        key={pair.termId}
+                        className={`description-target ${
+                          matchedTermId ? 'matched' : ''
+                        } ${
+                          draggedTerm?.termId === pair.termId ? 'drag-over' : ''
+                        }`}
+                        onDragOver={(e) => {
+                          e.preventDefault();
+                          if (draggedTerm) {
+                            e.currentTarget.classList.add('drag-over');
+                          }
+                        }}
+                        onDragLeave={(e) => {
+                          e.currentTarget.classList.remove('drag-over');
+                        }}
+                        onDrop={(e) => {
+                          e.preventDefault();
+                          e.currentTarget.classList.remove('drag-over');
+                          
+                          if (draggedTerm) {
+                            const newMatches = {...termMatches};
+                            delete newMatches[draggedTerm.termId];
+                            Object.keys(newMatches).forEach(termId => {
+                              if (newMatches[termId] === pair.description) {
+                                delete newMatches[termId];
+                              }
+                            });
+                            newMatches[draggedTerm.termId] = pair.description;
+                            setTermMatches(newMatches);
+                          }
+                        }}
+                      >
+                        {matchedTermId ? (
+                          <div className="matched-pair">
+                            <span className="matched-term">{matchedTerm}</span>
+                            <span className="matched-description">{pair.description}</span>
+                            <button 
+                              className="remove-match"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                const newMatches = {...termMatches};
+                                delete newMatches[matchedTermId];
+                                setTermMatches(newMatches);
+                              }}
+                            >
+                              ×
+                            </button>
+                          </div>
+                        ) : (
+                          <div className="description-content">
+                            {pair.description}
+                            <div className="drop-hint">Suelta aquí</div>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+              <ConfirmButton
+                onClick={() => {
+                  handleAnswerSelect({
+                    answer: termMatches,
+                    questionId: currentQuestion.id
+                  });
+                  resetTermMatch();
+                }}
+                disabled={Object.keys(termMatches).length !== currentQuestion.pairs.length}
+                className={`submit-match ${
+                  Object.keys(termMatches).length === currentQuestion.pairs.length ? 'pulse' : ''
+                }`}
+              >
+                Confirmar asociaciones
+              </ConfirmButton>
           </div>
         )}
 
@@ -167,42 +466,98 @@ const QuizComponent = () => {
               }}
               className="blank-input"
             />
-            <button 
+            <ConfirmButton
               onClick={() => {
                 const input = document.querySelector('.blank-input');
                 handleAnswerSelect(input.value);
               }}
-              className="submit-blank"
+              className="submit-blank hover-scale"
+              
             >
               Confirmar
-            </button>
+            </ConfirmButton>
           </div>
         )}
 
-        {currentQuestion.type === 'drag-drop' && (
-          <div className="drag-drop-container">
-            <div className="drag-items">
-              {currentQuestion.pairs.map((pair) => (
-                <div key={pair.id} className="drag-item" draggable="true">
-                  {pair.item}
+        {currentQuestion.type === 'drag-drop-order' && (
+          <div className="drag-order-container">
+            <h4 className="order-instructions">Ordena del más leve (1) al más severo (4):</h4>
+            
+            <div className="items-to-order">
+              {currentQuestion.itemsToOrder.map((item, index) => (
+                <div 
+                  key={index}
+                  className={`order-item ${orderedItems.includes(item) ? 'in-slot' : ''} ${isAnimating && draggedItem === item ? 'dragging' : ''}`}
+                  draggable={!orderedItems.includes(item)}
+                  onDragStart={() => handleDragStart(item)}
+                  onDragEnd={() => setIsAnimating(false)}
+                >
+                  {item}
+                  <div className="drag-handle">☰</div>
                 </div>
               ))}
             </div>
-            <div className="drop-targets">
-              {currentQuestion.pairs.map((pair) => (
-                <div key={pair.id} className="drop-target">
-                  <p>{pair.match}</p>
+            
+            <div className="order-slots">
+              {[1, 2, 3, 4].map((position, index) => (
+                <div 
+                  key={position}
+                  className={`order-slot ${orderedItems[index] ? 'filled' : ''}`}
+                  onDragOver={(e) => e.preventDefault()}
+                  onDrop={() => handleDrop(index)}
+                >
+                  {orderedItems[index] ? (
+                    <div className="ordered-item hover-scale">
+                      {orderedItems[index]}
+                      <button 
+                        className="remove-item"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setOrderedItems(prev => prev.filter((_, i) => i !== index));
+                        }}
+                      >
+                        ×
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="empty-slot">
+                      <span>Suelta aquí</span>
+                      <div className="drop-indicator"></div>
+                    </div>
+                  )}
+                  <div className="slot-number">{position}</div>
                 </div>
               ))}
             </div>
-          </div>
-        )}
+            
+             <ConfirmButton
+                onClick={() => {
+                  handleAnswerSelect({
+                    answer: orderedItems,
+                    questionId: currentQuestion.id
+                  });
+                  resetOrderQuestion();
+                }}
+                disabled={orderedItems.length !== currentQuestion.itemsToOrder.length}
+                className={`submit-order ${orderedItems.length === currentQuestion.itemsToOrder.length ? 'pulse' : ''}`}
+              >
+                Confirmar orden
+              </ConfirmButton>
+            </div>
+          )}
       </div>
 
       <div className="quiz-footer">
         <button 
-          onClick={restartQuiz} 
-          className="quit-button"
+          onClick={() => {
+            restartQuiz();
+            resetOrderQuestion();
+            resetImageSelection();
+            resetTermMatch();
+            resetFillBlankMultiple();
+            
+          }} 
+          className="quit-button hover-scale"
         >
           Salir del Quiz
         </button>

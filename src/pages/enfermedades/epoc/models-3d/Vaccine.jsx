@@ -155,7 +155,7 @@ export default function Scene() {
     setHit(true)
     setBallActive(false) 
     setIsAnimating(false)
-    setTimeout(() => setShowWelcome(true), 3000) // Mensaje después de 5 segundos
+    setTimeout(() => setShowWelcome(true), 3000) 
   }
 
   const handleRestore = () => {

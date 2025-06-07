@@ -12,11 +12,9 @@ const Epoc = () => {
   const [showContent, setShowContent] = useState(false);
 
   useEffect(() => {
-    // Verificar si estamos en una ruta anidada (no en la raíz)
     const isNestedRoute = location.pathname !== 'epoc' && !location.pathname.endsWith('epoc');
     setShowContent(isNestedRoute);
     
-    // Scroll suave al contenido cuando se muestra
     if (isNestedRoute) {
       setTimeout(() => {
         const contentElement = document.querySelector('.epoc-outlet-wrapper');

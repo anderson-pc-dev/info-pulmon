@@ -31,32 +31,25 @@
 }
 
 .quiz-header {
-  position: relative;
-  margin-bottom: 1rem;
-  display: flex;
   flex-direction: column;
-  align-items: center;
-  margin-top: -4rem;
+  margin-bottom: clamp(1rem, 3vw, 2rem);
+  text-align: center;
+  margin-top: -7rem;
   
   .quiz-icon {
     font-size: 3rem;
-    margin-top: 0.5rem;
+    margin-top: 1.9rem;
     animation: bounce 2s infinite;
-    order: 2; /* Coloca el icono después del título */
+    order: 2; 
   }
 }
 
 .quiz-title {
-  color: $light;
-  font-size: clamp(1.4rem, 3vw, 2rem);
-  padding: clamp(0.6rem, 1.5vw, 0.8rem);
   @extend .inter-bold;
-  background: $primary;
-  border-radius: 8px;
-  margin-top: clamp(-2rem, -4vw, -3rem);
+  font-size: clamp(1.8rem, 4vw, 3rem); 
   margin-bottom: 0.5rem;
-  order: 1; /* Coloca el título primero */
-
+  color: $light;
+  order: 1;
   @media (max-width: 768px) {
     font-size: 1.8rem;
   }
@@ -66,6 +59,7 @@
   font-size: 1.15rem;
   line-height: 1.7;
   margin-bottom: 2.5rem;
+  @extend .inter-regular;
   color: lighten($body-color, 10%);
   max-width: 700px;
   margin-left: auto;
@@ -74,6 +68,7 @@
   strong {
     color: $primary;
     font-weight: 600;
+    @extend .inter-bold;
     background-color: lighten($primary, 45%);
     padding: 0.2rem 0.4rem;
     border-radius: 4px;
@@ -96,7 +91,6 @@
   background: white;
   border-radius: 12px;
   padding: 1.5rem;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   
   &:hover {
@@ -111,12 +105,14 @@
 
   h3 {
     color: $primary;
+    @extend .inter-bold;
     margin-bottom: 0.5rem;
     font-size: 1.2rem;
   }
 
   p {
     color: lighten($body-color, 20%);
+    @extend .inter-regular;
     font-size: 0.95rem;
     line-height: 1.5;
   }
@@ -133,6 +129,7 @@
   h2 {
     color: $primary;
     font-size: 1.5rem;
+    @extend .inter-bold;
     margin-bottom: 1.5rem;
     text-align: center;
     font-weight: 700;
@@ -190,7 +187,6 @@
   border-radius: 12px;
   padding: 1.5rem;
   text-align: left;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
   border-top: 3px solid $primary;
   display: flex;
   align-items: flex-start;
@@ -204,6 +200,7 @@
   p {
     margin: 0;
     color: lighten($body-color, 10%);
+    @extend .inter-regular;
     line-height: 1.6;
   }
 }
@@ -219,10 +216,9 @@
   font-size: 1.2rem;
   font-weight: 700;
   text-decoration: none;
+  @extend .inter-regular;
   transition: all 0.3s ease;
-  border: none;
   cursor: pointer;
-  box-shadow: 0 10px 20px rgba($primary, 0.2);
   margin-top: 1rem;
   position: relative;
   overflow: hidden;
@@ -252,8 +248,6 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(rgba(255,255,255,0.1), rgba(255,255,255,0));
-    opacity: 0;
     transition: opacity 0.3s ease;
   }
 

@@ -8,6 +8,7 @@ import Enfermedades from './pages/enfermedades/Enfermedades.jsx';
 import Login from './pages/auth/Login.jsx';
 import Start from './pages/quiz/components/QuizComponent.jsx';
 import Podio from './pages/quiz/components/Leaderboard.jsx';
+import Tabla from './pages/quiz/components/FullLeaderboard.jsx';
 
 import Epoc from './pages/enfermedades/epoc/Epoc.jsx';
 import Asma from './pages/enfermedades/asma/Asma.jsx';
@@ -40,6 +41,8 @@ function App() {
         <Route path="/quiz" element={<Quiz />} />
         <Route path="/quiz/start" element={<Start />} />
         <Route path="/leaderboard" element={<Podio />} />
+        <Route path="/leaderboard/full" element={<Tabla />} />
+
 
         <Route path="/about" element={<About />} />
         <Route path="/enfermedades" element={<Enfermedades />} />

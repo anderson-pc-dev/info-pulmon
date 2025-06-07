@@ -34,28 +34,35 @@ export const useQuizLogic = () => {
     setSaveError(null);
 
     try {
+      const maxPossibleScore = quizQuestions.length * quizConfig.pointsPerQuestion;
+      const percentageScore = Math.round((finalScore / maxPossibleScore) * 100);
+
+      console.log("Enviando score:", {
+        rawScore: finalScore,
+        calculatedPercentage: percentageScore,
+        maxPossibleScore: maxPossibleScore
+      });
+
       const response = await fetch(
         `${import.meta.env.VITE_API_BASE_URL}quiz-scores`,
         {
           method: 'POST',
           headers: { 
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${await user.getIdToken()}` // Añadir autenticación
+            'Authorization': `Bearer ${await user.getIdToken()}`
           },
           body: JSON.stringify({
             userId: user.uid,
             email: user.email,
             displayName: user.displayName,
             score: finalScore,
-            maxScore: quizQuestions.length * quizConfig.pointsPerQuestion,
-            timeSpent: timeSpent, 
-            dateCompleted: new Date().toISOString() 
+            percentage: percentageScore,
+            maxScore: maxPossibleScore,
+            timeSpent: timeSpent,
+            dateCompleted: new Date().toISOString()
           }),
         }
       );
-      console.log("user:", user);
-      console.log("user.getIdToken:", user?.getIdToken);
-
 
       if (!response.ok) {
         const errorData = await response.json();
@@ -72,23 +79,28 @@ export const useQuizLogic = () => {
     }
   };
 
-  // Finalizar el quiz - Versión corregida
-  const completeQuiz = async () => {
-    console.log("completeQuiz triggered");
+  const calculatePercentageScore = (currentScore) => {
+    const maxPossibleScore = quizQuestions.length * quizConfig.pointsPerQuestion;
+    return Math.round((currentScore / maxPossibleScore) * 100);
+  };
+
+  const completeQuiz = async (finalScore) => {
+    console.log("Final score to save:", finalScore);
     setQuizCompleted(true);
     setShowResults(true);
     
     if (user) {
       try {
-        await saveQuizScore(score, quizConfig.timeLimit * 60 - timeLeft);
-        console.log("Score saved!");
+        await saveQuizScore(finalScore, quizConfig.timeLimit * 60 - timeLeft);
+        console.log("Score saved correctly:", finalScore);
       } catch (error) {
         console.error('Failed to save score:', error);
       }
-    }else {
-    console.log("No user, not saving score.");
-  }
+    } else {
+      console.log("No user, not saving score.");
+    }
   };
+
 
   const formatTime = (seconds) => {
     const mins = Math.floor(seconds / 60);
@@ -96,31 +108,109 @@ export const useQuizLogic = () => {
     return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
   };
 
-  // Manejar selección de respuesta
   const handleAnswerSelect = (selectedAnswer) => {
-    const isCorrect = selectedAnswer === currentQuestion.correctAnswer;
+  let isCorrect;
+  let formattedAnswer;
+  
+  // Preguntas de completar múltiples espacios
+  if (currentQuestion.type === 'fill-blank-multiple') {
+    const userAnswers = Array.isArray(selectedAnswer.answers || selectedAnswer) 
+      ? (selectedAnswer.answers || selectedAnswer).map(a => a.toLowerCase().trim())
+      : [selectedAnswer.toLowerCase().trim()];
     
-    // Guardar respuesta
-    setUserAnswers(prev => ({
-      ...prev,
-      [currentQuestion.id]: {
-        selectedAnswer,
-        isCorrect,
-        question: currentQuestion.question,
-        correctAnswer: currentQuestion.correctAnswer,
-        explanation: currentQuestion.explanation
-      }
-    }));
+    // Convertir respuestas correctas a minúsculas
+    const correctAnswers = currentQuestion.correctAnswers.map(a => a.toLowerCase().trim());
+    
+    // Verificar si contienen las mismas respuestas sin importar el orden
+    const allAnswersIncluded = correctAnswers.every(correctAns => 
+      userAnswers.includes(correctAns)
+    );
+    const noExtraAnswers = userAnswers.every(userAns => 
+      correctAnswers.includes(userAns)
+    );
+    
+    isCorrect = allAnswersIncluded && noExtraAnswers && 
+               userAnswers.length === correctAnswers.length;
+    
+    formattedAnswer = userAnswers.join(', ');
+  }
+  // Preguntas de ordenamiento
+  else if (currentQuestion.type === 'drag-drop-order') {
+    if (typeof selectedAnswer === 'object' && selectedAnswer.answer) {
+      isCorrect = JSON.stringify(selectedAnswer.answer) === JSON.stringify(currentQuestion.correctOrder);
+    } else {
+      isCorrect = JSON.stringify(selectedAnswer) === JSON.stringify(currentQuestion.correctOrder);
+    }
+    formattedAnswer = Array.isArray(selectedAnswer.answer || selectedAnswer) 
+      ? (selectedAnswer.answer || selectedAnswer).join(', ')
+      : selectedAnswer;
+  } 
+  // Preguntas de asociación imagen-enfermedad
+  else if (currentQuestion.type === 'image-match') {
+    const userAnswer = typeof selectedAnswer === 'object' && selectedAnswer.answer 
+      ? selectedAnswer.answer 
+      : selectedAnswer;
+    
+    isCorrect = Object.entries(currentQuestion.correctMatches).every(
+      ([imageId, correctDisease]) => userAnswer[imageId] === correctDisease
+    );
+    
+    formattedAnswer = Object.entries(userAnswer)
+      .map(([imageId, disease]) => `${imageId}: ${disease}`)
+      .join('; ');
+  }
+  // Preguntas de asociación término-descripción
+  else if (currentQuestion.type === 'term-match') {
+    const userAnswer = typeof selectedAnswer === 'object' && selectedAnswer.answer 
+      ? selectedAnswer.answer 
+      : selectedAnswer;
+    
+    isCorrect = Object.entries(currentQuestion.correctMatches).every(
+      ([termId, correctDescription]) => userAnswer[termId] === correctDescription
+    );
+    
+    formattedAnswer = Object.entries(userAnswer)
+      .map(([termId, description]) => `${termId}: ${description}`)
+      .join('; ');
+  } 
+  // Otros tipos de preguntas
+  else {
+    isCorrect = selectedAnswer.toLowerCase().trim() === currentQuestion.correctAnswer.toLowerCase().trim();
+    formattedAnswer = selectedAnswer;
+  }
+
+  // Guardar respuesta
+  setUserAnswers(prev => ({
+    ...prev,
+    [currentQuestion.id]: {
+      selectedAnswer: formattedAnswer,
+      isCorrect,
+      question: currentQuestion.question,
+      correctAnswer: currentQuestion.type === 'fill-blank-multiple'
+        ? currentQuestion.correctAnswers.join(', ')
+        : currentQuestion.type === 'image-match'
+          ? Object.entries(currentQuestion.correctMatches)
+              .map(([imageId, disease]) => `${imageId}: ${disease}`)
+              .join('; ')
+          : Array.isArray(currentQuestion.correctAnswer || currentQuestion.correctOrder)
+            ? (currentQuestion.correctAnswer || currentQuestion.correctOrder).join(', ')
+            : currentQuestion.correctAnswer,
+      explanation: currentQuestion.explanation
+    }
+  }));
 
     // Actualizar puntuación 
-    if (isCorrect) {
-      setScore(prev => prev + quizConfig.pointsPerQuestion);
-    }
-
+    const newScore = isCorrect ? score + quizConfig.pointsPerQuestion : score;
+    
+    // Avanzar a la siguiente pregunta o finalizar
     if (currentQuestionIndex < quizQuestions.length - 1) {
+      setScore(newScore);
       setCurrentQuestionIndex(prev => prev + 1);
     } else {
-      completeQuiz();
+      setScore(newScore);
+      setTimeout(() => {
+        completeQuiz(newScore);
+      }, 0);
     }
   };
 
@@ -149,6 +239,7 @@ export const useQuizLogic = () => {
     showResults,
     handleAnswerSelect,
     restartQuiz,
+    scorePercentage: calculatePercentageScore(score),
     progress,
     passingScore: quizConfig.passingScore,
     maxScore: quizQuestions.length * quizConfig.pointsPerQuestion,

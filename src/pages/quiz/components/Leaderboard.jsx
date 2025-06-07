@@ -1,7 +1,8 @@
-// LeaderboardPage.jsx
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import './LeaderboardPage.scss';
+import ThreeDPodium from '../../enfermedades/epoc/models-3d/3DPodium';
+import UserBadge from '../components/UserBadge';
 
 const LeaderboardPage = () => {
   const [topUsers, setTopUsers] = useState([]);
@@ -21,7 +22,8 @@ const LeaderboardPage = () => {
         }
         
         const data = await response.json();
-        setTopUsers(data);
+        const paddedData = [...data, ...Array(3 - data.length).fill(null)];
+        setTopUsers(paddedData);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -32,22 +34,22 @@ const LeaderboardPage = () => {
     fetchLeaderboard();
   }, []);
 
+  const formatTime = (seconds) => {
+    if (!seconds) return '--';
+    return seconds < 60 
+      ? `${Math.round(seconds)}s` 
+      : `${Math.floor(seconds / 60)}m ${Math.round(seconds % 60)}s`;
+  };
+
   if (loading) {
-    return (
-      <div className="leaderboard-container">
-        <div className="loading-spinner"></div>
-        <p>Cargando podio...</p>
-      </div>
-    );
+    return <div className="leaderboard-container loading">Cargando podio...</div>;
   }
 
   if (error) {
     return (
-      <div className="leaderboard-container">
-        <div className="error-message">
-          <p>⚠️ {error}</p>
-          <button onClick={() => window.location.reload()}>Reintentar</button>
-        </div>
+      <div className="leaderboard-container error">
+        <p>⚠️ {error}</p>
+        <button onClick={() => window.location.reload()}>Reintentar</button>
       </div>
     );
   }
@@ -56,92 +58,58 @@ const LeaderboardPage = () => {
     <div className="leaderboard-page">
       <div className="header">
         <h1>🏆 Podio de Campeones</h1>
-        <p>Los mejores jugadores según su puntuación y tiempo</p>
+        <p>Los mejores jugadores según su puntuación</p>
       </div>
 
       <div className="podium-container">
-        {/* Segundo lugar */}
-        {topUsers[1] && (
-          <div className="podium-item second-place">
-            <div className="podium-position">2°</div>
-            <div className="podium-avatar">
-              <img 
-                src={topUsers[1].photoURL || '/default-avatar.png'} 
-                alt={topUsers[1].displayName} 
-              />
-            </div>
-            <div className="podium-details">
-              <h3>{topUsers[1].displayName}</h3>
-              <p>{topUsers[1].bestScore}%</p>
-              <small>Tiempo: {topUsers[1].averageTime}s</small>
-            </div>
-          </div>
-        )}
+        <div className="podium-3d">
+          <ThreeDPodium topUsers={topUsers.filter(u => u)} />
+        </div>
 
-        {/* Primer lugar */}
-        {topUsers[0] && (
-          <div className="podium-item first-place">
-            <div className="podium-position">1°</div>
-            <div className="podium-avatar">
-              <img 
-                src={topUsers[0].photoURL || '/default-avatar.png'} 
-                alt={topUsers[0].displayName} 
+        <div className="user-badges">
+          {topUsers.map((user, index) => (
+            user ? (
+              <UserBadge 
+                key={user._id || index}
+                user={user} 
+                position={index + 1}
+                className={`position-${index + 1}`}
+                timeFormatter={formatTime}
               />
-              <div className="crown">👑</div>
-            </div>
-            <div className="podium-details">
-              <h3>{topUsers[0].displayName}</h3>
-              <p>{topUsers[0].bestScore}%</p>
-              <small>Tiempo: {topUsers[0].averageTime}s</small>
-            </div>
-          </div>
-        )}
-
-        {/* Tercer lugar */}
-        {topUsers[2] && (
-          <div className="podium-item third-place">
-            <div className="podium-position">3°</div>
-            <div className="podium-avatar">
-              <img 
-                src={topUsers[2].photoURL || '/default-avatar.png'} 
-                alt={topUsers[2].displayName} 
-              />
-            </div>
-            <div className="podium-details">
-              <h3>{topUsers[2].displayName}</h3>
-              <p>{topUsers[2].bestScore}%</p>
-              <small>Tiempo: {topUsers[2].averageTime}s</small>
-            </div>
-          </div>
-        )}
-      </div>
-
-      <div className="other-stats">
-        <h3>Estadísticas del Podio</h3>
-        <div className="stats-grid">
-          <div className="stat-item">
-            <span>Mejor puntuación</span>
-            <strong>{topUsers[0]?.bestScore || '--'}%</strong>
-          </div>
-          <div className="stat-item">
-            <span>Promedio del podio</span>
-            <strong>
-              {topUsers.length > 0 
-                ? Math.round(topUsers.reduce((sum, user) => sum + user.bestScore, 0) / topUsers.length) 
-                : '--'}%
-            </strong>
-          </div>
+            ) : (
+              <div key={index} className="empty-badge position-${index + 1}">
+                <div className="badge-position">{index + 1}°</div>
+                <div className="empty-avatar">👤</div>
+                <div className="badge-details">
+                  <h3>Vacante</h3>
+                  <p>--%</p>
+                  <small>Tiempo: --</small>
+                </div>
+              </div>
+            )
+          ))}
         </div>
       </div>
 
+      <div className="stats-section">
+        {topUsers[0] && (
+          <div className="champion-stats">
+            <h3>🥇 Campeón Actual</h3>
+            <p>{topUsers[0].displayName} con {topUsers[0].bestScore}%</p>
+            <p>Tiempo récord: {formatTime(topUsers[0].bestTime)}</p>
+          </div>
+        )}
+      </div>
+
       <div className="action-buttons">
-        <button onClick={() => navigate('/quiz')} className="play-button">
-          Jugar Quiz
+        <button onClick={() => navigate('/leaderboard/full')} className="back-button">
+          Ver Tabla de posiciones
         </button>
-        <button onClick={() => navigate('/')} className="home-button">
-          Volver al Inicio
+        <button onClick={() => navigate('/quiz')} className="play-button">
+          Volver al quiz!
         </button>
       </div>
+      
     </div>
   );
 };

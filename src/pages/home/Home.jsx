@@ -10,7 +10,6 @@ import EPOCImg from '../../assets/epoc.png';
 
 const Home = () => {
 
-  // Función para desplazarse a la sección de información
   const scrollToInfo = () => {
     const infoSection = document.querySelector('.info-section');
     if (infoSection) {
@@ -20,7 +19,6 @@ const Home = () => {
 
   return (
     <div className="home-page">
-      {/* Sección Hero */}
       <section className="hero-section">
         <div className="animated-bubbles">
           <span></span>
@@ -58,10 +56,8 @@ const Home = () => {
           </h2>
         </div>
 
-        {/* Botón para desplazarse hacia abajo */}
         <div className="scroll-down-button" onClick={scrollToInfo}>
           <span className="scroll-arrow"></span>
-          {/* <span className="scroll-text">Descubre más</span> */}
         </div>
       </section>
 

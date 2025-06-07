@@ -9,7 +9,7 @@ const TextLungTranspa = ({textSintoma}) => {
        color={"black"}
        anchorX={"center"}
        anchorY={"middle"}
-       fontSize={2.5}
+       fontSize={2.2}
        font= {letra}
      >
        {textSintoma}
