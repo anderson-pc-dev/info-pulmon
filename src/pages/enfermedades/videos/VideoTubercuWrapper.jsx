@@ -3,7 +3,7 @@ import VideoTuberculosis from './VideoTuberculosis';
 
 const VideoTubercuWrapper = () => {
   return (
-    <div style={{ width: '130%', height: '140%' }}>
+    <div style={{ width: '130%', height: '155%' }}>
       <Canvas camera={{ position: [0, 0, 2] }}>
         <VideoTuberculosis />
       </Canvas>

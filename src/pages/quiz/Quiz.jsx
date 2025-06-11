@@ -1,19 +1,63 @@
 import { NavLink } from 'react-router';
 import './Quiz.scss';
+import { useEffect } from 'react';
 
 const Quiz = () => {
+
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('show');
+        }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.animate-on-scroll').forEach(el => {
+      observer.observe(el);
+    });
+
+    const createParticles = () => {
+      const particlesContainer = document.querySelector('.particles-container');
+      if (!particlesContainer) return;
+
+      for (let i = 0; i < 500; i++) {
+        const particle = document.createElement('div');
+        particle.classList.add('particle');
+
+        particle.style.left = `${Math.random() * 100}%`;
+        particle.style.top = `${Math.random() * 100}%`;
+
+        const size = Math.random() * 15 + 5;
+        particle.style.width = `${size}px`;
+        particle.style.height = `${size}px`;
+
+        particle.style.animationDuration = `${Math.random() * 20 + 10}s`;
+        particle.style.animationDelay = `${Math.random() * 5}s`;
+
+        particlesContainer.appendChild(particle);
+      }
+    };
+
+    createParticles();
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
   return (
     <div className="quiz-intro-page">
-      <div className="quiz-container">
+      <div className="particles-container"></div>
+       <div className="quiz-container">
         <div className="quiz-header">
           <h1 className="quiz-title">Bienvenido al Quiz</h1>
           <div className="quiz-icon">🧠</div>
         </div>
-        
+
         <div className="quiz-description">
           <p>
-            Pon a prueba tus conocimientos sobre las enfermedades vistas a lo largo de la pagina con este quiz interactivo. 
-            Responde preguntas sobre síntomas, tratamientos y prevención. 
+            Pon a prueba tus conocimientos sobre las enfermedades vistas a lo largo de la pagina con este quiz interactivo.
+            Responde preguntas sobre síntomas, tratamientos y prevención.
             ¡Gana puntos y sube en el ranking!
           </p>
         </div>
@@ -48,7 +92,7 @@ const Quiz = () => {
         <div className="quiz-tips">
           <div className="tip-card">
             <div className="tip-icon">💡</div>
-            <p>Selecciona la opción correcta y presiona 'Siguiente' para avanzar.</p>
+            <p>Selecciona la opción correcta y presiona &apos;Siguiente&apos; para avanzar.</p>
           </div>
           <div className="tip-card">
             <div className="tip-icon">📊</div>
@@ -61,6 +105,7 @@ const Quiz = () => {
           <span className="button-icon">🚀</span>
         </NavLink>
       </div>
+     
     </div>
   );
 };

@@ -3,7 +3,7 @@
 
 .full-leaderboard-page {
   max-width: 1200px;
-  margin: 0 auto;
+  margin: 2rem auto;
   padding: 2rem;
   padding-top: 100px;
   color: $body-color;
@@ -14,23 +14,23 @@
 
     h1 {
       @extend .inter-bold;
-        font-size: clamp(1.5rem, 4vw, 2rem); 
-        margin-bottom: 0.5rem;
-        color: $body-color;
+      font-size: clamp(1.5rem, 4vw, 2rem);
+      margin-bottom: 0.5rem;
+      color: $white;
     }
 
     p {
       font-size: 1.2rem;
       @extend .inter-regular;
-      color: $body-color;
+      color: $white;
     }
   }
 
   .leaderboard-table-container {
-    background: white;
+    background: $white;
     border-radius: 10px;
     overflow-x: auto;
-    margin-bottom: 2rem;
+    margin: 2rem;
   }
 
   .leaderboard-table {
@@ -38,10 +38,11 @@
     border-collapse: collapse;
     font-size: 1rem;
 
-    th, td {
+    th,
+    td {
       padding: 1rem;
       text-align: left;
-      border-bottom: 1px solid white;
+      border-bottom: 1px solid $white;
     }
 
     th {
@@ -60,6 +61,7 @@
       .user-name {
         font-weight: bold;
       }
+
       .user-email {
         font-size: 0.8rem;
         color: $secondary;
@@ -68,6 +70,7 @@
 
     .top-1 {
       background-color: #fff9e6;
+
       td:first-child {
         color: #ffd700;
         font-weight: bold;
@@ -76,6 +79,7 @@
 
     .top-2 {
       background-color: #f0f0f0;
+
       td:first-child {
         color: #c0c0c0;
         font-weight: bold;
@@ -84,6 +88,7 @@
 
     .top-3 {
       background-color: #fff0e6;
+
       td:first-child {
         color: #cd7f32;
         font-weight: bold;
@@ -96,6 +101,32 @@
       color: $secondary;
     }
   }
+
+  .leaderboard-table-container.fixed-height {
+    min-height: 300px; // o el valor que prefieras
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    .loading-message,
+    .error-message {
+      text-align: center;
+      padding: 2rem;
+      font-size: 1.2rem;
+      color: $secondary;
+
+      button {
+        margin-top: 1rem;
+        padding: 0.5rem 1rem;
+        background-color: $primary;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+    }
+  }
+
 
   .action-buttons {
     display: flex;
@@ -120,7 +151,7 @@
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
       position: relative;
       overflow: hidden;
-      
+
       &::after {
         content: '';
         position: absolute;
@@ -140,9 +171,9 @@
       }
 
       &.play-button {
-        background: linear-gradient(135deg, $primary);
-        color: white;
-        
+        background: linear-gradient(135deg, $white);
+        color: $body-color;
+
         &:hover {
           transform: translateY(-3px);
           box-shadow: 0 8px 20px rgba($primary, 0.3);
@@ -153,7 +184,7 @@
         background: $dark;
         color: $white;
         border: 2px solid $dark;
-        
+
         &:hover {
           background: $dark;
           color: white;
@@ -164,7 +195,8 @@
     }
   }
 
-  .loading, .error {
+  .loading,
+  .error {
     text-align: center;
     padding: 2rem;
     font-size: 1.2rem;
@@ -192,7 +224,8 @@
     .leaderboard-table {
       font-size: 0.9rem;
 
-      th, td {
+      th,
+      td {
         padding: 0.7rem;
       }
     }

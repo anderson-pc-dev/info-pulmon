@@ -17,29 +17,15 @@ const Home = () => {
     }
   };
 
+  const renderBubbles = (n) => {
+    return Array.from({ length: n }, (_, index) => <span key={index}></span>);
+  };
+
   return (
     <div className="home-page">
       <section className="hero-section">
         <div className="animated-bubbles">
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
+          {renderBubbles(100)}
         </div>
 
 

@@ -6,16 +6,64 @@ import AppreciationImage from '../../assets/idea.jpg';
 import Feature1Image from '../../assets/3d.png';
 import Feature2Image from '../../assets/info.jpg';
 import Feature3Image from '../../assets/exam.jpg';
+import { useEffect } from 'react';
 
 const About = () => {
+
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('show');
+        }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.animate-on-scroll').forEach(el => {
+      observer.observe(el);
+    });
+
+    const createParticles = () => {
+      const particlesContainer = document.querySelector('.particles-container');
+      if (!particlesContainer) return;
+
+      for (let i = 0; i < 50; i++) {
+        const particle = document.createElement('div');
+        particle.classList.add('particle');
+
+        particle.style.left = `${Math.random() * 100}%`;
+        particle.style.top = `${Math.random() * 100}%`;
+
+        const size = Math.random() * 15 + 5;
+        particle.style.width = `${size}px`;
+        particle.style.height = `${size}px`;
+
+        particle.style.animationDuration = `${Math.random() * 20 + 10}s`;
+        particle.style.animationDelay = `${Math.random() * 5}s`;
+
+        particlesContainer.appendChild(particle);
+      }
+    };
+
+    createParticles();
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
   return (
     <div className="about-page">
-      <div className="about-hero">
-        <div className="hero-content">
-          <h1>Sobre Nosotros</h1>
-          <p>Innovación educativa en salud respiratoria</p>
+      <section className="diseases-hero">
+        <div className="particles-container">
+          <div className="particle"></div>
         </div>
-      </div>
+        <div className="hero-content">
+          <h1 className="animate-title">Sobre Nosotros</h1>
+          <p className="animate-description">Innovación educativa en salud respiratoria</p>
+        </div>
+
+      </section>
+
 
       {/* Mission Section */}
       <section className="mission-section">
@@ -23,11 +71,11 @@ const About = () => {
           <div className="text-content">
             <h2>Nuestra Misión</h2>
             <p>
-              En un mundo donde la educación y la salud son pilares fundamentales para el bienestar de las personas, 
-              creemos en el poder de la tecnología para transformar la manera en que aprendemos. Nuestro objetivo es proporcionar una 
+              En un mundo donde la educación y la salud son pilares fundamentales para el bienestar de las personas,
+              creemos en el poder de la tecnología para transformar la manera en que aprendemos. Nuestro objetivo es proporcionar una
               plataforma educativa innovadora y accesible que ayude a las personas a comprender mejor enfermedades específicas de un órgano humano.
-              A través de un entorno 3D interactivo, buscamos hacer que el aprendizaje sobre salud sea más inmersivo, dinámico y atractivo. 
-              Queremos que los usuarios no solo lean sobre una enfermedad, sino que la experimenten de manera visual y práctica, facilitando así su 
+              A través de un entorno 3D interactivo, buscamos hacer que el aprendizaje sobre salud sea más inmersivo, dinámico y atractivo.
+              Queremos que los usuarios no solo lean sobre una enfermedad, sino que la experimenten de manera visual y práctica, facilitando así su
               comprensión y promoviendo una mayor conciencia sobre la prevención y el autocuidado.
             </p>
           </div>
@@ -37,7 +85,7 @@ const About = () => {
         </div>
       </section>
 
-       {/* What We Do Section */}
+      {/* What We Do Section */}
       <section className="features-section">
         <div className="section-header">
           <h2>¿Qué Ofrecemos?</h2>
@@ -109,7 +157,7 @@ const About = () => {
           </div>
           <div className="team-description">
             <p>
-              Somos un equipo de tres estudiantes de Ingeniería en Sistemas, actualmente cursando la materia Proyecto Integrador en nuestra universidad. 
+              Somos un equipo de tres estudiantes de Ingeniería en Sistemas, actualmente cursando la materia Proyecto Integrador en nuestra universidad.
               Compartimos una pasión por la tecnología, el desarrollo de software y la educación digital, lo que nos motivó a crear esta aplicación web 3D interactiva.
             </p>
             <div className="team-stats">
@@ -138,12 +186,12 @@ const About = () => {
           <div className="text-content">
             <h2>¡Gracias por visitarnos!</h2>
             <p>
-              Agradecemos profundamente tu interés en nuestra plataforma educativa. 
-              Hemos trabajado con pasión y dedicación para crear este recurso que 
+              Agradecemos profundamente tu interés en nuestra plataforma educativa.
+              Hemos trabajado con pasión y dedicación para crear este recurso que
               esperamos sea de gran valor para tu aprendizaje sobre salud pulmonar.
             </p>
             <p className="highlight">
-              Esperamos que disfrutes explorando la información, interactuando con 
+              Esperamos que disfrutes explorando la información, interactuando con
               nuestros modelos 3D y descubriendo todo lo que hemos preparado para ti.
             </p>
             <div className="signature">
@@ -153,7 +201,7 @@ const About = () => {
           </div>
         </div>
       </section>
-    </div>
+    </div >
   );
 };
 

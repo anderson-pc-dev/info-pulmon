@@ -15,6 +15,8 @@ export const useQuizLogic = () => {
   const [hasLoadedProgress, setHasLoadedProgress] = useState(false);
   const [isLoadingProgress, setIsLoadingProgress] = useState(true);
   const currentQuestion = quizQuestions[currentQuestionIndex];
+  const [lastSavedProgress, setLastSavedProgress] = useState({});
+
 
   // Temporizador
   useEffect(() => {
@@ -75,32 +77,44 @@ export const useQuizLogic = () => {
   };
 
   // Guardar progreso del usuario
-  const saveProgress = useCallback(async () => {
-    if (!user || quizCompleted) return;
+const saveProgress = useCallback(async () => {
+  if (!user || quizCompleted) return;
 
-    try {
-      await fetch(`${import.meta.env.VITE_API_BASE_URL}quiz-scores/progress`, {
-        method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${await user.getIdToken()}`
-        },
-        body: JSON.stringify({
-          userId: user.uid,
-          email: user.email,
-          displayName: user.displayName,
-          questionIndex: currentQuestionIndex,
-          answers: userAnswers,
-          score,
-          timeLeft,
-          quizCompleted: false,
-          progressSavedAt: new Date().toISOString()
-        }),
-      });
-    } catch (error) {
-      console.error('Error saving progress:', error);
-    }
-  }, [user, currentQuestionIndex, userAnswers, score, timeLeft, quizCompleted]);
+  const newProgress = {
+    questionIndex: currentQuestionIndex,
+    answers: userAnswers,
+    score,
+    timeLeft
+  };
+
+  const isSame =
+    JSON.stringify(newProgress) === JSON.stringify(lastSavedProgress);
+
+  if (isSame) return; // No ha cambiado nada
+
+  try {
+    await fetch(`${import.meta.env.VITE_API_BASE_URL}quiz-scores/progress`, {
+      method: 'POST',
+      headers: { 
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${await user.getIdToken()}`
+      },
+      body: JSON.stringify({
+        userId: user.uid,
+        email: user.email,
+        displayName: user.displayName,
+        ...newProgress,
+        quizCompleted: false,
+        progressSavedAt: new Date().toISOString()
+      }),
+    });
+
+    setLastSavedProgress(newProgress); // Actualiza progreso guardado
+  } catch (error) {
+    console.error('Error saving progress:', error);
+  }
+}, [user, currentQuestionIndex, userAnswers, score, timeLeft, quizCompleted, lastSavedProgress]);
+
 
   // Cargar progreso guardado
   const loadProgress = useCallback(async () => {

@@ -15,106 +15,69 @@
     margin: 0 auto;
     padding: 0 20px;
   }
+}
 
-  .about-hero {
-    background: $dark;
-    color: white;
-    padding: 100px 0;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
+.mission-section {
+  padding: 100px 0;
+  background-color: white;
 
-    &::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      opacity: 0.1;
-    }
+  .container {
+    display: flex;
+    @include fadeInAnimation(0.8s);
+    align-items: center;
+    gap: 50px;
 
-    .hero-content {
-      position: relative;
-      z-index: 2;
+    .text-content {
+      flex: 1;
 
-      h1 {
+      h2 {
+        font-size: 2.5rem;
+        margin-bottom: 1.5rem;
+        position: relative;
         @extend .inter-bold;
-        font-size: 4.5rem;
-        @include fadeInAnimation(0.8s);
-        color: $white;
+        color: $body-color;
+        display: inline-block;
+
+        &::after {
+          content: '';
+          position: absolute;
+          bottom: -10px;
+          left: 0;
+          width: 60px;
+          height: 4px;
+          background: $primary;
+          border-radius: 2px;
+        }
       }
 
       p {
-        font-size: 1.2rem;
-        @include fadeInAnimation(0.8s);
+        margin-bottom: 1.2rem;
         @extend .inter-regular;
-        opacity: 0.9;
+        font-size: 1.1rem;
       }
     }
-  }
 
-  .mission-section {
-    padding: 100px 0;
-    background-color: white;
+    .image-content {
+      flex: 1;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
 
-    .container {
-      display: flex;
-      @include fadeInAnimation(0.8s);
-      align-items: center;
-      gap: 50px;
+      img {
+        width: 100%;
+        height: auto;
+        display: block;
+        transition: transform 0.3s ease;
 
-      .text-content {
-        flex: 1;
-
-        h2 {
-          font-size: 2.5rem;
-          margin-bottom: 1.5rem;
-          position: relative;
-          @extend .inter-bold;
-          color: $body-color;
-          display: inline-block;
-
-          &::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 0;
-            width: 60px;
-            height: 4px;
-            background: $primary;
-            border-radius: 2px;
-          }
-        }
-
-        p {
-          margin-bottom: 1.2rem;
-          @extend .inter-regular;
-          font-size: 1.1rem;
-        }
-      }
-
-      .image-content {
-        flex: 1;
-        border-radius: 10px;
-        overflow: hidden;
-        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-
-        img {
-          width: 100%;
-          height: auto;
-          display: block;
-          transition: transform 0.3s ease;
-
-          &:hover {
-            transform: scale(1.03);
-          }
+        &:hover {
+          transform: scale(1.03);
         }
       }
     }
   }
+}
 
-  .features-section {
+.features-section {
   padding: 80px 0;
   background: $light;
 
@@ -151,7 +114,7 @@
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     overflow: hidden;
-    
+
     &:hover {
       transform: translateY(-10px);
       box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
@@ -164,7 +127,7 @@
       align-items: center;
 
       overflow: hidden;
-      
+
       .feature-image {
         width: auto;
         height: auto;
@@ -195,83 +158,83 @@
   }
 }
 
-  .impact-section {
-    padding: 80px 0;
-    background-color: white;
+.impact-section {
+  padding: 80px 0;
+  background-color: white;
 
-    .container {
-      display: flex;
-      align-items: center;
-      @include fadeInAnimation(0.8s);
-      gap: 50px;
-      flex-direction: row-reverse;
+  .container {
+    display: flex;
+    align-items: center;
+    @include fadeInAnimation(0.8s);
+    gap: 50px;
+    flex-direction: row-reverse;
 
-      .text-content {
-        flex: 1;
+    .text-content {
+      flex: 1;
 
-        h2 {
-          font-size: 2rem;
-          margin-bottom: 1.5rem;
-          @extend .inter-bold;
-          color: $body-color;
-          position: relative;
-          display: inline-block;
+      h2 {
+        font-size: 2rem;
+        margin-bottom: 1.5rem;
+        @extend .inter-bold;
+        color: $body-color;
+        position: relative;
+        display: inline-block;
 
-          &::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 0;
-            width: 60px;
-            height: 4px;
-            background: $primary;
-            border-radius: 2px;
-          }
-        }
-
-        ul {
-          list-style: none;
-          padding: 0;
-
-          li {
-            margin-bottom: 15px;
-            font-size: 1.1rem;
-            color: $body-color;
-            @extend .inter-regular;
-            display: flex;
-            align-items: flex-start;
-
-            span {
-              color: $primary;
-              font-weight: bold;
-              margin-right: 10px;
-              font-size: 1.2rem;
-            }
-          }
+        &::after {
+          content: '';
+          position: absolute;
+          bottom: -10px;
+          left: 0;
+          width: 60px;
+          height: 4px;
+          background: $primary;
+          border-radius: 2px;
         }
       }
 
-      .image-content {
-        flex: 1;
-        border-radius: 10px;
-        overflow: hidden;
-        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      ul {
+        list-style: none;
+        padding: 0;
 
-        img {
-          width: 100%;
-          height: auto;
-          display: block;
-          transition: transform 0.3s ease;
+        li {
+          margin-bottom: 15px;
+          font-size: 1.1rem;
+          color: $body-color;
+          @extend .inter-regular;
+          display: flex;
+          align-items: flex-start;
 
-          &:hover {
-            transform: scale(1.03);
+          span {
+            color: $primary;
+            font-weight: bold;
+            margin-right: 10px;
+            font-size: 1.2rem;
           }
         }
       }
     }
-  }
 
-  .team-section {
+    .image-content {
+      flex: 1;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+
+      img {
+        width: 100%;
+        height: auto;
+        display: block;
+        transition: transform 0.3s ease;
+
+        &:hover {
+          transform: scale(1.03);
+        }
+      }
+    }
+  }
+}
+
+.team-section {
   padding: 80px 0;
   background-color: $light;
 
@@ -293,11 +256,11 @@
     align-items: center;
     max-width: 1500px;
     margin: 0 auto;
-    padding: 0 20px; 
+    padding: 0 20px;
 
     .team-image {
       flex: 1;
-      max-width: 70%; 
+      max-width: 70%;
       max-height: 80%;
       border-radius: 10px;
       overflow: hidden;
@@ -306,8 +269,8 @@
       img {
         width: 100%;
         height: auto;
-        max-height: 1000px; 
-        object-fit: cover; 
+        max-height: 1000px;
+        object-fit: cover;
         display: block;
         transition: transform 0.5s ease;
 
@@ -319,7 +282,7 @@
 
     .team-description {
       flex: 1;
-      max-width: 60%; 
+      max-width: 60%;
 
       p {
         font-size: 1.2rem;
@@ -352,7 +315,7 @@
   }
 }
 
-  .appreciation-section {
+.appreciation-section {
   padding: 80px 0;
   background: $white;
 
@@ -410,9 +373,9 @@
         line-height: 1.7;
 
         &.highlight {
-        @extend .inter-regular;
-        color: $body-color;
-        font-weight: 500;
+          @extend .inter-regular;
+          color: $body-color;
+          font-weight: 500;
         }
       }
 
@@ -440,36 +403,36 @@
   }
 }
 
-  @media (max-width: 768px) {
-    .mission-section .container,
-    .impact-section .container,
-    .tech-section .container,
-    .team-container {
-      flex-direction: column;
-    }
+@media (max-width: 768px) {
 
-    .about-hero {
-      height: 300px;
+  .mission-section .container,
+  .impact-section .container,
+  .tech-section .container,
+  .team-container {
+    flex-direction: column;
+  }
 
-      .hero-overlay {
-        h1 {
-          font-size: 2.5rem;
-        }
+  .about-hero {
+    height: 300px;
 
-        p {
-          font-size: 1.2rem;
-        }
+    .hero-overlay {
+      h1 {
+        font-size: 2.5rem;
+      }
+
+      p {
+        font-size: 1.2rem;
       }
     }
+  }
 
-    .features-grid {
-      grid-template-columns: 1fr !important;
-    }
+  .features-grid {
+    grid-template-columns: 1fr !important;
+  }
 
-    .team-container {
-      .team-image {
-        order: -1;
-      }
+  .team-container {
+    .team-image {
+      order: -1;
     }
   }
 }

@@ -1,10 +1,10 @@
 // components/VideoEPOCWrapper.jsx
 import { Canvas } from '@react-three/fiber';
-import VideoAsma from './VIdeoAsma';
+import VideoAsma from './VideoAsma';
 
 const VideoAsmaWrapper = () => {
   return (
-    <div style={{ width: '130%', height: '140%' }}>
+    <div style={{ width: '130%', height: '155%' }}>
       <Canvas camera={{ position: [0, 0, 2] }}>
         <VideoAsma />
       </Canvas>

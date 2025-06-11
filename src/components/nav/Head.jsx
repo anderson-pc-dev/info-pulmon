@@ -1,6 +1,6 @@
 import { useCallback, useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router';
-import { Navbar, Nav, Container } from 'react-bootstrap'; 
+import { Navbar, Nav, Container, Dropdown } from 'react-bootstrap';
 import Logo from '../logos/Logo';
 import Logonombre from '../logos/LogoNombre';
 import './Head.scss';
@@ -9,10 +9,6 @@ import useAuthStore from '../../stores/use-auth-store';
 const Head = () => {
   const { user: userLooged, logout } = useAuthStore();
   const navigate = useNavigate();
-  useEffect(() => {
-  console.log('Usuario actualizado:', userLooged);
-}, [userLooged]);
-
 
   const handleLogout = useCallback(() => {
     logout().then(() => navigate('/'));
@@ -43,7 +39,30 @@ const Head = () => {
       }
     };
 
-    fetchData();
+    const verifyUser = async (email) => {
+      try {
+        const response = await fetch(
+          `${import.meta.env.VITE_API_BASE_URL}users`,
+          {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+          }
+        );
+        if (!response.ok) {
+          throw new Error(`Error ${response.status}: ${response.statusText}`);
+        }
+        const data = await response.json();
+        // Filtrar usuarios por email
+        return data.some(user => user.email === email);
+      } catch (error) {
+        console.error('Error verifying user:', error);
+        return false;
+      }
+    };
+
+    verifyUser(userLooged.email).then(exists => {
+      if (!exists) fetchData();
+    });
   }, [userLooged]);
 
   return (
@@ -82,28 +101,39 @@ const Head = () => {
               </NavLink>
             </Nav.Item>
 
-            {/* Botón de sesión: cambia dinámicamente */}
-            <Nav.Item className="d-flex align-items-center gap-3 ms-3">
+
+            <Nav.Item className="d-flex align-items-center ms-3">
               {userLooged ? (
-                <>
-                  {userLooged.photoURL && (
-                    <img
-                      src={userLooged.photoURL}
-                      alt={`Foto de perfil de ${userLooged.displayName}`}
-                      className="profile-img"
-                      style={{
-                        width: '36px',
-                        height: '36px',
-                        borderRadius: '50%',
-                        objectFit: 'cover',
-                      }}
-                    />
-                  )}
-                  <span className="user-name">{userLooged.displayName}</span>
-                  <button onClick={handleLogout} className="btn-head" title="Cerrar sesión">
-                    Cerrar sesión
-                  </button>
-                </>
+                <Dropdown align="end">
+                  <Dropdown.Toggle variant="link" className="d-flex align-items-center dropdown-toggle-custom">
+                    {userLooged.photoURL && (
+                      <img
+                        src={userLooged.photoURL}
+                        alt={`Foto de perfil de ${userLooged.displayName}`}
+                        className="profile-img"
+                        referrerPolicy="no-referrer"
+                        style={{
+                          width: '36px',
+                          height: '36px',
+                          borderRadius: '50%',
+                          objectFit: 'cover',
+                          marginRight: '10px',
+                        }}
+                      />
+                    )}
+                    <span className="user-name">{userLooged.displayName}</span>
+                  </Dropdown.Toggle>
+
+                  <Dropdown.Menu className="custom-dropdown">
+                    <Dropdown.Item as={NavLink} to="/leaderboard/full" className="custom-dropdown-item">
+                      🏆 Ver Podio
+                    </Dropdown.Item>
+                    <Dropdown.Divider />
+                    <Dropdown.Item onClick={handleLogout} className="logout-btn">
+                      Cerrar sesión
+                    </Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
               ) : (
                 <NavLink to="/login" className="btn-head">
                   Ingresar

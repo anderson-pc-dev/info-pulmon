@@ -6,11 +6,11 @@
   flex-direction: column;
   align-items: center;
   padding: 2rem;
-  min-height: 100vh;
-  background: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%);
+  min-height: calc(100vh - 40vh);
+  background: transparent;
   @extend .inter-regular;
   padding-top: 90px;
-  color: $primary;
+  color: $white;
   position: relative;
   overflow-x: hidden;
 
@@ -22,7 +22,7 @@
     
     h1 {
       font-size: 2.8rem;
-      color: $primary;
+      color: $white;
       @extend .inter-bold;
       margin-bottom: 0.5rem;
       font-weight: 700;
@@ -43,7 +43,7 @@
     }
     
     p {
-      color: $body-color;
+      color: $white;
       font-size: 1.2rem;
       @extend .inter-regular;
       max-width: 600px;
@@ -61,7 +61,7 @@
     border-radius: 16px;
     overflow: hidden;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-    background: white;
+    background: transparent;
     animation: slideUp 0.8s ease-out;
 
     .podium-3d {
@@ -170,8 +170,8 @@
       }
 
       &.play-button {
-        background: linear-gradient(135deg, $primary);
-        color: white;
+        background: linear-gradient(135deg, $white);
+        color: $body-color;
         
         &:hover {
           transform: translateY(-3px);
