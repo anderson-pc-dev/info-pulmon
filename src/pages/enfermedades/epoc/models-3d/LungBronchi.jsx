@@ -143,6 +143,20 @@ export default function Scene() {
                 <br/>
                 <strong>Puedes presionar la tecla "A" para detener la animación del modelo.</strong>
               </p>
+              <button 
+                onClick={() => setShowMessage(false)}
+                style={{
+                  marginTop: '15px',
+                  padding: '8px 16px',
+                  backgroundColor: '#4CAF50',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '4px',
+                  cursor: 'pointer'
+                }}
+              >
+                Cerrar Mensaje
+              </button>
             </div>
           </Html>
         )}
