@@ -49,17 +49,47 @@ function PodiumModel(props) {
   );
 }
 
-function Ball({ position }) {
+function ConfettiPiece({ position }) {
+  const shape = Math.random() > 0.5 ? 'square' : 'rectangle';
+  
+  const width = 0.03 + Math.random() * 0.04; 
+  const height = 0.02 + Math.random() * 0.03; 
+  const depth = 0.005 + Math.random() * 0.01;
+  
+  const colors = [
+    '#ff0000', '#00ff00', '#0000ff', '#ffff00', 
+    '#ff00ff', '#00ffff', '#ff8800', '#ff0088'
+  ];
+  const color = colors[Math.floor(Math.random() * colors.length)];
+  
+  const rotation = [
+    Math.random() * Math.PI,
+    Math.random() * Math.PI,
+    Math.random() * Math.PI
+  ];
+  
   return (
     <RigidBody
       position={position}
-      colliders="ball"
-      restitution={0.7}
-      friction={0.5}
+      rotation={rotation}
+      colliders="cuboid"
+      restitution={0.1} 
+      friction={0.02}   
+      linearDamping={0.5}
+      angularDamping={0.7} 
+      density={0.3} 
     >
       <mesh castShadow>
-        <sphereGeometry args={[0.2, 32, 32]} />
-        <meshStandardMaterial color="gold" />
+        <boxGeometry args={[
+          shape === 'square' ? width : width * 1.5, 
+          shape === 'square' ? width : height, 
+          depth
+        ]} />
+        <meshStandardMaterial 
+          color={color} 
+          emissive={color} 
+          emissiveIntensity={0.3} 
+        />
       </mesh>
     </RigidBody>
   );
@@ -68,44 +98,27 @@ function Ball({ position }) {
 useGLTF.preload('/models-3d/winner_podium.glb');
 
 export default function Scene() {
-  const [balls, setBalls] = useState([]);
-  const initialBallsDropped = useRef(false);
-  const ballInterval = useRef(null);
+  const [confettiPieces, setConfettiPieces] = useState([]);
+  const initialConfettiDropped = useRef(false);
+  const confettiInterval = useRef(null);
 
   useEffect(() => {
-    // Primera caída: 200 pelotas simultáneamente
-    if (!initialBallsDropped.current) {
-      const initialBalls = Array.from({ length: 200 }, (_, i) => ({
+    if (!initialConfettiDropped.current) {
+      const initialConfetti = Array.from({ length: 2000 }, (_, i) => ({
         id: i,
         position: [
-          Math.random() * 6 - 3, 
-          10 + Math.random() * 5, 
-          Math.random() * 6 - 3   
+          Math.random() * 8 - 4, 
+          3 + Math.random() * 3,  
+          Math.random() * 8 - 4  
         ]
       }));
-      setBalls(initialBalls);
-      initialBallsDropped.current = true;
-
-      setTimeout(() => {
-        ballInterval.current = setInterval(() => {
-          setBalls(prev => [
-            ...prev,
-            {
-              id: Date.now(),
-              position: [
-                Math.random() * 4 - 2, 
-                10,                   
-                Math.random() * 4 - 2 
-              ]
-            }
-          ]);
-        }, 500); // Cada 0.5 segundos
-      }, 2000); // Esperar 3 segundos despues de la primera caída
+      setConfettiPieces(initialConfetti);
+      initialConfettiDropped.current = true;
     }
 
     return () => {
-      if (ballInterval.current) {
-        clearInterval(ballInterval.current);
+      if (confettiInterval.current) {
+        clearInterval(confettiInterval.current);
       }
     };
   }, []);
@@ -125,7 +138,7 @@ export default function Scene() {
           minPolarAngle={0}
         />
         <Lights />
-        <Physics gravity={[0, -9.81, 0]}>
+        <Physics gravity={[0, -0.45, 0]}> 
           <RigidBody type="fixed" name="ground">
             <CuboidCollider args={[10, 0.1, 10]} position={[0, -2.5, 0]} />
           </RigidBody>
@@ -136,8 +149,8 @@ export default function Scene() {
             rotation={[0, 1.58, 0]}
           />
 
-          {balls.map((ball) => (
-            <Ball key={ball.id} position={ball.position} />
+          {confettiPieces.map((piece) => (
+            <ConfettiPiece key={piece.id} position={piece.position} />
           ))}
         </Physics>
       </Canvas>
