@@ -75,7 +75,7 @@ const QuizComponent = () => {
       }
     };
 
-    createParticles();
+    //createParticles();
 
     return () => {
       observer.disconnect();
