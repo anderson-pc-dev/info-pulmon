@@ -15,7 +15,7 @@ const Model = (props) => {
     const { nodes, materials, animations } = useGLTF("/models-3d/tbc-sintomas-2.glb");
     const { actions } = useAnimations(animations, group)
     // console.log("animations", actions);
-    // console.log("nodes", nodes);
+     console.log("nodes", nodes);
     useEffect(() => {
       const action = actions.Beating;
       if (action) {

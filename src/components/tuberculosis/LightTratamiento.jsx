@@ -13,8 +13,8 @@ const LightTratamiento = () => {
   useFrame((state) => {
     const elapsedTime = state.clock.getElapsedTime();
     directionalLightRef.current.position.x = MathUtils.lerp(
-      -1,
-      1,
+      -2,
+      2,
       Math.cos(elapsedTime)
     );
   });
