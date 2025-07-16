@@ -1,136 +1,97 @@
 /* eslint-disable react/no-unknown-property */
-import { useGLTF, Loader, OrbitControls, useAnimations } from "@react-three/drei";
-import { Canvas } from "@react-three/fiber";
-import { Suspense, useRef } from "react";
+import { useGLTF, Loader, OrbitControls, useAnimations, Image } from "@react-three/drei";
+import { Canvas, useThree } from "@react-three/fiber";
+import { Suspense, useRef, useEffect, useState, use } from "react";
 import { Perf } from "r3f-perf";
 import Lights from "./LightPrevencion";
 import Recipient from "./RecipientPrevencion"; // Importa el componente Recipient
 import Staging from "./StagingQueEs";
+import ManejoCamara from "./ManejoCamaraPrevencion"; // Importa el componente ManejoCamara
 //Modelo 3d "QUE ES LA TUBERCULOSIS"
 const Model = (props) => {
   const group = useRef()
   const { nodes, materials, animations } = useGLTF("/models-3d/tbc-prevencion.glb");
   const { actions } = useAnimations(animations, group)
+   //console.log("animations", actions);
+       //console.log("nodes", nodes);
+      useEffect(() => {
+        const action = actions["mixamo.com"];
+        if (action) {
+          //console.log("action", action);
+          action.play();
+          return () => action.stop();
+        }
+      }, [actions["mixamo.com"]]);
     return (
       <group ref={group} {...props} dispose={null}>
         <group name="Scene">
-          <group name="person">
-            <group name="g_person">
-              <group name="Object_2">
-                <group name="RootNode001">
-                  <group
-                    name="Object_4"
-                    position={[1.396, 0.983, 0.463]}
-                    rotation={[-3.122, 0, 0]}
-                    scale={0}>
-                    <group
-                      name="CC_Base_Body"
-                      position={[-46540.691, 33062.609, 14792.244]}
-                      rotation={[3.122, 0, 0]}
-                      scale={[33333.32, 33333.316, 33333.316]}
-                    />
-                    <group
-                      name="Hair"
-                      position={[-46540.691, 33062.609, 14792.244]}
-                      rotation={[3.122, 0, 0]}
-                      scale={[33333.32, 33333.316, 33333.316]}
-                    />
-                    <group
-                      name="Jeans"
-                      position={[-46540.691, 33062.609, 14792.244]}
-                      rotation={[3.122, 0, 0]}
-                      scale={[33333.32, 33333.316, 33333.316]}
-                    />
-                    <group
-                      name="Object_10"
-                      position={[-46540.691, 33062.609, 14792.244]}
-                      rotation={[3.122, 0, 0]}
-                      scale={[33333.32, 33333.316, 33333.316]}
-                    />
-                    <skinnedMesh
-                      name="Object_11"
-                      geometry={nodes.Object_11.geometry}
-                      material={materials['Sneakers.001']}
-                      skeleton={nodes.Object_11.skeleton}
-                    />
-                    <group
-                      name="Object_12"
-                      position={[-46540.691, 33062.609, 14792.244]}
-                      rotation={[3.122, 0, 0]}
-                      scale={[33333.32, 33333.316, 33333.316]}
-                    />
-                    <skinnedMesh
-                      name="Object_13"
-                      geometry={nodes.Object_13.geometry}
-                      material={materials['Jeans.001']}
-                      skeleton={nodes.Object_13.skeleton}
-                    />
-                    <group
-                      name="Object_14"
-                      position={[-46540.691, 33062.609, 14792.244]}
-                      rotation={[3.122, 0, 0]}
-                      scale={[33333.32, 33333.316, 33333.316]}
-                    />
-                    <skinnedMesh
-                      name="Object_15"
-                      geometry={nodes.Object_15.geometry}
-                      material={materials['Std_Skin_Arm.001']}
-                      skeleton={nodes.Object_15.skeleton}
-                    />
-                    <skinnedMesh
-                      name="Object_16"
-                      geometry={nodes.Object_16.geometry}
-                      material={materials['Std_Skin_Head.001']}
-                      skeleton={nodes.Object_16.skeleton}
-                    />
-                    <skinnedMesh
-                      name="Object_17"
-                      geometry={nodes.Object_17.geometry}
-                      material={materials['Std_Nails.001']}
-                      skeleton={nodes.Object_17.skeleton}
-                    />
-                    <group
-                      name="Object_6"
-                      position={[-46540.691, 33062.609, 14792.244]}
-                      rotation={[3.122, 0, 0]}
-                      scale={[33333.32, 33333.316, 33333.316]}
-                    />
-                    <skinnedMesh
-                      name="Object_7"
-                      geometry={nodes.Object_7.geometry}
-                      material={materials['embed_hair_male.001']}
-                      skeleton={nodes.Object_7.skeleton}
-                    />
-                    <group
-                      name="Object_8"
-                      position={[-46540.691, 33062.609, 14792.244]}
-                      rotation={[3.122, 0, 0]}
-                      scale={[33333.32, 33333.316, 33333.316]}
-                    />
-                    <skinnedMesh
-                      name="Object_9"
-                      geometry={nodes.Object_9.geometry}
-                      material={materials['T-shirt.001']}
-                      skeleton={nodes.Object_9.skeleton}
-                    />
-                    <group
-                      name="Sneakers"
-                      position={[-46540.691, 33062.609, 14792.244]}
-                      rotation={[3.122, 0, 0]}
-                      scale={[33333.32, 33333.316, 33333.316]}
-                    />
-                    <group
-                      name="T_shirt"
-                      position={[-46540.691, 33062.609, 14792.244]}
-                      rotation={[3.122, 0, 0]}
-                      scale={[33333.32, 33333.316, 33333.316]}
-                    />
-                    <primitive object={nodes._rootJoint} />
-                  </group>
+          <group
+          name="person"
+          position={[5.273, 0.741, 0.577]}
+          rotation={[-Math.PI / 2, 0, 0]}
+          scale={0.014}>
+          <group name="personfbx" rotation={[Math.PI / 2, 0, 0]}>
+            <group name="Object_2001">
+              <group name="RootNode002">
+                <group name="Object_4001">
+                  <group name="CC_Base_Body001" position={[0.003, 145.767, -3.211]} />
+                  <group name="Hair001" position={[-0.538, 168.987, -0.654]} />
+                  <group name="Jeans001" />
+                  <group name="Object_10002" />
+                  <skinnedMesh
+                    name="Object_11001"
+                    geometry={nodes.Object_11001.geometry}
+                    material={materials.Sneakers}
+                    skeleton={nodes.Object_11001.skeleton}
+                  />
+                  <group name="Object_12002" />
+                  <skinnedMesh
+                    name="Object_13001"
+                    geometry={nodes.Object_13001.geometry}
+                    material={materials.Jeans}
+                    skeleton={nodes.Object_13001.skeleton}
+                  />
+                  <group name="Object_14002" position={[0.003, 145.767, -3.211]} />
+                  <skinnedMesh
+                    name="Object_15001"
+                    geometry={nodes.Object_15001.geometry}
+                    material={materials.Std_Skin_Arm}
+                    skeleton={nodes.Object_15001.skeleton}
+                  />
+                  <skinnedMesh
+                    name="Object_16002"
+                    geometry={nodes.Object_16002.geometry}
+                    material={materials.Std_Skin_Head}
+                    skeleton={nodes.Object_16002.skeleton}
+                  />
+                  <skinnedMesh
+                    name="Object_17001"
+                    geometry={nodes.Object_17001.geometry}
+                    material={materials.Std_Nails}
+                    skeleton={nodes.Object_17001.skeleton}
+                  />
+                  <group name="Object_6002" position={[-0.538, 168.987, -0.654]} />
+                  <skinnedMesh
+                    name="Object_7001"
+                    geometry={nodes.Object_7001.geometry}
+                    material={materials.embed_hair_male}
+                    skeleton={nodes.Object_7001.skeleton}
+                  />
+                  <group name="Object_8002" />
+                  <skinnedMesh
+                    name="Object_9001"
+                    geometry={nodes.Object_9001.geometry}
+                    material={materials['T-shirt']}
+                    skeleton={nodes.Object_9001.skeleton}
+                  />
+                  <group name="Sneakers001" />
+                  <group name="T_shirt001" />
+                  <primitive object={nodes._rootJoint} />
                 </group>
               </group>
             </group>
           </group>
+        </group>
           <mesh
             name="Ventana"
             castShadow
@@ -315,8 +276,49 @@ const Model = (props) => {
 }
 
 useGLTF.preload("/models-3d/tbc-prevencion.glb");
+function useKeyPressP(callback) {
+  useEffect(() => {
+    function handleKeyDown(event) {
+      if (event.key === 'p' || event.key === 'P') {
+        callback();
+      }
+    }
 
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [callback]);
+}
 const PiantModel = (props) => {
+  const [showMessage, setShowMessage] = useState(true)
+    const [mensajeinformativo, setMensajeinformativo] = useState()
+    const handleQuestionClick = () => {
+      //alert("¡Has hecho clic en el signo de pregunta!");
+      setShowMessage(prev => !prev);
+      cambiarMensaje();
+    };
+    const cambiarMensaje = (val) => {
+      //console.log("showMessage", showMessage);
+      if (showMessage) {
+        if(val === 1) {
+          setMensajeinformativo(1);
+        } else if(val === 2) {
+          setMensajeinformativo(2);
+        }else if(val === 3) {
+          setMensajeinformativo(3);
+        }
+      }
+      if (!showMessage) {
+        setMensajeinformativo(0);
+      }
+    }
+    
+    useKeyPressP(() => {
+      setShowMessage(prev => !prev);
+      cambiarMensaje();
+    });
   return (
     <Suspense fallback={<Loader />}>
       <Canvas camera={{ position: [0, 10, 20] }} shadows={true}>
@@ -326,17 +328,27 @@ const PiantModel = (props) => {
         {/* <Staging /> */}
         <Model scale={5} />
         <Recipient />
-        {/* <BakeShadows /> 
-          <ContactShadows
-            frames={16}
-            opacity={1}
-            scale={20}
-            blur={1}
-            far={10}
-            resolution={256}
-            color="#000000"
-          /> 
-          <SoftShadows size={20} samples={4} focus={2} />*/}
+        <Image
+          url="/img/teclav11.png" // Ruta relativa o absoluta a la imagen
+          scale={[5, 5, 2]}           // Tamaño del plano (ancho, alto, profundidad)
+          position={[-33, 20, 3]}        // Posición en la escena
+          transparent // Esta propiedad es opcional, pero puedes agregarla
+          opacity={1} // Cambia el valor entre 0 (totalmente transparente) y 1 (opaco)
+        />
+        <Image
+          url="/img/teclav21.png" // Ruta relativa o absoluta a la imagen
+          scale={[5, 5, 2]}           // Tamaño del plano (ancho, alto, profundidad)
+          position={[-3, 20, 3]}        // Posición en la escena
+          transparent // Esta propiedad es opcional, pero puedes agregarla
+          opacity={1} // Cambia el valor entre 0 (totalmente transparente) y 1 (opaco)
+        />
+        <Image
+          url="/img/teclav31.png" // Ruta relativa o absoluta a la imagen
+          scale={[5, 5, 2]}           // Tamaño del plano (ancho, alto, profundidad)
+          position={[25, 20, 3]}        // Posición en la escena
+          transparent // Esta propiedad es opcional, pero puedes agregarla
+          opacity={1} // Cambia el valor entre 0 (totalmente transparente) y 1 (opaco)
+        />
       </Canvas>
     </Suspense>
   );
