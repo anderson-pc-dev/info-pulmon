@@ -131,12 +131,12 @@ export default function Scene() {
             target={[0, -10, -20]}
 
             // Límites verticales: evita que se vea desde abajo
-            minPolarAngle={Math.PI / 3}
+            minPolarAngle={Math.PI / 2}
             maxPolarAngle={Math.PI / 2}
 
             // Límites horizontales: restringe el giro lateral
-            minAzimuthAngle={-Math.PI / 8}
-            maxAzimuthAngle={Math.PI / 8}
+            minAzimuthAngle={-Math.PI / 35}
+            maxAzimuthAngle={Math.PI / 35}
 
             // Guarda el estado inicial solo una vez
             onChange={() => {
