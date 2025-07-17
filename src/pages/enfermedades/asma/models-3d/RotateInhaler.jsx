@@ -1,77 +1,118 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable react/no-unknown-property */
-import { useRef, Suspense } from 'react'
+import { useRef, Suspense, useState } from 'react'
 import { useFrame, Canvas } from '@react-three/fiber'
-import { Loader, OrbitControls, Text } from '@react-three/drei'
+import { Center, Loader, OrbitControls, Text3D } from '@react-three/drei'
 import { Inhaler } from './Inhaler'
 import Soporte from './Base'
 import StagingInhaler from '../staging/StagingInhaler'
 import Lights from './LightsBreathingHard'
+import font from "../../../../assets/fonts/Brunson_Regular.json";
 
-function RotatingInhaler(props) {
+import './RotateInhaler.scss'
+
+// Componente rotatorio que acepta props
+function RotatingInhaler({ isRotating, onClick, ...props }) {
   const groupRef = useRef()
 
   useFrame((state, delta) => {
-    if (groupRef.current) {
+    if (groupRef.current && isRotating) {
       groupRef.current.rotation.y += delta * 0.5
     }
   })
 
   return (
-    <group ref={groupRef}>
+    <group ref={groupRef} onClick={onClick}>
       <Inhaler {...props} />
     </group>
   )
 }
 
 export default function Scene() {
+  const [isRotating, setIsRotating] = useState(true)
+
+  const [showHint, setShowHint] = useState(true)
+
+  const toggleRotation = () => {
+    setIsRotating((prev) => !prev)
+    setShowHint(false)
+
+  }
+
   return (
-    <Suspense fallback={<Loader />}>
-      <Canvas
-        camera={{ position: [0, -9.5, 3], fov: 50 }}
-        shadows
-      >
-        <OrbitControls
-          enableRotate
-          enableZoom
-          enablePan={false}
-          target={[0, -10.5, 0.6]}
-          minDistance={2}
-          maxDistance={8}
-          minPolarAngle={Math.PI / 2.5}
-          maxPolarAngle={Math.PI / 1.5}
-          minAzimuthAngle={-Math.PI / 4}
-          maxAzimuthAngle={Math.PI / 4}
-        />
-
-        <StagingInhaler />
-        <Lights />
-        <ambientLight intensity={0.5} />
-        <directionalLight
-          position={[10, 10, 5]}
-          intensity={1}
-          castShadow
-          shadow-mapSize-width={1024}
-          shadow-mapSize-height={1024}
-          shadow-camera-near={0.5}
-          shadow-camera-far={50}
-          shadow-camera-left={-10}
-          shadow-camera-right={10}
-          shadow-camera-top={10}
-          shadow-camera-bottom={-10}
-        />
-        <Soporte />
-        <RotatingInhaler scale={2.0} position={[0, -11.95, 0]} rotation={[0, 0, 0]} />
-
-        <Text
-          position={[0, -9.7, 0.5]}
-          fontSize={0.6}
-          color="#2AABEC"
-          anchorX="center"
-          anchorY="middle"
+    <>
+      <Suspense fallback={<Loader />}>
+        <Canvas
+          camera={{ position: [0, -9.5, 4], fov: 50 }}
+          shadows
         >
-          Inhalador
-        </Text>
-      </Canvas>
-    </Suspense>
+          <OrbitControls
+            enableRotate
+            enableZoom
+            enablePan={false}
+            target={[0, -10.5, 0.6]}
+            minDistance={2}
+            maxDistance={8}
+            minPolarAngle={Math.PI / 2.5}
+            maxPolarAngle={Math.PI / 1.5}
+            minAzimuthAngle={-Math.PI / 4}
+            maxAzimuthAngle={Math.PI / 4}
+          />
+
+          <StagingInhaler />
+          <Lights />
+          <ambientLight intensity={0.5} />
+          <directionalLight
+            position={[10, 10, 5]}
+            intensity={1}
+            castShadow
+            shadow-mapSize-width={1024}
+            shadow-mapSize-height={1024}
+            shadow-camera-near={0.5}
+            shadow-camera-far={50}
+            shadow-camera-left={-10}
+            shadow-camera-right={10}
+            shadow-camera-top={10}
+            shadow-camera-bottom={-10}
+          />
+          <Soporte />
+
+          {/* 👉 Al hacer clic en el modelo, se pausa/reanuda la rotación */}
+          <RotatingInhaler
+            scale={2.0}
+            position={[0, -11.95, 0]}
+            rotation={[0, 0, 0]}
+            isRotating={isRotating}
+            onClick={toggleRotation}
+          />
+
+          <Center position={[0, -9.7, -2]}>
+            <Text3D
+              font={font}
+              bevelEnabled
+              bevelSize={0.05}
+              bevelThickness={0.3}
+              height={0.1}
+              depth={0.5}
+              lineHeight={0.8}
+              letterSpacing={0.02}
+              size={0.8}
+            >
+              Inhalador
+              <meshPhongMaterial
+                color="#2AABEC"
+                specular="#ffffff"
+                shininess={100}
+              />
+            </Text3D>
+          </Center>
+        </Canvas>
+      </Suspense>
+      {showHint && (
+        <div className="hint">
+          💡 Haz clic en el modelo para pausar/reanudar la rotación
+        </div>
+      )}
+    </>
   )
 }
