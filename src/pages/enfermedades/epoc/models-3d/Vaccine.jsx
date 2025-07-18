@@ -9,7 +9,6 @@ import Lights from '../lights/LightsVaccine';
 import Soporte from '../models-3d/SoporteVaccine'; 
 import Staging from '../staging/StagingVaccine';
 import Text from '../texts/TextTratamiento';
-import Ball from '../models-3d/Ball';
 
 function Vaccine(props) {
   const { nodes, materials } = useGLTF('/models-3d/Vaccine.glb')
@@ -132,37 +131,29 @@ function WelcomeMessage({ onRestore }) {
 
 export default function Scene() {
   const [isAnimating, setIsAnimating] = useState(true)
-  const [showBall, setShowBall] = useState(false)
   const [showWelcome, setShowWelcome] = useState(false)
-  const [hit, setHit] = useState(false)
-   const [ballActive, setBallActive] = useState(true)
-   const [resetKey, setResetKey] = useState(0); 
+  const [resetKey, setResetKey] = useState(0); 
 
   useEffect(() => {
     const handleKeyDown = (e) => {
-      if (e.key.toLowerCase() === 'c' && !showBall && !hit) {
-        setShowBall(true)
-        setBallActive(true)
+      if (e.key.toLowerCase() === 'c') {
+        setShowWelcome(prev => !prev);
+        setIsAnimating(prev => !prev); 
       }
     }
 
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [showBall, hit])
+  }, [])
 
-  const handleCollision = () => {
-    if (hit) return;
-    setHit(true)
-    setBallActive(false) 
-    setIsAnimating(false)
-    setTimeout(() => setShowWelcome(true), 3000) 
+  const handleTextClick = () => {
+    setShowWelcome(prev => !prev);
+    setIsAnimating(prev => !prev);
   }
 
   const handleRestore = () => {
     setShowWelcome(false)
-    setHit(false)
     setIsAnimating(true)
-    setShowBall(false) 
     setResetKey(prev => prev + 1); 
   }
 
@@ -184,22 +175,16 @@ export default function Scene() {
           <Lights />
           <Physics>
             <Vaccine
-            key={resetKey} 
-            isAnimating={isAnimating}
-            scale={1.4}            
-            reset={resetKey} 
-            position={[-1, -5, 0]}   
-            rotation={[0, 0, 0]}  
-          />
-          {showBall && (
-              <Ball 
-                position={[15, 0, -5]} 
-                onCollide={handleCollision}
-                isActive={ballActive}
-              />)}
-          <Soporte/>
+              key={resetKey} 
+              isAnimating={isAnimating}
+              scale={1.4}            
+              reset={resetKey} 
+              position={[-1, -5, 0]}   
+              rotation={[0, 0, 0]}  
+            />
+            <Soporte/>
           </Physics>
-          <Text/>
+          <Text onClick={handleTextClick} />
           <Staging/>
           {showWelcome && <WelcomeMessage onRestore={handleRestore} />}
         </Canvas>

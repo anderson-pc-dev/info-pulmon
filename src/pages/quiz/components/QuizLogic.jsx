@@ -17,7 +17,6 @@ export const useQuizLogic = () => {
   const currentQuestion = quizQuestions[currentQuestionIndex];
   const [lastSavedProgress, setLastSavedProgress] = useState({});
 
-
   // Temporizador
   useEffect(() => {
     if (timeLeft > 0 && !quizCompleted) {
@@ -90,7 +89,7 @@ const saveProgress = useCallback(async () => {
   const isSame =
     JSON.stringify(newProgress) === JSON.stringify(lastSavedProgress);
 
-  if (isSame) return; // No ha cambiado nada
+  if (isSame) return; 
 
   try {
     await fetch(`${import.meta.env.VITE_API_BASE_URL}quiz-scores/progress`, {
@@ -249,100 +248,25 @@ const saveProgress = useCallback(async () => {
   };
 
   const handleAnswerSelect = (selectedAnswer) => {
-    let isCorrect;
-    let formattedAnswer;
-    
-    // Preguntas de completar múltiples espacios
-    if (currentQuestion.type === 'fill-blank-multiple') {
-      const userAnswers = Array.isArray(selectedAnswer.answers || selectedAnswer) 
-        ? (selectedAnswer.answers || selectedAnswer).map(a => a.toLowerCase().trim())
-        : [selectedAnswer.toLowerCase().trim()];
-      
-      const correctAnswers = currentQuestion.correctAnswers.map(a => a.toLowerCase().trim());
-      
-      const allAnswersIncluded = correctAnswers.every(correctAns => 
-        userAnswers.includes(correctAns)
-      );
-      const noExtraAnswers = userAnswers.every(userAns => 
-        correctAnswers.includes(userAns)
-      );
-      
-      isCorrect = allAnswersIncluded && noExtraAnswers && 
-                 userAnswers.length === correctAnswers.length;
-      
-      formattedAnswer = userAnswers.join(', ');
-    }
-    // Preguntas de ordenamiento
-    else if (currentQuestion.type === 'drag-drop-order') {
-      if (typeof selectedAnswer === 'object' && selectedAnswer.answer) {
-        isCorrect = JSON.stringify(selectedAnswer.answer) === JSON.stringify(currentQuestion.correctOrder);
-      } else {
-        isCorrect = JSON.stringify(selectedAnswer) === JSON.stringify(currentQuestion.correctOrder);
-      }
-      formattedAnswer = Array.isArray(selectedAnswer.answer || selectedAnswer) 
-        ? (selectedAnswer.answer || selectedAnswer).join(', ')
-        : selectedAnswer;
-    } 
-    // Preguntas de asociación imagen-enfermedad
-    else if (currentQuestion.type === 'image-match') {
-      const userAnswer = typeof selectedAnswer === 'object' && selectedAnswer.answer 
-        ? selectedAnswer.answer 
-        : selectedAnswer;
-      
-      isCorrect = Object.entries(currentQuestion.correctMatches).every(
-        ([imageId, correctDisease]) => userAnswer[imageId] === correctDisease
-      );
-      
-      formattedAnswer = Object.entries(userAnswer)
-        .map(([imageId, disease]) => `${imageId}: ${disease}`)
-        .join('; ');
-    }
-    // Preguntas de asociación término-descripción
-    else if (currentQuestion.type === 'term-match') {
-      const userAnswer = typeof selectedAnswer === 'object' && selectedAnswer.answer 
-        ? selectedAnswer.answer 
-        : selectedAnswer;
-      
-      isCorrect = Object.entries(currentQuestion.correctMatches).every(
-        ([termId, correctDescription]) => userAnswer[termId] === correctDescription
-      );
-      
-      formattedAnswer = Object.entries(userAnswer)
-        .map(([termId, description]) => `${termId}: ${description}`)
-        .join('; ');
-    } 
-    // Otros tipos de preguntas
-    else {
-      isCorrect = selectedAnswer.toLowerCase().trim() === currentQuestion.correctAnswer.toLowerCase().trim();
-      formattedAnswer = selectedAnswer;
-    }
+    const isCorrect = selectedAnswer === currentQuestion.correctAnswer;
 
     // Guardar respuesta
     const newAnswers = {
       ...userAnswers,
       [currentQuestion.id]: {
-        selectedAnswer: formattedAnswer,
+        selectedAnswer,
         isCorrect,
         question: currentQuestion.question,
-        correctAnswer: currentQuestion.type === 'fill-blank-multiple'
-          ? currentQuestion.correctAnswers.join(', ')
-          : currentQuestion.type === 'image-match'
-            ? Object.entries(currentQuestion.correctMatches)
-                .map(([imageId, disease]) => `${imageId}: ${disease}`)
-                .join('; ')
-            : Array.isArray(currentQuestion.correctAnswer || currentQuestion.correctOrder)
-              ? (currentQuestion.correctAnswer || currentQuestion.correctOrder).join(', ')
-              : currentQuestion.correctAnswer,
+        correctAnswer: currentQuestion.correctAnswer,
         explanation: currentQuestion.explanation
       }
     };
-
     setUserAnswers(newAnswers);
 
-    // Actualizar puntuación 
+    // Actualizar puntuación
     const newScore = isCorrect ? score + quizConfig.pointsPerQuestion : score;
     
-    // Avanzar a la siguiente pregunta o finalizar
+    // Avanzar o finalizar
     if (currentQuestionIndex < quizQuestions.length - 1) {
       setScore(newScore);
       setCurrentQuestionIndex(prev => prev + 1);
@@ -353,7 +277,6 @@ const saveProgress = useCallback(async () => {
       }, 0);
     }
   };
-
   // Calcular progreso
   const progress = ((currentQuestionIndex + 1) / quizQuestions.length) * 100;
 

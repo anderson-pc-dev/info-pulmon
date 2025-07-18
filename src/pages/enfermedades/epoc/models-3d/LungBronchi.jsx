@@ -88,6 +88,11 @@ export default function Scene() {
     }
   }, [])
 
+  const handleTextClick = () => {
+    setShowMessage(prev => !prev);
+    setIsAnimating(prev => !prev);
+  }
+
   return (
     <Suspense fallback={<Loader />}>
       <Canvas
@@ -104,7 +109,7 @@ export default function Scene() {
         />
         <Lights />
         <Staging />
-        <Text/>
+        <Text onClick={handleTextClick} />
         <Soporte/>
         <LungBronchi
           scale={0.7}            
@@ -113,7 +118,7 @@ export default function Scene() {
         />
         {showMessage && (
           <Html
-            position={[-6.8, 5, -1.5]}
+            position={[-6.8, 7, -1.5]}
             zIndexRange={[100, 0]}
             transform={false} 
           >

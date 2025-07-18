@@ -7,6 +7,7 @@ const TextPrevencion = ({
   rotation = [0, 0, 0],
   color = "#005089",
   depth = 0.5, 
+  onClick, 
 }) => {
   return (
     <Center position={position}>
@@ -21,6 +22,7 @@ const TextPrevencion = ({
         letterSpacing={0.02}
         size={2.5}
         rotation={rotation}
+        onClick={onClick}
       >
         {text}
         <meshPhongMaterial 

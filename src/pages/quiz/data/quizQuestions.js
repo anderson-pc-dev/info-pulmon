@@ -1,212 +1,139 @@
 export const quizQuestions = [
-{
-  id: 1,
-  type: "drag-drop-order",
-  question: "Ordena los síntomas de la EPOC del más leve al más severo.",
-  itemsToOrder: [
-    "Cianosis (Coloración Azulada en la Piel y Labios)",
-    "Sibilancias (Sonido Agudo al Respirar)",
-    "Fatiga Extrema y Debilidad",
-    "Falta de aire o dificultad para respirar (Disnea)"
-  ],
-  correctOrder: [
-    "Sibilancias (Sonido Agudo al Respirar)",
-    "Fatiga Extrema y Debilidad",
-    "Cianosis (Coloración Azulada en la Piel y Labios)",
-    "Falta de aire o dificultad para respirar (Disnea)"
-  ],
-  explanation: "Los síntomas de la EPOC suelen comenzar con signos leves como sibilancias, y progresan gradualmente hacia manifestaciones más graves como fatiga intensa, cambios en el color de la piel (cianosis) y dificultad severa para respirar incluso en reposo."
-},
+  {
+    id: 1,
+    type: "multiple-choice",
+    question: "¿Cuál es la causa principal de la EPOC?",
+    options: [
+      "Contaminación del aire",
+      "Tabaquismo",
+      "Infecciones virales",
+      "Factores genéticos"
+    ],
+    correctAnswer: "Tabaquismo",
+    explanation: "El tabaquismo es responsable del 80-90% de los casos de EPOC, ya que el humo del cigarrillo daña irreversiblemente los pulmones."
+  },
   {
     id: 2,
-    type: "image-match",
-    question: "Asocia cada imagen con su enfermedad correspondiente",
-    images: [
-      { id: "A", url: "/imagesQuiz/epocQuiz.jpg", alt: "Pulmón con EPOC" },
-      { id: "B", url: "/imagesQuiz/tuberculosisQuiz.jpg", alt: "Pulmón con tuberculosis" },
-      { id: "C", url: "/imagesQuiz/asmaQuiz.png", alt: "Pulmón con asma" }
+    type: "multiple-choice",
+    question: "¿Cuál de estos síntomas es más característico de la EPOC avanzada?",
+    options: [
+      "Estornudos frecuentes",
+      "Cianosis (coloración azulada en labios/uñas)",
+      "Dolor de cabeza",
+      "Picor en la piel"
     ],
-    options: ["EPOC", "Tuberculosis", "Asma"],
-    correctMatches: {
-      "A": "EPOC",
-      "B": "Tuberculosis", 
-      "C": "Asma"
-    },
-    explanation: "La EPOC se reconoce por perdida de elasticidad y un cambio de color notable en el pulmon(debido al tabaquismo), la Tuberculosis por la bacteria Mycobacterium y el Asma se caracteriza por la inflamación de los bronquios."
+    correctAnswer: "Cianosis (coloración azulada en labios/uñas)",
+    explanation: "La cianosis indica baja oxigenación en sangre, un signo de EPOC grave."
   },
   {
     id: 3,
-    type: "term-match",
-    question: "Asocia cada término con su descripción correcta",
-    pairs: [
-      {
-        term: "EPOC",
-        description: "Destrucción progresiva de los alvéolos",
-        termId: "A"
-      },
-      {
-        term: "Enfisema pulmonar",
-        description: "Afección respiratoria de carácter progresivo e irreversible que se caracteriza por una obstrucción persistente del flujo de aire en los pulmones",
-        termId: "B"
-      },
-      {
-        term: "Broncodilatadores",
-        description: "Medicamentos que abren las vías respiratorias",
-        termId: "C"
-      },
-      {
-        term: "Corticosteroides",
-        description: "Reducen la inflamación de las vías respiratorias y se utilizan principalmente en casos avanzados",
-        termId: "D"
-      }
+    type: "multiple-choice",
+    question: "¿Qué bacteria causa la Tuberculosis?",
+    options: [
+      "Streptococcus pneumoniae",
+      "Mycobacterium tuberculosis",
+      "Escherichia coli",
+      "Staphylococcus aureus"
     ],
-    correctMatches: {
-      "A": "Afección respiratoria de carácter progresivo e irreversible que se caracteriza por una obstrucción persistente del flujo de aire en los pulmones",
-      "B": "Destrucción progresiva de los alvéolos",
-      "C": "Medicamentos que abren las vías respiratorias",
-      "D": "Reducen la inflamación de las vías respiratorias y se utilizan principalmente en casos avanzados"
-    },
-    explanation: "Comprender los términos médicos clave es fundamental para interpretar correctamente las enfermedades respiratorias. El EPOC se refiere a una obstrucción pulmonar crónica, mientras que el enfisema es un tipo específico de EPOC caracterizado por la destrucción de los alvéolos. Los broncodilatadores alivian los síntomas al abrir las vías respiratorias, y los corticosteroides se utilizan para reducir la inflamación, especialmente en etapas avanzadas."
-
+    correctAnswer: "Mycobacterium tuberculosis",
+    explanation: "La Tuberculosis es causada exclusivamente por la bacteria *Mycobacterium tuberculosis*."
   },
   {
     id: 4,
-    type: "fill-blank",
-    question: "El __________ es la causa principal de la EPOC.",
-    correctAnswer: "tabaquismo",
-    explanation: "El tabaquismo es la causa principal de la EPOC, ya que el humo del cigarro daña progresivamente los pulmones, provocando inflamación crónica y obstrucción del flujo de aire. Aunque existen otros factores de riesgo, fumar es, con mucho, el más significativo."
+    type: "multiple-choice",
+    question: "¿Cuál es el primer síntoma más común de la Tuberculosis?",
+    options: [
+      "Fiebre y sudores nocturnos",
+      "Dolor en las articulaciones",
+      "Erupciones cutáneas",
+      "Pérdida del gusto"
+    ],
+    correctAnswer: "Fiebre y sudores nocturnos",
+    explanation: "Los síntomas iniciales suelen ser inespecíficos, pero la fiebre persistente y los sudores nocturnos son clave."
   },
   {
-  id: 5,
-  type: "drag-drop-order",
-  question: "Ordena los síntomas de la Tuberculosis del más leve al más severo.",
-  itemsToOrder: [
-    "Dolor en los huesos o articulaciones",
-    "Inflamación de los ganglios linfáticos",
-    "Fiebre, sudores nocturnos",
-    "Dificultad para respirar"
-  ],
-  correctOrder: [
-    "Fiebre, sudores nocturnos",
-    "Dificultad para respirar",
-    "Dolor en los huesos o articulaciones",
-    "Inflamación de los ganglios linfáticos"
-  ],
-  explanation: "La tuberculosis puede comenzar con síntomas generales como fiebre y sudores nocturnos. A medida que progresa, pueden aparecer dificultades respiratorias debido al daño pulmonar. En casos más avanzados o diseminados, la infección puede afectar los huesos, articulaciones o ganglios linfáticos, lo que indica un compromiso más grave del organismo."
-},
+    id: 5,
+    type: "multiple-choice",
+    question: "¿Qué medicamento es de última línea para tratar la TB resistente?",
+    options: [
+      "Paracetamol",
+      "Linezolid (LZD)",
+      "Amoxicilina",
+      "Ibuprofeno"
+    ],
+    correctAnswer: "Linezolid (LZD)",
+    explanation: "El Linezolid es un antibiótico potente reservado para casos de TB multirresistente (MDR-TB)."
+  },
   {
-  id: 6,
-  type: "fill-blank-multiple",
-  question: "Los tipos de Tuberculosis son: __________,__________ y __________.",
-  correctAnswers: ["tuberculosis latente", "tuberculosis activa", "tuberculosis multirresistente"],
-  explanation: "La tuberculosis se clasifica en tres tipos principales: Latente (sin síntomas, pero con infección), Activa (con síntomas y contagiosa) y Multirresistente (resistente a los medicamentos comunes).",
-},
-
-{
+    id: 6,
+    type: "multiple-choice",
+    question: "¿Cuál es una característica del Asma?",
+    options: [
+      "Inflamación crónica de los bronquios",
+      "Destrucción de los alvéolos",
+      "Fibrosis pulmonar irreversible",
+      "Infección bacteriana persistente"
+    ],
+    correctAnswer: "Inflamación crónica de los bronquios",
+    explanation: "El Asma se define por la inflamación crónica y la hiperreactividad bronquial."
+  },
+  {
     id: 7,
-    type: "term-match",
-    question: "Asocia cada término con su descripción correcta",
-    pairs: [
-      {
-        term: "Daño hepatico",
-        description: "Un antibiótico de última línea, potente pero con efectos secundarios severos",
-        termId: "A"
-      },
-      {
-        term: "Tuberculosis",
-        description: "Efecto secundarios del tratamiento de TB-MDR",
-        termId: "B"
-      },
-      {
-        term: "Linezolid (LZD)",
-        description: "Enfermedad infecciosa causada por la bacteria Mycobacterium",
-        termId: "C"
-      },
-      {
-        term: "Vacuna BCG",
-        description: "La OMS recomienda su aplicación en países con alta incidencia de TB",
-        termId: "D"
-      }
+    type: "multiple-choice",
+    question: "¿Qué desencadena comúnmente crisis de Asma?",
+    options: [
+      "Alérgenos (como polen o ácaros)",
+      "Consumo de agua fría",
+      "Caminar despacio",
+      "Dormir boca arriba"
     ],
-    correctMatches: {
-      "A": "Efecto secundarios del tratamiento de TB-MDR",
-      "B": "Enfermedad infecciosa causada por la bacteria Mycobacterium",
-      "C": "Un antibiótico de última línea, potente pero con efectos secundarios severos",
-      "D": "La OMS recomienda su aplicación en países con alta incidencia de TB"
-    },
-    explanation: "La tuberculosis es una enfermedad causada por la bacteria *Mycobacterium tuberculosis*. Su tratamiento, especialmente en casos de TB-MDR (resistente a múltiples fármacos), puede provocar efectos secundarios como daño hepático. Linezolid es un antibiótico de uso limitado pero efectivo, aunque con riesgos importantes. La vacuna BCG es una medida preventiva recomendada por la OMS en regiones con alta prevalencia de la enfermedad."
-
+    correctAnswer: "Alérgenos (como polen o ácaros)",
+    explanation: "Los alérgenos, el aire frío o el ejercicio intenso pueden desencadenar broncoespasmos en pacientes asmáticos."
   },
-
   {
-  id: 8,
-  type: "drag-drop-order",
-  question: "Ordena los síntomas del Asma, del más leve al más severo.",
-  itemsToOrder: [
-    "Opresión en el pecho",
-    "Sibilancias intensas",
-    "Dificultad respiratoria extrema",
-    "Coloración azulada en labios o uñas (cianosis)"
-  ],
-  correctOrder: [
-    "Sibilancias intensas",
-    "Opresión en el pecho",
-    "Coloración azulada en labios o uñas (cianosis)",
-    "Dificultad respiratoria extrema"
-  ],
-  explanation: "El asma suele comenzar con síntomas leves como sibilancias (silbidos al respirar) y opresión en el pecho. Si no se controla, puede progresar a dificultad respiratoria extrema. En los casos más graves, la oxigenación deficiente provoca cianosis, un signo clínico de urgencia médica."
-},
-
-{
-  id: 9,
-  type: "fill-blank-multiple",
-  question: "El Asma es una condicion que se caracteriza por: __________,__________ y __________.",
-  correctAnswers: ["inflamacion cronica", "hiperreactividad bronquial", "obstrucción variable del flujo de aire"],
-  explanation: "El asma es una enfermedad respiratoria inflamatoria crónica. Se caracteriza por una inflamación persistente de las vías respiratorias, una respuesta exagerada a diversos estímulos (hiperreactividad bronquial), y una obstrucción del flujo de aire que puede variar en intensidad y ser reversible de forma espontánea o con tratamiento.",
-},
-
-{
-    id: 10,
-    type: "term-match",
-    question: "Asocia cada término con su descripción correcta",
-    pairs: [
-      {
-        term: "Asma",
-        description: "Este tratamiento se utiliza para tratar el asma grave que no mejora con los corticosteroides inhalados",
-        termId: "A"
-      },
-      {
-        term: "Termoplastia bronquial",
-        description: "Es una enfermedad crónica que afecta las vías respiratorias, específicamente los bronquios",
-        termId: "B"
-      },
-      {
-        term: "Genetica",
-        description: "Medicamento para el tratamiento del asma a largo plazo",
-        termId: "C"
-      },
-      {
-        term: "Teofilina",
-        description: "Es una de las causas del Asma",
-        termId: "D"
-      }
+    id: 8,
+    type: "multiple-choice",
+    question: "¿Qué vacuna se recomienda para prevenir formas graves de Tuberculosis en niños?",
+    options: [
+      "Vacuna contra la influenza",
+      "Vacuna BCG",
+      "Vacuna DPT",
+      "Vacuna contra el sarampión"
     ],
-    correctMatches: {
-      "A": "Es una enfermedad crónica que afecta las vías respiratorias, específicamente los bronquios",
-      "B": "Este tratamiento se utiliza para tratar el asma grave que no mejora con los corticosteroides inhalados",
-      "C": "Es una de las causas del Asma",
-      "D": "Medicamento para el tratamiento del asma a largo plazo"
-    },
-    explanation: "La tuberculosis es una enfermedad causada por la bacteria *Mycobacterium tuberculosis*. Su tratamiento, especialmente en casos de TB-MDR (resistente a múltiples fármacos), puede provocar efectos secundarios como daño hepático. Linezolid es un antibiótico de uso limitado pero efectivo, aunque con riesgos importantes. La vacuna BCG es una medida preventiva recomendada por la OMS en regiones con alta prevalencia de la enfermedad."
-
+    correctAnswer: "Vacuna BCG",
+    explanation: "La vacuna BCG protege contra formas graves de TB (como la meningitis tuberculosa) en niños."
   },
-
-
+  {
+    id: 9,
+    type: "multiple-choice",
+    question: "¿Cuál es el tratamiento más usado para controlar el Asma persistente?",
+    options: [
+      "Antibióticos orales",
+      "Corticosteroides inhalados",
+      "Analgésicos",
+      "Quimioterapia"
+    ],
+    correctAnswer: "Corticosteroides inhalados",
+    explanation: "Los corticosteroides inhalados son la base del tratamiento para reducir la inflamación en el Asma crónico."
+  },
+  {
+    id: 10,
+    type: "multiple-choice",
+    question: "¿Qué signo indica una crisis de Asma potencialmente mortal?",
+    options: [
+      "Estornudos",
+      "Cianosis (labios azules)",
+      "Dolor de garganta",
+      "Tos seca ocasional"
+    ],
+    correctAnswer: "Cianosis (labios azules)",
+    explanation: "La cianosis sugiere falta severa de oxígeno, requiriendo atención médica inmediata."
+  }
 ];
 
 export const quizConfig = {
   totalQuestions: 10,
-  timeLimit: 12, // minutos
+  timeLimit: 10, 
   pointsPerQuestion: 10,
-  passingScore: 70 // porcentaje minimo para parobar la prueba
+  passingScore: 70 
 };

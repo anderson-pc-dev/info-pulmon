@@ -6,7 +6,8 @@ const TextTratamiento = ({
   position = [0, 12, -3], 
   rotation = [0, 0.25, 0],
   color = "#005089",
-  depth = 0.5,  
+  depth = 0.5,
+  onClick, 
 }) => {
   return (
     <Center position={position}>
@@ -21,6 +22,7 @@ const TextTratamiento = ({
         letterSpacing={0.02}
         size={3}
         rotation={rotation}
+        onClick={onClick} 
       >
         {text}
         <meshPhongMaterial 
