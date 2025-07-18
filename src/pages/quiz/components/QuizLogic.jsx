@@ -6,8 +6,12 @@ import useAuthStore from "../../../stores/use-auth-store";
 
 export const useQuizLogic = () => {
   const { user } = useAuthStore();
-  // Usar preguntas en orden original
-  const [shuffledQuestions] = useState(() => originalQuizQuestions);
+  // Seleccionar 10 preguntas aleatorias del banco
+  function getRandomQuestions(arr, n) {
+    const shuffled = arr.slice().sort(() => 0.5 - Math.random());
+    return shuffled.slice(0, n);
+  }
+  const [shuffledQuestions] = useState(() => getRandomQuestions(originalQuizQuestions, 10));
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [score, setScore] = useState(0);
   const [timeLeft, setTimeLeft] = useState(quizConfig.timeLimit * 60);
@@ -20,6 +24,10 @@ export const useQuizLogic = () => {
   const [isLoadingProgress, setIsLoadingProgress] = useState(true);
   const currentQuestion = shuffledQuestions[currentQuestionIndex];
   const [lastSavedProgress, setLastSavedProgress] = useState({});
+  // Para image-match
+  const [imageMatchIndex, setImageMatchIndex] = useState(0); // índice de imagen actual
+  const [imageMatchAssociations, setImageMatchAssociations] = useState({}); // {A: 'EPOC', ...}
+  const [imageMatchResult, setImageMatchResult] = useState(null); // null | true | false
 
   // Temporizador
   useEffect(() => {
@@ -253,35 +261,79 @@ const saveProgress = useCallback(async () => {
 
   // Solo guarda la respuesta y actualiza el score, no avanza pregunta
   const handleAnswerSelect = (selectedAnswer) => {
-    const isCorrect = selectedAnswer === currentQuestion.correctAnswer;
-    const newAnswers = {
-      ...userAnswers,
-      [currentQuestion.id]: {
-        selectedAnswer,
-        isCorrect,
-        question: currentQuestion.question,
-        correctAnswer: currentQuestion.correctAnswer,
-        explanation: currentQuestion.explanation
+    // Para preguntas normales
+    if (currentQuestion.type !== 'image-match') {
+      const isCorrect = selectedAnswer === currentQuestion.correctAnswer;
+      const newAnswers = {
+        ...userAnswers,
+        [currentQuestion.id]: {
+          selectedAnswer,
+          isCorrect,
+          question: currentQuestion.question,
+          correctAnswer: currentQuestion.correctAnswer,
+          explanation: currentQuestion.explanation
+        }
+      };
+      setUserAnswers(newAnswers);
+      if (isCorrect) {
+        setScore(prev => prev + quizConfig.pointsPerQuestion);
       }
-    };
-    setUserAnswers(newAnswers);
-    // Actualizar puntuación
-    if (isCorrect) {
-      setScore(prev => prev + quizConfig.pointsPerQuestion);
+    } else {
+      // image-match: asociar la opción seleccionada a la imagen actual
+      const imageObj = currentQuestion.images[imageMatchIndex];
+      if (!imageObj) return;
+      const newAssociations = {
+        ...imageMatchAssociations,
+        [imageObj.id]: selectedAnswer
+      };
+      setImageMatchAssociations(newAssociations);
+
+      // Si quedan más imágenes, avanza a la siguiente
+      if (imageMatchIndex < currentQuestion.images.length - 1) {
+        setImageMatchIndex(prev => prev + 1);
+      } else {
+        // Validar todas las asociaciones
+        let allCorrect = true;
+        for (const img of currentQuestion.images) {
+          if (newAssociations[img.id] !== currentQuestion.correctMatches[img.id]) {
+            allCorrect = false;
+            break;
+          }
+        }
+        setImageMatchResult(allCorrect);
+        // Guardar en userAnswers para el resumen/final
+        const newAnswers = {
+          ...userAnswers,
+          [currentQuestion.id]: {
+            selectedAnswer: newAssociations,
+            isCorrect: allCorrect,
+            question: currentQuestion.question,
+            correctAnswer: currentQuestion.correctMatches,
+            explanation: currentQuestion.explanation
+          }
+        };
+        setUserAnswers(newAnswers);
+        if (allCorrect) {
+          setScore(prev => prev + quizConfig.pointsPerQuestion);
+        }
+      }
     }
   };
   // Calcular progreso
   const progress = ((currentQuestionIndex + 1) / shuffledQuestions.length) * 100;
 
   // Avanzar a la siguiente pregunta
-  const goToNextQuestion = () => {
-    console.log('Current question index:', currentQuestionIndex);
 
+  const goToNextQuestion = () => {
+    // Si la pregunta actual es image-match, reiniciar el estado de asociación
+    if (currentQuestion.type === 'image-match') {
+      setImageMatchIndex(0);
+      setImageMatchAssociations({});
+      setImageMatchResult(null);
+    }
     if (currentQuestionIndex < shuffledQuestions.length - 1) {
       setCurrentQuestionIndex(prev => prev + 1);
     }
-
-    console.log('Next question index:', currentQuestionIndex + 1);
   };
 
   // Finalizar el quiz manualmente
@@ -310,6 +362,10 @@ const saveProgress = useCallback(async () => {
     isSavingScore,
     saveError,
     isLoadingProgress,
-    hasLoadedProgress
+    hasLoadedProgress,
+    // image-match extra
+    imageMatchIndex,
+    imageMatchAssociations,
+    imageMatchResult
   };
 };

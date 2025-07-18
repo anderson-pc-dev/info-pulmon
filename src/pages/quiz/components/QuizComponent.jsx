@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/no-unknown-property */
@@ -21,12 +22,19 @@ const ColoredFloor = () => (
   </RigidBody>
 )
 
-const DecorativeElements = () => (
+const getOptionPositions = (count) => {
+  // Centra los cubos/cilindros en X, separados por 10 unidades
+  const spacing = 10;
+  const startX = -((count - 1) * spacing) / 2;
+  return Array.from({ length: count }, (_, i) => [startX + i * spacing, 5, -10]);
+};
+
+const DecorativeElements = ({ optionCount }) => (
   <>
-    {[-15, -5, 5, 15].map((x) => (
-      <mesh key={x} position={[x, 1, -10]} castShadow>
+    {getOptionPositions(optionCount).map((pos, idx) => (
+      <mesh key={idx} position={[pos[0], 1, pos[2]]} castShadow>
         <cylinderGeometry args={[1, 1, 4, 16]} />
-        <meshStandardMaterial color="##E2F5FF" metalness={0.8} roughness={0.2} />
+        <meshStandardMaterial color="#E2F5FF" metalness={0.8} roughness={0.2} />
       </mesh>
     ))}
     {[...Array(5)].map((_, i) => (
@@ -46,7 +54,7 @@ const DecorativeElements = () => (
       </Float>
     ))}
   </>
-)
+);
 
 const QuizGame3D = () => {
   const {
@@ -64,7 +72,10 @@ const QuizGame3D = () => {
     totalQuestions,
     progress,
     passingScore,
-    maxScore
+    maxScore,
+    imageMatchIndex,
+    imageMatchAssociations,
+    imageMatchResult
   } = useQuizLogic()
 
   const navigate = useNavigate()
@@ -96,29 +107,54 @@ const QuizGame3D = () => {
   }, [quizCompleted, showResults])
 
   const handleCollisionWithOption = (targetName) => {
-    // Bloquear cualquier doble avance incluso si el componente se renderiza dos veces
-    if (userAnswers[currentQuestion.id] || answerLocked || hasAnsweredRef.current) return;
-    setAnswerLocked(true); // Bloquea inmediatamente
+    // Para image-match, el flujo es diferente
+    if (answerLocked || hasAnsweredRef.current) return;
+    setAnswerLocked(true);
     hasAnsweredRef.current = true;
 
-    const isCorrect = targetName === currentQuestion.correctAnswer;
-    setHighlightedOption(targetName);
-    setIsCorrectAnswer(isCorrect);
-
-    setTimeout(() => {
-      handleAnswerSelect(targetName);
-      setHighlightedOption(null);
-      setIsCorrectAnswer(null);
-      setAnswerLocked(false);
-      // Avanzar automáticamente a la siguiente pregunta si no es la última
-      if (currentQuestionIndex < totalQuestions - 1) {
-        goToNextQuestion();
-      } else {
-        goToQuizEnd();
-      }
-      // Reset ref para la siguiente pregunta
-      hasAnsweredRef.current = false;
-    }, 3000);
+    if (currentQuestion.type === 'image-match') {
+      // No hay userAnswers[currentQuestion.id] hasta terminar todas las asociaciones
+      setHighlightedOption(targetName);
+      // No sabemos si es correcto hasta terminar todas
+      setTimeout(() => {
+        handleAnswerSelect(targetName);
+        setHighlightedOption(null);
+        setIsCorrectAnswer(null);
+        setAnswerLocked(false);
+        // Si ya se terminó de asociar todas las imágenes, mostrar resultado y avanzar
+        if (imageMatchIndex === currentQuestion.images.length - 1) {
+          setTimeout(() => {
+            // Espera un poco para mostrar el resultado visual
+            if (currentQuestionIndex < totalQuestions - 1) {
+              goToNextQuestion();
+            } else {
+              goToQuizEnd();
+            }
+            hasAnsweredRef.current = false;
+          }, 2200);
+        } else {
+          hasAnsweredRef.current = false;
+        }
+      }, 1200);
+    } else {
+      // Pregunta normal
+      if (userAnswers[currentQuestion.id]) return;
+      const isCorrect = targetName === currentQuestion.correctAnswer;
+      setHighlightedOption(targetName);
+      setIsCorrectAnswer(isCorrect);
+      setTimeout(() => {
+        handleAnswerSelect(targetName);
+        setHighlightedOption(null);
+        setIsCorrectAnswer(null);
+        setAnswerLocked(false);
+        if (currentQuestionIndex < totalQuestions - 1) {
+          goToNextQuestion();
+        } else {
+          goToQuizEnd();
+        }
+        hasAnsweredRef.current = false;
+      }, 3000);
+    }
   };
 
   return (
@@ -138,95 +174,146 @@ const QuizGame3D = () => {
 
         <Physics gravity={[0, -9.81, 0]}>
           <ColoredFloor />
-          <mesh position={[0, 10, -20]} receiveShadow>
-            <boxGeometry args={[80, 20, 2]} />
-            <meshStandardMaterial color="#2AABEC" transparent opacity={0.7} />
+      <mesh position={[0, 13, -20]} receiveShadow>
+        <boxGeometry args={[80, 28, 2]} />
+        <meshStandardMaterial color="#2AABEC" transparent opacity={0.7} />
 
-            <Html
-              position={[0, 3, 1.1]}
-              transform
-              center
-              distanceFactor={10}
-              occlude
-              className="question-wall"
-            >
+        <Html
+          position={[0, 5, 1.1]}
+          transform
+          center
+          distanceFactor={10}
+          occlude
+          className="question-wall"
+        >
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            minWidth: '520px',
+            maxWidth: '900px',
+            padding: '32px 24px',
+            background: 'rgba(255,255,255,0.92)',
+            borderRadius: '24px',
+            boxShadow: '0 8px 32px rgba(0,0,0,0.18)',
+            border: '2px solid rgba(0,0,0,0.08)',
+            backdropFilter: 'blur(6px)'
+          }}>
+            <div style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              width: '100%',
+              marginBottom: '18px',
+              gap: '18px',
+              fontSize: '22px',
+              fontWeight: 600,
+              color: '#222'
+            }}>
+              <span>Pregunta {currentQuestionIndex + 1}/{totalQuestions}</span>
+              <span style={{
+                background: 'rgba(100,150,255,0.18)',
+                padding: '6px 18px',
+                borderRadius: '20px',
+                fontWeight: 700,
+                fontSize: '20px',
+                color: '#1e293b',
+                letterSpacing: '1px'
+              }}>⏱️ {timeLeft}s</span>
+            </div>
+            <div style={{
+              fontSize: '32px',
+              fontWeight: 700,
+              color: '#22223b',
+              textAlign: 'center',
+              marginBottom: '22px',
+              textShadow: '0 2px 8px rgba(0,0,0,0.08)'
+            }}>
+              {currentQuestion.question}
+            </div>
+            {/* Si es image-match, mostrar la imagen actual */}
+            {currentQuestion.type === 'image-match' && currentQuestion.images && (
               <div style={{
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
-                justifyContent: 'center',
-                minWidth: '420px',
-                maxWidth: '700px',
-                padding: '32px 24px',
-                background: 'rgba(255,255,255,0.92)',
-                borderRadius: '24px',
-                boxShadow: '0 8px 32px rgba(0,0,0,0.18)',
-                border: '2px solid rgba(0,0,0,0.08)',
-                backdropFilter: 'blur(6px)'
+                marginBottom: '18px',
+                marginTop: '8px',
+                width: '100%'
               }}>
+                <img
+                  src={currentQuestion.images[imageMatchIndex]?.url}
+                  alt={currentQuestion.images[imageMatchIndex]?.alt || ''}
+                  style={{
+                    maxWidth: '320px',
+                    maxHeight: '220px',
+                    borderRadius: '18px',
+                    boxShadow: '0 4px 18px rgba(0,0,0,0.18)',
+                    border: '3px solid #2AABEC',
+                    background: '#fff',
+                    marginBottom: '8px'
+                  }}
+                />
                 <div style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  width: '100%',
-                  marginBottom: '18px',
-                  gap: '18px',
-                  fontSize: '22px',
-                  fontWeight: 600,
-                  color: '#222'
+                  fontSize: '18px',
+                  color: '#333',
+                  fontWeight: 500,
+                  marginTop: '2px',
+                  marginBottom: '0'
                 }}>
-                  <span>Pregunta {currentQuestionIndex + 1}/{totalQuestions}</span>
-                  <span style={{
-                    background: 'rgba(100,150,255,0.18)',
-                    padding: '6px 18px',
-                    borderRadius: '20px',
-                    fontWeight: 700,
-                    fontSize: '20px',
-                    color: '#1e293b',
-                    letterSpacing: '1px'
-                  }}>⏱️ {timeLeft}s</span>
+                  Imagen {imageMatchIndex + 1} de {currentQuestion.images.length}
                 </div>
-                <div style={{
-                  fontSize: '32px',
-                  fontWeight: 700,
-                  color: '#22223b',
-                  textAlign: 'center',
-                  marginBottom: '22px',
-                  textShadow: '0 2px 8px rgba(0,0,0,0.08)'
-                }}>
-                  {currentQuestion.question}
-                </div>
-                <div style={{
-                  width: '100%',
-                  marginTop: '10px',
-                  marginBottom: '0',
-                  background: 'rgba(0,0,0,0.08)',
-                  borderRadius: '8px',
-                  height: '12px',
-                  overflow: 'hidden',
-                  boxShadow: '0 2px 8px rgba(0,0,0,0.06)'
-                }}>
+                {/* Mostrar feedback si ya terminó de asociar todas */}
+                {imageMatchResult !== null && (
                   <div style={{
-                    width: `${(score / maxScore) * 100}%`,
-                    height: '100%',
-                    background: 'linear-gradient(90deg, #6366f1, #8b5cf6)',
-                    borderRadius: '8px',
-                    transition: 'width 0.5s ease'
-                  }} />
-                </div>
-                <div style={{
-                  width: '100%',
-                  textAlign: 'right',
-                  fontSize: '15px',
-                  color: '#444',
-                  marginTop: '4px',
-                  fontWeight: 500
-                }}>
-                  {score} / {maxScore} puntos
-                </div>
+                    marginTop: '12px',
+                    fontSize: '22px',
+                    fontWeight: 700,
+                    color: imageMatchResult ? '#10b981' : '#ef4444',
+                    background: imageMatchResult ? 'rgba(16,185,129,0.12)' : 'rgba(239,68,68,0.12)',
+                    borderRadius: '10px',
+                    padding: '10px 18px',
+                    border: `2px solid ${imageMatchResult ? '#10b981' : '#ef4444'}`
+                  }}>
+                    {imageMatchResult ? '¡Asociación correcta!' : 'Alguna asociación es incorrecta'}
+                  </div>
+                )}
               </div>
-            </Html>
-          </mesh>
+            )}
+            <div style={{
+              width: '100%',
+              marginTop: '10px',
+              marginBottom: '0',
+              background: 'rgba(0,0,0,0.08)',
+              borderRadius: '8px',
+              height: '12px',
+              overflow: 'hidden',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.06)'
+            }}>
+              <div style={{
+                width: `${(score / maxScore) * 100}%`,
+                height: '100%',
+                background: 'linear-gradient(90deg, #6366f1, #8b5cf6)',
+                borderRadius: '8px',
+                transition: 'width 0.5s ease'
+              }} />
+            </div>
+            <div style={{
+              width: '100%',
+              textAlign: 'right',
+              fontSize: '15px',
+              color: '#444',
+              marginTop: '4px',
+              fontWeight: 500
+            }}>
+              {score} / {maxScore} puntos
+            </div>
+          </div>
+        </Html>
+      </mesh>
+
+
 
           <OptionCubes
             options={currentQuestion.options}
@@ -234,6 +321,8 @@ const QuizGame3D = () => {
             userAnswers={userAnswers}
             highlightedOption={highlightedOption}
             isCorrect={isCorrectAnswer}
+            optionType={currentQuestion.type === 'image-match' ? 'text' : 'text'}
+            optionPositions={getOptionPositions(currentQuestion.options.length)}
           />
 
           <Esphere
@@ -242,7 +331,7 @@ const QuizGame3D = () => {
             disabled={answerLocked}
           />
 
-          <DecorativeElements />
+          <DecorativeElements optionCount={currentQuestion.options.length} />
         </Physics>
 
         <OrbitControls

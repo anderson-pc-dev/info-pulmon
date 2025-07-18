@@ -128,12 +128,155 @@ export const quizQuestions = [
     ],
     correctAnswer: "Cianosis (labios azules)",
     explanation: "La cianosis sugiere falta severa de oxígeno, requiriendo atención médica inmediata."
-  }
+  },
+
+  // IMAGE-MATCH: Tratamientos
+  {
+    id: 12,
+    type: "image-match",
+    question: "Relaciona el dispositivo con la enfermedad que más lo utiliza",
+    images: [
+      { id: "A", url: "https://www.lapatria.com/sites/default/files/styles/ampliar_945/public/noticia/2024-11/Los-inhaladores.jpg?itok=0gAxlRrx", alt: "Inhalador de asma" },
+      { id: "B", url: "https://www.indushealthplus.com/media/media/news_media/anti-tb-drugs-article.jpg", alt: "Medicamentos antituberculosos" },
+      { id: "C", url: "https://m.media-amazon.com/images/I/81Rz7S3MBrL._AC_SL1500_.jpg", alt: "Mascarilla de oxígeno" }
+    ],
+    options: ["Asma", "Tuberculosis", "EPOC"],
+    correctMatches: {
+      "A": "Asma",
+      "B": "Tuberculosis",
+      "C": "EPOC"
+    },
+    explanation: "El inhalador es típico del asma, los medicamentos antibióticos para la tuberculosis y la oxigenoterapia para EPOC grave."
+  },
+
+  // MULTIPLE-CHOICE: EPOC
+  {
+    id: 13,
+    type: "multiple-choice",
+    question: "¿Cuál de los siguientes NO es un factor de riesgo para EPOC?",
+    options: [
+      "Tabaquismo",
+      "Exposición a biomasa",
+      "Ejercicio regular",
+      "Contaminación ambiental"
+    ],
+    correctAnswer: "Ejercicio regular",
+    explanation: "El ejercicio regular es saludable y no es un factor de riesgo para EPOC."
+  },
+  {
+    id: 14,
+    type: "multiple-choice",
+    question: "¿Qué prueba es fundamental para el diagnóstico de EPOC?",
+    options: [
+      "Espirometría",
+      "Radiografía de abdomen",
+      "Electrocardiograma",
+      "Hemograma"
+    ],
+    correctAnswer: "Espirometría",
+    explanation: "La espirometría mide la función pulmonar y es esencial para diagnosticar EPOC."
+  },
+  {
+    id: 15,
+    type: "multiple-choice",
+    question: "¿Cuál es el síntoma cardinal del asma?",
+    options: [
+      "Disnea episódica",
+      "Dolor torácico constante",
+      "Hemoptisis",
+      "Edema de miembros inferiores"
+    ],
+    correctAnswer: "Disnea episódica",
+    explanation: "El asma se caracteriza por episodios de dificultad respiratoria (disnea) reversible."
+  },
+  {
+    id: 16,
+    type: "multiple-choice",
+    question: "¿Cuál es el principal objetivo del tratamiento del asma?",
+    options: [
+      "Curar la enfermedad",
+      "Prevenir exacerbaciones y controlar síntomas",
+      "Eliminar la alergia",
+      "Reducir la tos únicamente"
+    ],
+    correctAnswer: "Prevenir exacerbaciones y controlar síntomas",
+    explanation: "El objetivo es mantener al paciente sin síntomas y evitar crisis."
+  },
+  {
+    id: 17,
+    type: "multiple-choice",
+    question: "¿Cuál de los siguientes NO es un síntoma típico de tuberculosis pulmonar?",
+    options: [
+      "Tos crónica",
+      "Pérdida de peso",
+      "Sudoración nocturna",
+      "Dolor lumbar"
+    ],
+    correctAnswer: "Dolor lumbar",
+    explanation: "El dolor lumbar no es característico de tuberculosis pulmonar."
+  },
+  {
+    id: 18,
+    type: "multiple-choice",
+    question: "¿Qué medida es clave para prevenir la transmisión de tuberculosis?",
+    options: [
+      "Uso de mascarilla",
+      "Ejercicio físico",
+      "Vacuna contra la gripe",
+      "Tomar vitamina C"
+    ],
+    correctAnswer: "Uso de mascarilla",
+    explanation: "El uso de mascarilla reduce la transmisión aérea de la bacteria."
+  },
+  {
+    id: 19,
+    type: "multiple-choice",
+    question: "¿Cuál es el principal agente causal de la tuberculosis?",
+    options: [
+      "Mycobacterium tuberculosis",
+      "Streptococcus pneumoniae",
+      "Haemophilus influenzae",
+      "Virus sincitial respiratorio"
+    ],
+    correctAnswer: "Mycobacterium tuberculosis",
+    explanation: "La tuberculosis es causada por la bacteria Mycobacterium tuberculosis."
+  },
+  {
+    id: 20,
+    type: "multiple-choice",
+    question: "¿Qué complicación grave puede causar la tuberculosis no tratada?",
+    options: [
+      "Meningitis",
+      "Rinitis",
+      "Otitis",
+      "Sinusitis"
+    ],
+    correctAnswer: "Meningitis",
+    explanation: "La tuberculosis puede diseminarse y causar meningitis, especialmente en niños."
+  },
+
+  {
+    id: 2,
+    type: "image-match",
+    question: "Asocia cada imagen con su enfermedad correspondiente",
+    images: [
+      { id: "A", url: "/imagesQuiz/epocQuiz.jpg", alt: "Pulmón con EPOC" },
+      { id: "B", url: "/imagesQuiz/tuberculosisQuiz.jpg", alt: "Pulmón con tuberculosis" },
+      { id: "C", url: "/imagesQuiz/asmaQuiz.png", alt: "Pulmón con asma" }
+    ],
+    options: ["EPOC", "Tuberculosis", "Asma"],
+    correctMatches: {
+      "A": "EPOC",
+      "B": "Tuberculosis",
+      "C": "Asma"
+    },
+    explanation: "La EPOC se reconoce por perdida de elasticidad y un cambio de color notable en el pulmon(debido al tabaquismo), la Tuberculosis por la bacteria Mycobacterium y el Asma se caracteriza por la inflamación de los bronquios."
+  },
 ];
 
 export const quizConfig = {
   totalQuestions: 10,
-  timeLimit: 10, 
+  timeLimit: 10,
   pointsPerQuestion: 10,
-  passingScore: 70 
+  passingScore: 70
 };

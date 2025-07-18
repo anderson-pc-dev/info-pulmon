@@ -10,28 +10,23 @@ import { Line } from "@react-three/drei";
 const Esphere = ({ onCollision, ...props }) => {
   const sphereRef = useRef();
   const { camera, raycaster, gl } = useThree();
-  const [showLine, setShowLine] = useState(false);
-  const [linePoints, setLinePoints] = useState([new Vector3(0,0,0), new Vector3(0,0,0)]);
-  const [shootDirection, setShootDirection] = useState(new Vector3(0,0,1));
+  // Eliminado: línea de dirección
   const [isAiming, setIsAiming] = useState(false);
-  // No se necesita lastPointer
 
 
-  // Al presionar el mouse, mostrar la línea y calcular dirección
+  // Al presionar el mouse, solo activar aiming
   const handlePointerDown = useCallback((e) => {
     e.stopPropagation();
     setIsAiming(true);
-    setShowLine(true);
   }, []);
 
   // Al mover el mouse mientras se mantiene presionado
   // No hace falta handlePointerMove
 
-  // Al soltar el mouse, disparar la esfera y ocultar la línea
+  // Al soltar el mouse, disparar la esfera
   const handlePointerUp = useCallback(() => {
     if (!isAiming) return;
     setIsAiming(false);
-    setShowLine(false);
     // Calcular dirección cámara→esfera
     const origin = sphereRef.current.translation();
     const spherePos = new Vector3(origin.x, origin.y, origin.z);
@@ -55,19 +50,7 @@ const Esphere = ({ onCollision, ...props }) => {
     }, 2000);
   }, [isAiming, camera]);
 
-  // Actualizar la línea de dirección en cada frame mientras se apunta
-  useFrame(() => {
-    if (!isAiming || !sphereRef.current) return;
-    // Dirección cámara→esfera
-    const origin = sphereRef.current.translation();
-    const spherePos = new Vector3(origin.x, origin.y, origin.z);
-    const camPos = camera.position;
-    const dir = new Vector3().subVectors(spherePos, camPos).normalize();
-    setShootDirection(dir);
-    const start = spherePos;
-    const end = start.clone().add(dir.clone().multiplyScalar(10));
-    setLinePoints([start, end]);
-  });
+  // Eliminado: actualización de línea de dirección
 
   // Detectar colision
   const handleCollisionEnter = (payload) => {
@@ -90,16 +73,7 @@ const Esphere = ({ onCollision, ...props }) => {
       onCollisionEnter={handleCollisionEnter}
       {...props}
     >
-      {showLine && (
-        <Line
-          points={linePoints}
-          color="#222"
-          lineWidth={2}
-          dashed
-          dashSize={0.5}
-          gapSize={0.3}
-        />
-      )}
+      {/* Línea de dirección eliminada */}
       <mesh
         onPointerDown={handlePointerDown}
         onPointerUp={handlePointerUp}

@@ -108,8 +108,32 @@ const QuizResults = () => {
             </div>
             <div className="answer-content">
               <p className="question-text"><strong>Pregunta {questionId}:</strong> {answerData.question}</p>
-              <p><strong>Tu respuesta:</strong> {answerData.selectedAnswer}</p>
-              {!answerData.isCorrect && <p><strong>Respuesta correcta:</strong> {answerData.correctAnswer}</p>}
+              {/* Si es image-match, mostrar asociaciones legibles */}
+              {typeof answerData.selectedAnswer === 'object' && answerData.selectedAnswer !== null ? (
+                <>
+                  <p><strong>Tus asociaciones:</strong></p>
+                  <ul style={{ margin: 0, paddingLeft: 20 }}>
+                    {Object.entries(answerData.selectedAnswer).map(([imgKey, value]) => (
+                      <li key={imgKey}><strong>{imgKey}:</strong> {value}</li>
+                    ))}
+                  </ul>
+                  {!answerData.isCorrect && (
+                    <>
+                      <p><strong>Asociación correcta:</strong></p>
+                      <ul style={{ margin: 0, paddingLeft: 20 }}>
+                        {Object.entries(answerData.correctAnswer).map(([imgKey, value]) => (
+                          <li key={imgKey}><strong>{imgKey}:</strong> {value}</li>
+                        ))}
+                      </ul>
+                    </>
+                  )}
+                </>
+              ) : (
+                <>
+                  <p><strong>Tu respuesta:</strong> {answerData.selectedAnswer}</p>
+                  {!answerData.isCorrect && <p><strong>Respuesta correcta:</strong> {answerData.correctAnswer}</p>}
+                </>
+              )}
               <p className="explanation"><strong>Explicación:</strong> {answerData.explanation}</p>
             </div>
           </div>
