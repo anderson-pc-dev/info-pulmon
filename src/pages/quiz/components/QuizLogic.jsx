@@ -1,9 +1,13 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect, useCallback } from 'react';
-import { quizQuestions, quizConfig } from '../data/quizQuestions';
+import { quizQuestions as originalQuizQuestions, quizConfig } from '../data/quizQuestions';
 import useAuthStore from "../../../stores/use-auth-store";
+
 
 export const useQuizLogic = () => {
   const { user } = useAuthStore();
+  // Usar preguntas en orden original
+  const [shuffledQuestions] = useState(() => originalQuizQuestions);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [score, setScore] = useState(0);
   const [timeLeft, setTimeLeft] = useState(quizConfig.timeLimit * 60);
@@ -14,7 +18,7 @@ export const useQuizLogic = () => {
   const [saveError, setSaveError] = useState(null);
   const [hasLoadedProgress, setHasLoadedProgress] = useState(false);
   const [isLoadingProgress, setIsLoadingProgress] = useState(true);
-  const currentQuestion = quizQuestions[currentQuestionIndex];
+  const currentQuestion = shuffledQuestions[currentQuestionIndex];
   const [lastSavedProgress, setLastSavedProgress] = useState({});
 
   // Temporizador
@@ -35,7 +39,7 @@ export const useQuizLogic = () => {
     setSaveError(null);
 
     try {
-      const maxPossibleScore = quizQuestions.length * quizConfig.pointsPerQuestion;
+      const maxPossibleScore = shuffledQuestions.length * quizConfig.pointsPerQuestion;
       const percentageScore = Math.round((finalScore / maxPossibleScore) * 100);
 
       const response = await fetch(
@@ -237,7 +241,7 @@ const saveProgress = useCallback(async () => {
   };
 
   const calculatePercentageScore = (currentScore) => {
-    const maxPossibleScore = quizQuestions.length * quizConfig.pointsPerQuestion;
+    const maxPossibleScore = shuffledQuestions.length * quizConfig.pointsPerQuestion;
     return Math.round((currentScore / maxPossibleScore) * 100);
   };
 
@@ -247,10 +251,9 @@ const saveProgress = useCallback(async () => {
     return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
   };
 
+  // Solo guarda la respuesta y actualiza el score, no avanza pregunta
   const handleAnswerSelect = (selectedAnswer) => {
     const isCorrect = selectedAnswer === currentQuestion.correctAnswer;
-
-    // Guardar respuesta
     const newAnswers = {
       ...userAnswers,
       [currentQuestion.id]: {
@@ -262,28 +265,34 @@ const saveProgress = useCallback(async () => {
       }
     };
     setUserAnswers(newAnswers);
-
     // Actualizar puntuación
-    const newScore = isCorrect ? score + quizConfig.pointsPerQuestion : score;
-    
-    // Avanzar o finalizar
-    if (currentQuestionIndex < quizQuestions.length - 1) {
-      setScore(newScore);
-      setCurrentQuestionIndex(prev => prev + 1);
-    } else {
-      setScore(newScore);
-      setTimeout(() => {
-        completeQuiz(newScore);
-      }, 0);
+    if (isCorrect) {
+      setScore(prev => prev + quizConfig.pointsPerQuestion);
     }
   };
   // Calcular progreso
-  const progress = ((currentQuestionIndex + 1) / quizQuestions.length) * 100;
+  const progress = ((currentQuestionIndex + 1) / shuffledQuestions.length) * 100;
+
+  // Avanzar a la siguiente pregunta
+  const goToNextQuestion = () => {
+    console.log('Current question index:', currentQuestionIndex);
+
+    if (currentQuestionIndex < shuffledQuestions.length - 1) {
+      setCurrentQuestionIndex(prev => prev + 1);
+    }
+
+    console.log('Next question index:', currentQuestionIndex + 1);
+  };
+
+  // Finalizar el quiz manualmente
+  const goToQuizEnd = () => {
+    completeQuiz(score);
+  };
 
   return {
     currentQuestion,
     currentQuestionIndex,
-    totalQuestions: quizQuestions.length,
+    totalQuestions: shuffledQuestions.length,
     score,
     timeLeft: formatTime(timeLeft),
     quizCompleted,
@@ -291,10 +300,12 @@ const saveProgress = useCallback(async () => {
     showResults,
     handleAnswerSelect,
     restartQuiz,
+    goToNextQuestion,
+    goToQuizEnd,
     scorePercentage: calculatePercentageScore(score),
     progress,
     passingScore: quizConfig.passingScore,
-    maxScore: quizQuestions.length * quizConfig.pointsPerQuestion,
+    maxScore: shuffledQuestions.length * quizConfig.pointsPerQuestion,
     user,
     isSavingScore,
     saveError,

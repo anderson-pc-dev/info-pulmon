@@ -1,41 +1,73 @@
+/* eslint-disable react/no-unknown-property */
+/* eslint-disable no-unused-vars */
+/* eslint-disable react/prop-types */
 import { RigidBody } from "@react-three/rapier";
-import { useRef, useCallback } from "react";
-import { useThree } from "@react-three/fiber";
-import { Vector2 } from "three";
+import { useRef, useCallback, useState } from "react";
+import { useThree, useFrame } from "@react-three/fiber";
+import { Vector3 } from "three";
+import { Line } from "@react-three/drei";
 
 const Esphere = ({ onCollision, ...props }) => {
   const sphereRef = useRef();
-  const { camera, raycaster } = useThree();
+  const { camera, raycaster, gl } = useThree();
+  const [showLine, setShowLine] = useState(false);
+  const [linePoints, setLinePoints] = useState([new Vector3(0,0,0), new Vector3(0,0,0)]);
+  const [shootDirection, setShootDirection] = useState(new Vector3(0,0,1));
+  const [isAiming, setIsAiming] = useState(false);
+  // No se necesita lastPointer
 
-  const handleEsphere = useCallback((e) => {
+
+  // Al presionar el mouse, mostrar la línea y calcular dirección
+  const handlePointerDown = useCallback((e) => {
     e.stopPropagation();
+    setIsAiming(true);
+    setShowLine(true);
+  }, []);
 
-    const mouse = new Vector2(
-      (e.clientX / window.innerWidth) * 2 - 1,
-      -(e.clientY / window.innerHeight) * 2 + 1
-    );
+  // Al mover el mouse mientras se mantiene presionado
+  // No hace falta handlePointerMove
 
-    raycaster.setFromCamera(mouse, camera);
-    const shootDirection = raycaster.ray.direction.clone();
+  // Al soltar el mouse, disparar la esfera y ocultar la línea
+  const handlePointerUp = useCallback(() => {
+    if (!isAiming) return;
+    setIsAiming(false);
+    setShowLine(false);
+    // Calcular dirección cámara→esfera
+    const origin = sphereRef.current.translation();
+    const spherePos = new Vector3(origin.x, origin.y, origin.z);
+    const camPos = camera.position;
+    const dir = new Vector3().subVectors(spherePos, camPos).normalize();
     const force = 800;
-
     sphereRef.current.wakeUp();
     sphereRef.current.applyImpulse(
       {
-        x: shootDirection.x * force,
-        y: shootDirection.y * force,
-        z: shootDirection.z * force,
+        x: dir.x * force,
+        y: dir.y * force,
+        z: dir.z * force,
       },
       true
     );
-
     setTimeout(() => {
       sphereRef.current.setTranslation({ x: 0, y: 10, z: 15 }, true);
       sphereRef.current.setLinvel({ x: 0, y: 0, z: 0 }, true);
       sphereRef.current.setAngvel({ x: 0, y: 0, z: 0 }, true);
       sphereRef.current.wakeUp();
     }, 2000);
-  }, [camera, raycaster]);
+  }, [isAiming, camera]);
+
+  // Actualizar la línea de dirección en cada frame mientras se apunta
+  useFrame(() => {
+    if (!isAiming || !sphereRef.current) return;
+    // Dirección cámara→esfera
+    const origin = sphereRef.current.translation();
+    const spherePos = new Vector3(origin.x, origin.y, origin.z);
+    const camPos = camera.position;
+    const dir = new Vector3().subVectors(spherePos, camPos).normalize();
+    setShootDirection(dir);
+    const start = spherePos;
+    const end = start.clone().add(dir.clone().multiplyScalar(10));
+    setLinePoints([start, end]);
+  });
 
   // Detectar colision
   const handleCollisionEnter = (payload) => {
@@ -58,7 +90,20 @@ const Esphere = ({ onCollision, ...props }) => {
       onCollisionEnter={handleCollisionEnter}
       {...props}
     >
-      <mesh onClick={handleEsphere}>
+      {showLine && (
+        <Line
+          points={linePoints}
+          color="#222"
+          lineWidth={2}
+          dashed
+          dashSize={0.5}
+          gapSize={0.3}
+        />
+      )}
+      <mesh
+        onPointerDown={handlePointerDown}
+        onPointerUp={handlePointerUp}
+      >
         <sphereGeometry args={[1, 32]} />
         <meshStandardMaterial color="hotpink" />
       </mesh>

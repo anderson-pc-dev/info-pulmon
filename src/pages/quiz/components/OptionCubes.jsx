@@ -1,15 +1,19 @@
+/* eslint-disable react/no-unknown-property */
+/* eslint-disable react/prop-types */
 import { RigidBody } from '@react-three/rapier';
 import { Html } from '@react-three/drei';
 
+
+// Alinear los OptionCubes justo encima de los cilindros (x: -15, -5, 5, 15; z: -10; y: 6.5)
 const OPTION_POSITIONS = [
-  [-18, 8.5, -5], 
-  [8, 9.5, -5],
-  [-8, 2.5, 5],
-  [8, 2.5, 5]
+  [-15, 5, -10],
+  [-5, 5, -10],
+  [5, 5, -10],
+  [15, 5, -10]
 ];
 
 const COLORS = {
-  default: '#6366f1',   
+  default: '#a3d0ee',   
   correct: '#10b981',    
   incorrect: '#ef4444', 
   highlighted: '#f59e0b', 
