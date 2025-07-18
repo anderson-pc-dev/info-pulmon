@@ -37,7 +37,7 @@ const DecorativeElements = ({ optionCount }) => (
         <meshStandardMaterial color="#E2F5FF" metalness={0.8} roughness={0.2} />
       </mesh>
     ))}
-    {[...Array(5)].map((_, i) => (
+    {[...Array(20)].map((_, i) => (
       <Float key={i} speed={i % 2 ? 0.5 : 1} floatIntensity={0.5}>
         <mesh position={[
           Math.sin(i) * 30,
@@ -85,6 +85,7 @@ const QuizGame3D = () => {
   const [answerLocked, setAnswerLocked] = useState(false)
   const hasAnsweredRef = useRef(false)
 
+
   useEffect(() => {
     if (quizCompleted && showResults) {
       const resultsData = {
@@ -102,9 +103,23 @@ const QuizGame3D = () => {
           }
           : null
       }
+      localStorage.removeItem('quiz-progress');
       navigate('/quiz/results', { state: resultsData })
     }
   }, [quizCompleted, showResults])
+
+  // Guardar progreso
+  const handleExitQuiz = () => {
+    const progress = {
+      userAnswers,
+      currentQuestionIndex,
+      score,
+      timeLeft,
+      // Puedes agregar más campos si lo necesitas
+    };
+    localStorage.setItem('quiz-progress', JSON.stringify(progress));
+    navigate('/');
+  };
 
   const handleCollisionWithOption = (targetName) => {
     // Para image-match, el flujo es diferente
@@ -179,12 +194,12 @@ const QuizGame3D = () => {
         <meshStandardMaterial color="#2AABEC" transparent opacity={0.7} />
 
         <Html
-          position={[0, 5, 1.1]}
+          position={[0, 3, 1.1]}
           transform
           center
           distanceFactor={10}
-          occlude
           className="question-wall"
+          style={{ zIndex: 1000, pointerEvents: 'auto' }}
         >
           <div style={{
             display: 'flex',
@@ -340,8 +355,8 @@ const QuizGame3D = () => {
           enableRotate={true}
           minDistance={25}
           maxDistance={35}
-          minPolarAngle={Math.PI / 3}
-          maxPolarAngle={Math.PI / 1.35}
+          minPolarAngle={Math.PI / 4}      // 45 grados
+          maxPolarAngle={Math.PI / 1.8}  // ~80 grados
           target={[0, 1, -1]}
           enableDamping
           minAzimuthAngle={-Math.PI / 5}
@@ -359,6 +374,7 @@ const QuizGame3D = () => {
         display: 'flex',
         flexDirection: 'column',
         pointerEvents: 'none',
+        zIndex: 2000
       }}>
 
 
@@ -375,7 +391,8 @@ const QuizGame3D = () => {
             boxShadow: '0 4px 20px rgba(0,0,0,0.3)',
             border: '1px solid rgba(255,255,255,0.15)',
             marginBottom: '30px',
-            width: 'fit-content'
+            width: 'fit-content',
+            pointerEvents: 'auto',
           }}>
             {user.photoURL && (
               <img
@@ -393,6 +410,27 @@ const QuizGame3D = () => {
             <span style={{ fontSize: '18px', fontWeight: '600' }}>{user.displayName}</span>
           </div>
         )}
+
+        {/* Botón para salir y guardar progreso */}
+        <button
+          onClick={handleExitQuiz}
+          style={{
+            background: '#ef4444',
+            color: 'white',
+            border: 'none',
+            borderRadius: '30px',
+            padding: '12px 28px',
+            fontSize: '18px',
+            fontWeight: 700,
+            marginBottom: '18px',
+            cursor: 'pointer',
+            boxShadow: '0 2px 8px rgba(0,0,0,0.12)',
+            pointerEvents: 'auto',
+            transition: 'background 0.2s',
+          }}
+        >
+          Salir y guardar
+        </button>
       </div>
 
       <style>
@@ -400,6 +438,10 @@ const QuizGame3D = () => {
           @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
+          }
+          .question-wall {
+            z-index: 1000 !important;
+            position: relative;
           }
         `}
       </style>

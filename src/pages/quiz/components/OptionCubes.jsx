@@ -18,10 +18,10 @@ const COLORS = {
 
 // optionType: 'text' | 'image' (default: 'text')
 const DEFAULT_POSITIONS = [
-  [-15, 5, -10],
-  [-5, 5, -10],
-  [5, 5, -10],
-  [15, 5, -10]
+  [-15, -1, -10],
+  [-5, -1, -10],
+  [5, -1, -10],
+  [15, -1, -10]
 ];
 
 const OptionCubes = ({ options, currentQuestionId, userAnswers, highlightedOption, isCorrect, optionType = 'text', optionPositions }) => {
