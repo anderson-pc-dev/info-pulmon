@@ -112,7 +112,7 @@ export default function Scene() {
 
   const resetCamera = () => {
     if (controlsRef.current) {
-      controlsRef.current.reset() 
+      controlsRef.current.reset()
     }
   }
 
@@ -126,15 +126,23 @@ export default function Scene() {
           <OrbitControls
             ref={controlsRef}
             enableRotate={true}
-            enableZoom={true}
+            enableZoom={false}
             enablePan={false}
             target={[0, -10, -20]}
+
+            // Límites verticales: evita que se vea desde abajo
+            minPolarAngle={Math.PI / 3}
             maxPolarAngle={Math.PI / 2}
-            minPolarAngle={0}
+
+            // Límites horizontales: restringe el giro lateral
+            minAzimuthAngle={-Math.PI / 8}
+            maxAzimuthAngle={Math.PI / 8}
+
+            // Guarda el estado inicial solo una vez
             onChange={() => {
               if (!controlsRef.current.__hasSavedState) {
                 controlsRef.current.saveState()
-                controlsRef.current.__hasSavedState = true 
+                controlsRef.current.__hasSavedState = true
               }
             }}
           />

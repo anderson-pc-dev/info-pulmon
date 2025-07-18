@@ -7,7 +7,7 @@ const TextTratamiento = ({
   rotation = [0, 0.25, 0],
   color = "#005089",
   depth = 0.5,
-  onClick, 
+  onClick,
 }) => {
   return (
     <Center position={position}>

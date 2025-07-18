@@ -137,7 +137,7 @@ export default function Scene() {
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key.toLowerCase() === 'c') {
-        setShowWelcome(prev => !prev);
+        setShowWelcome(prev => !prev); 
         setIsAnimating(prev => !prev); 
       }
     }
