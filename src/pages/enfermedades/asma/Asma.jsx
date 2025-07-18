@@ -14,15 +14,6 @@ const Asma = () => {
     // Verificar si estamos en una ruta anidada (no en la raíz)
     const isNestedRoute = location.pathname !== 'asma' && !location.pathname.endsWith('asma');
     setShowContent(isNestedRoute);
-    // Scroll suave al contenido cuando se muestra
-    if (isNestedRoute) {
-      setTimeout(() => {
-        const contentElement = document.querySelector('.epoc-outlet-wrapper');
-        if (contentElement) {
-          contentElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-      }, 300); // Espera a que la animación comience
-    }
   }, [location, location.pathname]);
   return (
     <div className="epoc-container">
