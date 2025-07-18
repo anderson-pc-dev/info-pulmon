@@ -3,14 +3,28 @@ import { useState, useEffect, useCallback } from 'react';
 import { quizQuestions as originalQuizQuestions, quizConfig } from '../data/quizQuestions';
 import useAuthStore from "../../../stores/use-auth-store";
 
+function getRandomQuestions(arr, n) {
+  const storageKey = 'quiz_random_questions';
+  
+  const savedQuestions = localStorage.getItem(storageKey);
+  if (savedQuestions) {
+    return JSON.parse(savedQuestions);
+  }
+  
+  const shuffled = arr.slice().sort(() => 0.5 - Math.random());
+  const selectedQuestions = shuffled.slice(0, n);
+  localStorage.setItem(storageKey, JSON.stringify(selectedQuestions));
+  
+  return selectedQuestions;
+}
+
+function clearSavedQuestions() {
+  localStorage.removeItem('quiz_random_questions');
+}
 
 export const useQuizLogic = () => {
   const { user } = useAuthStore();
-  // Seleccionar 10 preguntas aleatorias del banco
-  function getRandomQuestions(arr, n) {
-    const shuffled = arr.slice().sort(() => 0.5 - Math.random());
-    return shuffled.slice(0, n);
-  }
+  
   const [shuffledQuestions] = useState(() => getRandomQuestions(originalQuizQuestions, 10));
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [score, setScore] = useState(0);
@@ -25,9 +39,9 @@ export const useQuizLogic = () => {
   const currentQuestion = shuffledQuestions[currentQuestionIndex];
   const [lastSavedProgress, setLastSavedProgress] = useState({});
   // Para image-match
-  const [imageMatchIndex, setImageMatchIndex] = useState(0); // índice de imagen actual
-  const [imageMatchAssociations, setImageMatchAssociations] = useState({}); // {A: 'EPOC', ...}
-  const [imageMatchResult, setImageMatchResult] = useState(null); // null | true | false
+  const [imageMatchIndex, setImageMatchIndex] = useState(0);
+  const [imageMatchAssociations, setImageMatchAssociations] = useState({});
+  const [imageMatchResult, setImageMatchResult] = useState(null);
 
   // Temporizador
   useEffect(() => {
@@ -88,93 +102,91 @@ export const useQuizLogic = () => {
   };
 
   // Guardar progreso del usuario
-const saveProgress = useCallback(async () => {
-  if (!user || quizCompleted) return;
+  const saveProgress = useCallback(async () => {
+    if (!user || quizCompleted) return;
 
-  const newProgress = {
-    questionIndex: currentQuestionIndex,
-    answers: userAnswers,
-    score,
-    timeLeft
-  };
+    const newProgress = {
+      questionIndex: currentQuestionIndex,
+      answers: userAnswers,
+      score,
+      timeLeft
+    };
 
-  const isSame =
-    JSON.stringify(newProgress) === JSON.stringify(lastSavedProgress);
+    const isSame =
+      JSON.stringify(newProgress) === JSON.stringify(lastSavedProgress);
 
-  if (isSame) return; 
+    if (isSame) return; 
 
-  try {
-    await fetch(`${import.meta.env.VITE_API_BASE_URL}quiz-scores/progress`, {
-      method: 'POST',
-      headers: { 
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${await user.getIdToken()}`
-      },
-      body: JSON.stringify({
-        userId: user.uid,
-        email: user.email,
-        displayName: user.displayName,
-        ...newProgress,
-        quizCompleted: false,
-        progressSavedAt: new Date().toISOString()
-      }),
-    });
+    try {
+      await fetch(`${import.meta.env.VITE_API_BASE_URL}quiz-scores/progress`, {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${await user.getIdToken()}`
+        },
+        body: JSON.stringify({
+          userId: user.uid,
+          email: user.email,
+          displayName: user.displayName,
+          ...newProgress,
+          quizCompleted: false,
+          progressSavedAt: new Date().toISOString()
+        }),
+      });
 
-    setLastSavedProgress(newProgress); // Actualiza progreso guardado
-  } catch (error) {
-    console.error('Error saving progress:', error);
-  }
-}, [user, currentQuestionIndex, userAnswers, score, timeLeft, quizCompleted, lastSavedProgress]);
-
+      setLastSavedProgress(newProgress);
+    } catch (error) {
+      console.error('Error saving progress:', error);
+    }
+  }, [user, currentQuestionIndex, userAnswers, score, timeLeft, quizCompleted, lastSavedProgress]);
 
   // Cargar progreso guardado
   const loadProgress = useCallback(async () => {
-  if (!user || hasLoadedProgress) return;
+    if (!user || hasLoadedProgress) return;
 
-  setIsLoadingProgress(true);
-  try {
-    const response = await fetch(
-      `${import.meta.env.VITE_API_BASE_URL}quiz-scores/progress/${user.uid}`,
-      {
-        headers: {
-          'Authorization': `Bearer ${await user.getIdToken()}`
+    setIsLoadingProgress(true);
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_BASE_URL}quiz-scores/progress/${user.uid}`,
+        {
+          headers: {
+            'Authorization': `Bearer ${await user.getIdToken()}`
+          }
         }
-      }
-    );
+      );
 
-    if (response.ok) {
-      const progress = await response.json();
-      if (progress) {
-        // Calcular tiempo actualizado
-        const now = new Date();
-        const lastActivity = new Date(progress.lastActivityAt || progress.progressSavedAt);
-        const timeElapsed = Math.floor((now - lastActivity) / 1000);
-        const updatedTimeLeft = Math.max(0, progress.timeLeft - timeElapsed);
+      if (response.ok) {
+        const progress = await response.json();
+        if (progress) {
+          const now = new Date();
+          const lastActivity = new Date(progress.lastActivityAt || progress.progressSavedAt);
+          const timeElapsed = Math.floor((now - lastActivity) / 1000);
+          const updatedTimeLeft = Math.max(0, progress.timeLeft - timeElapsed);
 
-        setCurrentQuestionIndex(progress.questionIndex || 0);
-        setScore(progress.score || 0);
-        setTimeLeft(updatedTimeLeft);
-        setUserAnswers(progress.answers || {});
-        
-        if (updatedTimeLeft <= 0) {
-          setQuizCompleted(true);
-          setShowResults(true);
-          await completeQuiz(progress.score || 0);
-        } else {
-          setQuizCompleted(progress.quizCompleted || false);
-          if (progress.quizCompleted) {
+          setCurrentQuestionIndex(progress.questionIndex || 0);
+          setScore(progress.score || 0);
+          setTimeLeft(updatedTimeLeft);
+          setUserAnswers(progress.answers || {});
+          
+          if (updatedTimeLeft <= 0) {
+            setQuizCompleted(true);
             setShowResults(true);
+            await completeQuiz(progress.score || 0);
+          } else {
+            setQuizCompleted(progress.quizCompleted || false);
+            if (progress.quizCompleted) {
+              setShowResults(true);
+            }
           }
         }
       }
+    } catch (error) {
+      console.error('Error loading progress:', error);
+    } finally {
+      setHasLoadedProgress(true);
+      setIsLoadingProgress(false);
     }
-  } catch (error) {
-    console.error('Error loading progress:', error);
-  } finally {
-    setHasLoadedProgress(true);
-    setIsLoadingProgress(false);
-  }
-}, [user, hasLoadedProgress]);
+  }, [user, hasLoadedProgress]);
 
   // Cargar progreso al montar el componente
   useEffect(() => {
@@ -205,7 +217,6 @@ const saveProgress = useCallback(async () => {
       try {
         await saveQuizScore(finalScore, quizConfig.timeLimit * 60 - timeLeft);
         
-        // Eliminar progreso guardado
         await fetch(
           `${import.meta.env.VITE_API_BASE_URL}quiz-scores/progress/${user.uid}`,
           {
@@ -238,7 +249,8 @@ const saveProgress = useCallback(async () => {
         console.error('Error deleting progress:', error);
       }
     }
-
+    clearSavedQuestions();
+    
     setCurrentQuestionIndex(0);
     setScore(0);
     setTimeLeft(quizConfig.timeLimit * 60);
@@ -246,6 +258,8 @@ const saveProgress = useCallback(async () => {
     setUserAnswers({});
     setShowResults(false);
     setSaveError(null);
+    
+    window.location.reload();
   };
 
   const calculatePercentageScore = (currentScore) => {
@@ -259,9 +273,7 @@ const saveProgress = useCallback(async () => {
     return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
   };
 
-  // Solo guarda la respuesta y actualiza el score, no avanza pregunta
   const handleAnswerSelect = (selectedAnswer) => {
-    // Para preguntas normales
     if (currentQuestion.type !== 'image-match') {
       const isCorrect = selectedAnswer === currentQuestion.correctAnswer;
       const newAnswers = {
@@ -279,7 +291,6 @@ const saveProgress = useCallback(async () => {
         setScore(prev => prev + quizConfig.pointsPerQuestion);
       }
     } else {
-      // image-match: asociar la opción seleccionada a la imagen actual
       const imageObj = currentQuestion.images[imageMatchIndex];
       if (!imageObj) return;
       const newAssociations = {
@@ -288,11 +299,9 @@ const saveProgress = useCallback(async () => {
       };
       setImageMatchAssociations(newAssociations);
 
-      // Si quedan más imágenes, avanza a la siguiente
       if (imageMatchIndex < currentQuestion.images.length - 1) {
         setImageMatchIndex(prev => prev + 1);
       } else {
-        // Validar todas las asociaciones
         let allCorrect = true;
         for (const img of currentQuestion.images) {
           if (newAssociations[img.id] !== currentQuestion.correctMatches[img.id]) {
@@ -301,7 +310,6 @@ const saveProgress = useCallback(async () => {
           }
         }
         setImageMatchResult(allCorrect);
-        // Guardar en userAnswers para el resumen/final
         const newAnswers = {
           ...userAnswers,
           [currentQuestion.id]: {
@@ -319,13 +327,10 @@ const saveProgress = useCallback(async () => {
       }
     }
   };
-  // Calcular progreso
+
   const progress = ((currentQuestionIndex + 1) / shuffledQuestions.length) * 100;
 
-  // Avanzar a la siguiente pregunta
-
   const goToNextQuestion = () => {
-    // Si la pregunta actual es image-match, reiniciar el estado de asociación
     if (currentQuestion.type === 'image-match') {
       setImageMatchIndex(0);
       setImageMatchAssociations({});
@@ -336,7 +341,6 @@ const saveProgress = useCallback(async () => {
     }
   };
 
-  // Finalizar el quiz manualmente
   const goToQuizEnd = () => {
     completeQuiz(score);
   };
@@ -363,7 +367,6 @@ const saveProgress = useCallback(async () => {
     saveError,
     isLoadingProgress,
     hasLoadedProgress,
-    // image-match extra
     imageMatchIndex,
     imageMatchAssociations,
     imageMatchResult
