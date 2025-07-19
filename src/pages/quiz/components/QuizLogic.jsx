@@ -1,9 +1,31 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect, useCallback } from 'react';
-import { quizQuestions, quizConfig } from '../data/quizQuestions';
+import { quizQuestions as originalQuizQuestions, quizConfig } from '../data/quizQuestions';
 import useAuthStore from "../../../stores/use-auth-store";
+
+function getRandomQuestions(arr, n) {
+  const storageKey = 'quiz_random_questions';
+  
+  const savedQuestions = localStorage.getItem(storageKey);
+  if (savedQuestions) {
+    return JSON.parse(savedQuestions);
+  }
+  
+  const shuffled = arr.slice().sort(() => 0.5 - Math.random());
+  const selectedQuestions = shuffled.slice(0, n);
+  localStorage.setItem(storageKey, JSON.stringify(selectedQuestions));
+  
+  return selectedQuestions;
+}
+
+function clearSavedQuestions() {
+  localStorage.removeItem('quiz_random_questions');
+}
 
 export const useQuizLogic = () => {
   const { user } = useAuthStore();
+  
+  const [shuffledQuestions] = useState(() => getRandomQuestions(originalQuizQuestions, 10));
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [score, setScore] = useState(0);
   const [timeLeft, setTimeLeft] = useState(quizConfig.timeLimit * 60);
@@ -14,9 +36,12 @@ export const useQuizLogic = () => {
   const [saveError, setSaveError] = useState(null);
   const [hasLoadedProgress, setHasLoadedProgress] = useState(false);
   const [isLoadingProgress, setIsLoadingProgress] = useState(true);
-  const currentQuestion = quizQuestions[currentQuestionIndex];
+  const currentQuestion = shuffledQuestions[currentQuestionIndex];
   const [lastSavedProgress, setLastSavedProgress] = useState({});
-
+  // Para image-match
+  const [imageMatchIndex, setImageMatchIndex] = useState(0);
+  const [imageMatchAssociations, setImageMatchAssociations] = useState({});
+  const [imageMatchResult, setImageMatchResult] = useState(null);
 
   // Temporizador
   useEffect(() => {
@@ -36,7 +61,7 @@ export const useQuizLogic = () => {
     setSaveError(null);
 
     try {
-      const maxPossibleScore = quizQuestions.length * quizConfig.pointsPerQuestion;
+      const maxPossibleScore = shuffledQuestions.length * quizConfig.pointsPerQuestion;
       const percentageScore = Math.round((finalScore / maxPossibleScore) * 100);
 
       const response = await fetch(
@@ -77,93 +102,91 @@ export const useQuizLogic = () => {
   };
 
   // Guardar progreso del usuario
-const saveProgress = useCallback(async () => {
-  if (!user || quizCompleted) return;
+  const saveProgress = useCallback(async () => {
+    if (!user || quizCompleted) return;
 
-  const newProgress = {
-    questionIndex: currentQuestionIndex,
-    answers: userAnswers,
-    score,
-    timeLeft
-  };
+    const newProgress = {
+      questionIndex: currentQuestionIndex,
+      answers: userAnswers,
+      score,
+      timeLeft
+    };
 
-  const isSame =
-    JSON.stringify(newProgress) === JSON.stringify(lastSavedProgress);
+    const isSame =
+      JSON.stringify(newProgress) === JSON.stringify(lastSavedProgress);
 
-  if (isSame) return; // No ha cambiado nada
+    if (isSame) return; 
 
-  try {
-    await fetch(`${import.meta.env.VITE_API_BASE_URL}quiz-scores/progress`, {
-      method: 'POST',
-      headers: { 
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${await user.getIdToken()}`
-      },
-      body: JSON.stringify({
-        userId: user.uid,
-        email: user.email,
-        displayName: user.displayName,
-        ...newProgress,
-        quizCompleted: false,
-        progressSavedAt: new Date().toISOString()
-      }),
-    });
+    try {
+      await fetch(`${import.meta.env.VITE_API_BASE_URL}quiz-scores/progress`, {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${await user.getIdToken()}`
+        },
+        body: JSON.stringify({
+          userId: user.uid,
+          email: user.email,
+          displayName: user.displayName,
+          ...newProgress,
+          quizCompleted: false,
+          progressSavedAt: new Date().toISOString()
+        }),
+      });
 
-    setLastSavedProgress(newProgress); // Actualiza progreso guardado
-  } catch (error) {
-    console.error('Error saving progress:', error);
-  }
-}, [user, currentQuestionIndex, userAnswers, score, timeLeft, quizCompleted, lastSavedProgress]);
-
+      setLastSavedProgress(newProgress);
+    } catch (error) {
+      console.error('Error saving progress:', error);
+    }
+  }, [user, currentQuestionIndex, userAnswers, score, timeLeft, quizCompleted, lastSavedProgress]);
 
   // Cargar progreso guardado
   const loadProgress = useCallback(async () => {
-  if (!user || hasLoadedProgress) return;
+    if (!user || hasLoadedProgress) return;
 
-  setIsLoadingProgress(true);
-  try {
-    const response = await fetch(
-      `${import.meta.env.VITE_API_BASE_URL}quiz-scores/progress/${user.uid}`,
-      {
-        headers: {
-          'Authorization': `Bearer ${await user.getIdToken()}`
+    setIsLoadingProgress(true);
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_BASE_URL}quiz-scores/progress/${user.uid}`,
+        {
+          headers: {
+            'Authorization': `Bearer ${await user.getIdToken()}`
+          }
         }
-      }
-    );
+      );
 
-    if (response.ok) {
-      const progress = await response.json();
-      if (progress) {
-        // Calcular tiempo actualizado
-        const now = new Date();
-        const lastActivity = new Date(progress.lastActivityAt || progress.progressSavedAt);
-        const timeElapsed = Math.floor((now - lastActivity) / 1000);
-        const updatedTimeLeft = Math.max(0, progress.timeLeft - timeElapsed);
+      if (response.ok) {
+        const progress = await response.json();
+        if (progress) {
+          const now = new Date();
+          const lastActivity = new Date(progress.lastActivityAt || progress.progressSavedAt);
+          const timeElapsed = Math.floor((now - lastActivity) / 1000);
+          const updatedTimeLeft = Math.max(0, progress.timeLeft - timeElapsed);
 
-        setCurrentQuestionIndex(progress.questionIndex || 0);
-        setScore(progress.score || 0);
-        setTimeLeft(updatedTimeLeft);
-        setUserAnswers(progress.answers || {});
-        
-        if (updatedTimeLeft <= 0) {
-          setQuizCompleted(true);
-          setShowResults(true);
-          await completeQuiz(progress.score || 0);
-        } else {
-          setQuizCompleted(progress.quizCompleted || false);
-          if (progress.quizCompleted) {
+          setCurrentQuestionIndex(progress.questionIndex || 0);
+          setScore(progress.score || 0);
+          setTimeLeft(updatedTimeLeft);
+          setUserAnswers(progress.answers || {});
+          
+          if (updatedTimeLeft <= 0) {
+            setQuizCompleted(true);
             setShowResults(true);
+            await completeQuiz(progress.score || 0);
+          } else {
+            setQuizCompleted(progress.quizCompleted || false);
+            if (progress.quizCompleted) {
+              setShowResults(true);
+            }
           }
         }
       }
+    } catch (error) {
+      console.error('Error loading progress:', error);
+    } finally {
+      setHasLoadedProgress(true);
+      setIsLoadingProgress(false);
     }
-  } catch (error) {
-    console.error('Error loading progress:', error);
-  } finally {
-    setHasLoadedProgress(true);
-    setIsLoadingProgress(false);
-  }
-}, [user, hasLoadedProgress]);
+  }, [user, hasLoadedProgress]);
 
   // Cargar progreso al montar el componente
   useEffect(() => {
@@ -194,7 +217,6 @@ const saveProgress = useCallback(async () => {
       try {
         await saveQuizScore(finalScore, quizConfig.timeLimit * 60 - timeLeft);
         
-        // Eliminar progreso guardado
         await fetch(
           `${import.meta.env.VITE_API_BASE_URL}quiz-scores/progress/${user.uid}`,
           {
@@ -227,7 +249,8 @@ const saveProgress = useCallback(async () => {
         console.error('Error deleting progress:', error);
       }
     }
-
+    clearSavedQuestions();
+    
     setCurrentQuestionIndex(0);
     setScore(0);
     setTimeLeft(quizConfig.timeLimit * 60);
@@ -235,10 +258,12 @@ const saveProgress = useCallback(async () => {
     setUserAnswers({});
     setShowResults(false);
     setSaveError(null);
+    
+    window.location.reload();
   };
 
   const calculatePercentageScore = (currentScore) => {
-    const maxPossibleScore = quizQuestions.length * quizConfig.pointsPerQuestion;
+    const maxPossibleScore = shuffledQuestions.length * quizConfig.pointsPerQuestion;
     return Math.round((currentScore / maxPossibleScore) * 100);
   };
 
@@ -249,118 +274,81 @@ const saveProgress = useCallback(async () => {
   };
 
   const handleAnswerSelect = (selectedAnswer) => {
-    let isCorrect;
-    let formattedAnswer;
-    
-    // Preguntas de completar múltiples espacios
-    if (currentQuestion.type === 'fill-blank-multiple') {
-      const userAnswers = Array.isArray(selectedAnswer.answers || selectedAnswer) 
-        ? (selectedAnswer.answers || selectedAnswer).map(a => a.toLowerCase().trim())
-        : [selectedAnswer.toLowerCase().trim()];
-      
-      const correctAnswers = currentQuestion.correctAnswers.map(a => a.toLowerCase().trim());
-      
-      const allAnswersIncluded = correctAnswers.every(correctAns => 
-        userAnswers.includes(correctAns)
-      );
-      const noExtraAnswers = userAnswers.every(userAns => 
-        correctAnswers.includes(userAns)
-      );
-      
-      isCorrect = allAnswersIncluded && noExtraAnswers && 
-                 userAnswers.length === correctAnswers.length;
-      
-      formattedAnswer = userAnswers.join(', ');
-    }
-    // Preguntas de ordenamiento
-    else if (currentQuestion.type === 'drag-drop-order') {
-      if (typeof selectedAnswer === 'object' && selectedAnswer.answer) {
-        isCorrect = JSON.stringify(selectedAnswer.answer) === JSON.stringify(currentQuestion.correctOrder);
-      } else {
-        isCorrect = JSON.stringify(selectedAnswer) === JSON.stringify(currentQuestion.correctOrder);
+    if (currentQuestion.type !== 'image-match') {
+      const isCorrect = selectedAnswer === currentQuestion.correctAnswer;
+      const newAnswers = {
+        ...userAnswers,
+        [currentQuestion.id]: {
+          selectedAnswer,
+          isCorrect,
+          question: currentQuestion.question,
+          correctAnswer: currentQuestion.correctAnswer,
+          explanation: currentQuestion.explanation
+        }
+      };
+      setUserAnswers(newAnswers);
+      if (isCorrect) {
+        setScore(prev => prev + quizConfig.pointsPerQuestion);
       }
-      formattedAnswer = Array.isArray(selectedAnswer.answer || selectedAnswer) 
-        ? (selectedAnswer.answer || selectedAnswer).join(', ')
-        : selectedAnswer;
-    } 
-    // Preguntas de asociación imagen-enfermedad
-    else if (currentQuestion.type === 'image-match') {
-      const userAnswer = typeof selectedAnswer === 'object' && selectedAnswer.answer 
-        ? selectedAnswer.answer 
-        : selectedAnswer;
-      
-      isCorrect = Object.entries(currentQuestion.correctMatches).every(
-        ([imageId, correctDisease]) => userAnswer[imageId] === correctDisease
-      );
-      
-      formattedAnswer = Object.entries(userAnswer)
-        .map(([imageId, disease]) => `${imageId}: ${disease}`)
-        .join('; ');
-    }
-    // Preguntas de asociación término-descripción
-    else if (currentQuestion.type === 'term-match') {
-      const userAnswer = typeof selectedAnswer === 'object' && selectedAnswer.answer 
-        ? selectedAnswer.answer 
-        : selectedAnswer;
-      
-      isCorrect = Object.entries(currentQuestion.correctMatches).every(
-        ([termId, correctDescription]) => userAnswer[termId] === correctDescription
-      );
-      
-      formattedAnswer = Object.entries(userAnswer)
-        .map(([termId, description]) => `${termId}: ${description}`)
-        .join('; ');
-    } 
-    // Otros tipos de preguntas
-    else {
-      isCorrect = selectedAnswer.toLowerCase().trim() === currentQuestion.correctAnswer.toLowerCase().trim();
-      formattedAnswer = selectedAnswer;
-    }
-
-    // Guardar respuesta
-    const newAnswers = {
-      ...userAnswers,
-      [currentQuestion.id]: {
-        selectedAnswer: formattedAnswer,
-        isCorrect,
-        question: currentQuestion.question,
-        correctAnswer: currentQuestion.type === 'fill-blank-multiple'
-          ? currentQuestion.correctAnswers.join(', ')
-          : currentQuestion.type === 'image-match'
-            ? Object.entries(currentQuestion.correctMatches)
-                .map(([imageId, disease]) => `${imageId}: ${disease}`)
-                .join('; ')
-            : Array.isArray(currentQuestion.correctAnswer || currentQuestion.correctOrder)
-              ? (currentQuestion.correctAnswer || currentQuestion.correctOrder).join(', ')
-              : currentQuestion.correctAnswer,
-        explanation: currentQuestion.explanation
-      }
-    };
-
-    setUserAnswers(newAnswers);
-
-    // Actualizar puntuación 
-    const newScore = isCorrect ? score + quizConfig.pointsPerQuestion : score;
-    
-    // Avanzar a la siguiente pregunta o finalizar
-    if (currentQuestionIndex < quizQuestions.length - 1) {
-      setScore(newScore);
-      setCurrentQuestionIndex(prev => prev + 1);
     } else {
-      setScore(newScore);
-      setTimeout(() => {
-        completeQuiz(newScore);
-      }, 0);
+      const imageObj = currentQuestion.images[imageMatchIndex];
+      if (!imageObj) return;
+      const newAssociations = {
+        ...imageMatchAssociations,
+        [imageObj.id]: selectedAnswer
+      };
+      setImageMatchAssociations(newAssociations);
+
+      if (imageMatchIndex < currentQuestion.images.length - 1) {
+        setImageMatchIndex(prev => prev + 1);
+      } else {
+        let allCorrect = true;
+        for (const img of currentQuestion.images) {
+          if (newAssociations[img.id] !== currentQuestion.correctMatches[img.id]) {
+            allCorrect = false;
+            break;
+          }
+        }
+        setImageMatchResult(allCorrect);
+        const newAnswers = {
+          ...userAnswers,
+          [currentQuestion.id]: {
+            selectedAnswer: newAssociations,
+            isCorrect: allCorrect,
+            question: currentQuestion.question,
+            correctAnswer: currentQuestion.correctMatches,
+            explanation: currentQuestion.explanation
+          }
+        };
+        setUserAnswers(newAnswers);
+        if (allCorrect) {
+          setScore(prev => prev + quizConfig.pointsPerQuestion);
+        }
+      }
     }
   };
 
-  // Calcular progreso
-  const progress = ((currentQuestionIndex + 1) / quizQuestions.length) * 100;
+  const progress = ((currentQuestionIndex + 1) / shuffledQuestions.length) * 100;
+
+  const goToNextQuestion = () => {
+    if (currentQuestion.type === 'image-match') {
+      setImageMatchIndex(0);
+      setImageMatchAssociations({});
+      setImageMatchResult(null);
+    }
+    if (currentQuestionIndex < shuffledQuestions.length - 1) {
+      setCurrentQuestionIndex(prev => prev + 1);
+    }
+  };
+
+  const goToQuizEnd = () => {
+    completeQuiz(score);
+  };
 
   return {
     currentQuestion,
     currentQuestionIndex,
-    totalQuestions: quizQuestions.length,
+    totalQuestions: shuffledQuestions.length,
     score,
     timeLeft: formatTime(timeLeft),
     quizCompleted,
@@ -368,14 +356,19 @@ const saveProgress = useCallback(async () => {
     showResults,
     handleAnswerSelect,
     restartQuiz,
+    goToNextQuestion,
+    goToQuizEnd,
     scorePercentage: calculatePercentageScore(score),
     progress,
     passingScore: quizConfig.passingScore,
-    maxScore: quizQuestions.length * quizConfig.pointsPerQuestion,
+    maxScore: shuffledQuestions.length * quizConfig.pointsPerQuestion,
     user,
     isSavingScore,
     saveError,
     isLoadingProgress,
-    hasLoadedProgress
+    hasLoadedProgress,
+    imageMatchIndex,
+    imageMatchAssociations,
+    imageMatchResult
   };
 };

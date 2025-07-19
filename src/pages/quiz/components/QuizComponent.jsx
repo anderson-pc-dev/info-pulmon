@@ -1,613 +1,452 @@
-import { useQuizLogic } from './QuizLogic';
-import './QuizStyles.scss';
-import { NavLink } from 'react-router';
-import { useState, useEffect } from 'react';
+/* eslint-disable react/prop-types */
+/* eslint-disable no-unused-vars */
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable react/no-unknown-property */
+import { Canvas } from '@react-three/fiber'
+import { Physics, RigidBody } from '@react-three/rapier'
+import { Html, Float, OrbitControls, Stars, Sky } from '@react-three/drei'
+import { useQuizLogic } from './QuizLogic'
+import { useEffect, useState, useRef } from 'react'
+import { useNavigate } from 'react-router'
+import Esphere from './Esphere'
+import OptionCubes from './OptionCubes'
 
-const QuizComponent = () => {
-  const {
-    currentQuestion,
-    currentQuestionIndex,
-    totalQuestions,
-    score,
-    timeLeft,
-    handleAnswerSelect,
-    progress,
-    showResults,
-    userAnswers,
-    restartQuiz,
-    passingScore,
-    maxScore,
-    user,
-    quizCompleted
-  } = useQuizLogic();
+import './QuizComponent.scss'
 
-  const [recentlySaved, setRecentlySaved] = useState(false);
-  const [draggedItem, setDraggedItem] = useState(null);
-  const [orderedItems, setOrderedItems] = useState([]);
-  const [isAnimating, setIsAnimating] = useState(false);
-  const [matchedPairs, setMatchedPairs] = useState({});
-  const [draggedOption, setDraggedOption] = useState(null);
-  const [termMatches, setTermMatches] = useState({});
-  const [draggedTerm, setDraggedTerm] = useState(null);
-  const [blankAnswers, setBlankAnswers] = useState([]);
+const ColoredFloor = () => (
+  <RigidBody type="fixed" friction={1} restitution={0.2}>
+    <mesh position={[0, -1, 0]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
+      <planeGeometry args={[80, 80]} />
+      <meshStandardMaterial color="#4c6bafff" />
+    </mesh>
+  </RigidBody>
+)
 
-  const ConfirmButton = ({ onClick, disabled, children, className = '' }) => (
-    <button
-      onClick={onClick}
-      disabled={disabled}
-      className={`confirm-button hover-scale ${className}`}
-    >
-      {children}
-    </button>
-  );
-
-  useEffect(() => {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('show');
-        }
-      });
-    }, { threshold: 0.1 });
-    document.querySelectorAll('.animate-on-scroll').forEach(el => {
-      observer.observe(el);
-    });
-
-    const createParticles = () => {
-      const particlesContainer = document.querySelector('.particles-container');
-      if (!particlesContainer) return;
-
-      for (let i = 0; i < 100; i++) {
-        const particle = document.createElement('div');
-        particle.classList.add('particle');
-
-        particle.style.left = `${Math.random() * 100}%`;
-        particle.style.top = `${Math.random() * 100}%`;
-
-        const size = Math.random() * 15 + 5;
-        particle.style.width = `${size}px`;
-        particle.style.height = `${size}px`;
-
-        particle.style.animationDuration = `${Math.random() * 20 + 10}s`;
-        particle.style.animationDelay = `${Math.random() * 5}s`;
-
-        particlesContainer.appendChild(particle);
-      }
-    };
-
-    //createParticles();
-
-    return () => {
-      observer.disconnect();
-    };
-  }, []);
-
-
-  useEffect(() => {
-    if (quizCompleted && user) {
-      setRecentlySaved(true);
-      const timer = setTimeout(() => setRecentlySaved(false), 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [quizCompleted, user]);
-
-  const handleOptionDragStart = (option) => {
-    setDraggedOption(option);
-  };
-
-  const handleImageDrop = (imageId) => {
-    if (!draggedOption) return;
-
-    setMatchedPairs(prev => ({
-      ...prev,
-      [imageId]: draggedOption
-    }));
-
-    setDraggedOption(null);
-  };
-
-  const handleDragStart = (item) => {
-    setDraggedItem(item);
-    setIsAnimating(true);
-  };
-
-  const handleDrop = (position) => {
-    if (!draggedItem) return;
-
-    setOrderedItems(prev => {
-      const newOrder = [...prev];
-      const filteredOrder = newOrder.filter(item => item !== draggedItem);
-      filteredOrder.splice(position, 0, draggedItem);
-      return filteredOrder;
-    });
-
-    setDraggedItem(null);
-    setIsAnimating(false);
-  };
-
-  const handleTermDragStart = (termId, term) => {
-    setDraggedTerm({ termId, term });
-  };
-
-  const resetOrderQuestion = () => {
-    setOrderedItems([]);
-  };
-  const resetImageSelection = () => {
-    setMatchedPairs({});
-    setDraggedOption(null);
-  };
-
-  const resetTermMatch = () => {
-    setTermMatches({});
-    setDraggedTerm(null);
-  };
-
-  const resetFillBlankMultiple = () => {
-    setBlankAnswers([]);
-  };
-
-  if (showResults) {
-    return (
-      <div className="quiz-results">
-        <div className="result-header">
-          <h2>Resultados del Quiz</h2>
-          <div className="decoration-circle"></div>
-          <div className="decoration-triangle"></div>
-        </div>
-
-        {!user && (
-          <div className="auth-warning pulse">
-            <div className="warning-icon">⚠️</div>
-            <div>
-              <p>No has iniciado sesión. Tu puntuación no se guardará.</p>
-              <p>Inicia sesión para guardar tus resultados y competir en el ranking.</p>
-            </div>
-          </div>
-        )}
-
-        {recentlySaved && (
-          <div className="saved-notification slide-in">
-            <div className="checkmark">✓</div>
-            <span>Tu puntuación ha sido guardada en tu historial</span>
-          </div>
-        )}
-
-        <div className="score-display">
-          <div className={`score-circle ${score >= passingScore ? 'success' : 'fail'}`}>
-            <span className="score-percent">
-              {Math.round((score / maxScore) * 100)}%
-            </span>
-            <svg className="circle-chart" viewBox="0 0 36 36">
-              <path
-                className="circle-bg"
-                d="M18 2.0845
-                  a 15.9155 15.9155 0 0 1 0 31.831
-                  a 15.9155 15.9155 0 0 1 0 -31.831"
-              />
-              <path
-                className="circle-fill"
-                strokeDasharray={`${(score / maxScore) * 100}, 100`}
-                d="M18 2.0845
-                  a 15.9155 15.9155 0 0 1 0 31.831
-                  a 15.9155 15.9155 0 0 1 0 -31.831"
-              />
-            </svg>
-          </div>
-          <div className="score-details">
-            <p><span className="detail-icon">✅</span> <strong>Respuestas correctas:</strong> {score / 10} de {totalQuestions}</p>
-            <p><span className="detail-icon">⭐</span> <strong>Puntos obtenidos:</strong> {score} de {maxScore}</p>
-            <p className={`result-message ${score >= passingScore ? 'pass-text' : 'fail-text'}`}>
-              {score >= passingScore ? (
-                <>
-                  <span className="celebrate">🎉</span> ¡Felicidades! Has aprobado.
-                </>
-              ) : (
-                <>
-                  <span className="sad-face">😕</span> No has alcanzado el puntaje mínimo.
-                </>
-              )}
-            </p>
-          </div>
-        </div>
-
-        <div className="answers-review">
-          <h3 className="review-title">
-            <span className="title-decoration"></span>
-            Revisión de respuestas
-            <span className="title-decoration"></span>
-          </h3>
-          {Object.entries(userAnswers).map(([questionId, answerData]) => (
-            <div key={questionId} className={`answer-item ${answerData.isCorrect ? 'correct' : 'incorrect'} fade-in`}>
-              <div className="answer-status">
-                {answerData.isCorrect ? '✓' : '✗'}
-              </div>
-              <div className="answer-content">
-                <p className="question-text"><strong>Pregunta {questionId}:</strong> {answerData.question}</p>
-                <p><strong>Tu respuesta:</strong> {answerData.selectedAnswer}</p>
-                {!answerData.isCorrect && <p><strong>Respuesta correcta:</strong> {answerData.correctAnswer}</p>}
-                <p className="explanation"><strong>Explicación:</strong> {answerData.explanation}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <div className="results-actions">
-          <button onClick={restartQuiz} className="restart-button hover-grow">
-            Volver a Intentar
-          </button>
-          <NavLink to="/leaderboard" className="leaderboard-button hover-grow">
-            Ver podio
-          </NavLink>
-        </div>
-      </div>
-    );
-  }
-
-  return (
-
-    <div className="quiz-intro-page">
-      <div className="particles-container"></div>
-      <div className="quiz-container">
-        <div className="quiz-header">
-          <div className="quiz-progress">
-            <div className="progress-bar-container">
-              <div className="progress-bar" style={{ width: `${progress}%` }}></div>
-              <span className="progress-text">Pregunta {currentQuestionIndex + 1} de {totalQuestions}</span>
-            </div>
-          </div>
-          <div className="quiz-stats">
-            <div className="stat-box time-left">
-              <div className="stat-icon">⏱️</div>
-              <div className="stat-value">{timeLeft}</div>
-            </div>
-            <div className="stat-box current-score">
-              <div className="stat-icon">⭐</div>
-              <div className="stat-value">{score}</div>
-            </div>
-            {user && (
-              <div className="user-quiz hover-grow">
-                <img src={user.photoURL} alt={user.displayName} className="user-avatar" />
-                <span className="user-name">{user.displayName}</span>
-              </div>
-            )}
-          </div>
-        </div>
-
-        <div className="question-container">
-          <h3 className="question-text slide-up">
-            <span className="question-number">{currentQuestionIndex + 1}</span>
-            {currentQuestion.question}
-          </h3>
-
-          {currentQuestion.type === 'fill-blank-multiple' && (
-            <div className="fill-blank-multiple-container">
-              <div className="blank-inputs-container">
-                {Array(currentQuestion.correctAnswers.length).fill().map((_, index) => (
-                  <div key={index} className="blank-input-group">
-                    <input
-                      type="text"
-                      value={blankAnswers[index] || ''}
-                      onChange={(e) => {
-                        const newAnswers = [...blankAnswers];
-                        newAnswers[index] = e.target.value;
-                        setBlankAnswers(newAnswers);
-                      }}
-                      placeholder={currentQuestion.placeholder?.[index] || 'Respuesta'}
-                      className="blank-input"
-                    />
-                    {index < currentQuestion.correctAnswers.length - 1 && (
-                      <span className="separator">,</span>
-                    )}
-                  </div>
-                ))}
-              </div>
-
-              <div className="question-prompt">
-                {currentQuestion.question.split('__________').slice(-1)[0]}
-              </div>
-
-              <ConfirmButton
-                onClick={() => {
-                  handleAnswerSelect({
-                    answers: blankAnswers,
-                    questionId: currentQuestion.id
-                  });
-                  resetFillBlankMultiple();
-                }}
-                disabled={blankAnswers.some(answer => !answer.trim())}
-                className="submit-blank hover-scale"
-              >
-                Confirmar
-              </ConfirmButton>
-            </div>
-          )}
-
-          {currentQuestion.type === 'image-match' && (
-            <div className="image-match-container">
-              <div className="match-options">
-                {currentQuestion.options.map((option, index) => (
-                  <div
-                    key={index}
-                    className={`match-option ${Object.values(matchedPairs).includes(option) ? 'matched' : ''}`}
-                    draggable={!Object.values(matchedPairs).includes(option)}
-                    onDragStart={() => handleOptionDragStart(option)}
-                  >
-                    {option}
-                  </div>
-                ))}
-              </div>
-
-              <div className="image-targets">
-                {currentQuestion.images.map((image) => (
-                  <div
-                    key={image.id}
-                    className="image-target"
-                    onDragOver={(e) => e.preventDefault()}
-                    onDrop={() => handleImageDrop(image.id)}
-                  >
-                    <img src={image.url} alt={image.alt} />
-                    <div className="match-result">
-                      {matchedPairs[image.id] && (
-                        <div className="matched-label">
-                          {matchedPairs[image.id]}
-                          <button
-                            className="remove-match"
-                            onClick={() => {
-                              const newPairs = { ...matchedPairs };
-                              delete newPairs[image.id];
-                              setMatchedPairs(newPairs);
-                            }}
-                          >
-                            ×
-                          </button>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              <ConfirmButton
-                onClick={() => {
-                  handleAnswerSelect({
-                    answer: matchedPairs,
-                    questionId: currentQuestion.id
-                  });
-                }}
-                disabled={Object.keys(matchedPairs).length !== currentQuestion.images.length}
-                className="submit-match"
-              >
-                Confirmar asociaciones
-              </ConfirmButton >
-            </div>
-          )}
-
-          {currentQuestion.type === 'term-match' && (
-            <div className="term-match-container">
-              <div className="match-grid">
-                <div className="terms-column">
-                  <h4>Términos</h4>
-                  <div className="terms-list">
-                    {currentQuestion.pairs.map((pair) => {
-                      const isTermMatched = Object.entries(termMatches).some(
-                        ([termId, description]) => termId === pair.termId
-                      );
-                      return (
-                        <div
-                          key={pair.termId}
-                          className={`term-item ${isTermMatched ? 'matched' : ''}`}
-                          draggable={!isTermMatched}
-                          onDragStart={() => handleTermDragStart(pair.termId, pair.term)}
-                          onDragEnd={() => setDraggedTerm(null)}
-                        >
-                          {pair.term}
-                          {!isTermMatched && <span className="drag-handle">☰</span>}
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-                <div className="descriptions-column">
-                  <h4>Descripciones</h4>
-                  <div className="descriptions-list">
-                    {currentQuestion.pairs.map((pair) => {
-                      const matchedTermId = Object.entries(termMatches).find(
-                        ([termId, description]) => description === pair.description
-                      )?.[0];
-
-                      const matchedTerm = matchedTermId
-                        ? currentQuestion.pairs.find(p => p.termId === matchedTermId)?.term
-                        : null;
-
-                      return (
-                        <div
-                          key={pair.termId}
-                          className={`description-target ${matchedTermId ? 'matched' : ''
-                            } ${draggedTerm?.termId === pair.termId ? 'drag-over' : ''
-                            }`}
-                          onDragOver={(e) => {
-                            e.preventDefault();
-                            if (draggedTerm) {
-                              e.currentTarget.classList.add('drag-over');
-                            }
-                          }}
-                          onDragLeave={(e) => {
-                            e.currentTarget.classList.remove('drag-over');
-                          }}
-                          onDrop={(e) => {
-                            e.preventDefault();
-                            e.currentTarget.classList.remove('drag-over');
-
-                            if (draggedTerm) {
-                              const newMatches = { ...termMatches };
-                              delete newMatches[draggedTerm.termId];
-                              Object.keys(newMatches).forEach(termId => {
-                                if (newMatches[termId] === pair.description) {
-                                  delete newMatches[termId];
-                                }
-                              });
-                              newMatches[draggedTerm.termId] = pair.description;
-                              setTermMatches(newMatches);
-                            }
-                          }}
-                        >
-                          {matchedTermId ? (
-                            <div className="matched-pair">
-                              <span className="matched-term">{matchedTerm}</span>
-                              <span className="matched-description">{pair.description}</span>
-                              <button
-                                className="remove-match"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  const newMatches = { ...termMatches };
-                                  delete newMatches[matchedTermId];
-                                  setTermMatches(newMatches);
-                                }}
-                              >
-                                ×
-                              </button>
-                            </div>
-                          ) : (
-                            <div className="description-content">
-                              {pair.description}
-                              <div className="drop-hint">Suelta aquí</div>
-                            </div>
-                          )}
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              </div>
-              <ConfirmButton
-                onClick={() => {
-                  handleAnswerSelect({
-                    answer: termMatches,
-                    questionId: currentQuestion.id
-                  });
-                  resetTermMatch();
-                }}
-                disabled={Object.keys(termMatches).length !== currentQuestion.pairs.length}
-                className={`submit-match ${Object.keys(termMatches).length === currentQuestion.pairs.length ? 'pulse' : ''
-                  }`}
-              >
-                Confirmar asociaciones
-              </ConfirmButton>
-            </div>
-          )}
-
-          {currentQuestion.type === 'fill-blank' && (
-            <div className="fill-blank-container">
-              <input
-                type="text"
-                placeholder="Escribe tu respuesta..."
-                onKeyPress={(e) => {
-                  if (e.key === 'Enter') {
-                    handleAnswerSelect(e.target.value);
-                  }
-                }}
-                className="blank-input"
-              />
-              <ConfirmButton
-                onClick={() => {
-                  const input = document.querySelector('.blank-input');
-                  handleAnswerSelect(input.value);
-                }}
-                className="submit-blank hover-scale"
-
-              >
-                Confirmar
-              </ConfirmButton>
-            </div>
-          )}
-
-          {currentQuestion.type === 'drag-drop-order' && (
-            <div className="drag-order-container">
-              <h4 className="order-instructions">Ordena del más leve (1) al más severo (4):</h4>
-
-              <div className="items-to-order">
-                {currentQuestion.itemsToOrder.map((item, index) => (
-                  <div
-                    key={index}
-                    className={`order-item ${orderedItems.includes(item) ? 'in-slot' : ''} ${isAnimating && draggedItem === item ? 'dragging' : ''}`}
-                    draggable={!orderedItems.includes(item)}
-                    onDragStart={() => handleDragStart(item)}
-                    onDragEnd={() => setIsAnimating(false)}
-                  >
-                    {item}
-                    <div className="drag-handle">☰</div>
-                  </div>
-                ))}
-              </div>
-
-              <div className="order-slots">
-                {[1, 2, 3, 4].map((position, index) => (
-                  <div
-                    key={position}
-                    className={`order-slot ${orderedItems[index] ? 'filled' : ''}`}
-                    onDragOver={(e) => e.preventDefault()}
-                    onDrop={() => handleDrop(index)}
-                  >
-                    {orderedItems[index] ? (
-                      <div className="ordered-item hover-scale">
-                        {orderedItems[index]}
-                        <button
-                          className="remove-item"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setOrderedItems(prev => prev.filter((_, i) => i !== index));
-                          }}
-                        >
-                          ×
-                        </button>
-                      </div>
-                    ) : (
-                      <div className="empty-slot">
-                        <span>Suelta aquí</span>
-                        <div className="drop-indicator"></div>
-                      </div>
-                    )}
-                    <div className="slot-number">{position}</div>
-                  </div>
-                ))}
-              </div>
-
-              <ConfirmButton
-                onClick={() => {
-                  handleAnswerSelect({
-                    answer: orderedItems,
-                    questionId: currentQuestion.id
-                  });
-                  resetOrderQuestion();
-                }}
-                disabled={orderedItems.length !== currentQuestion.itemsToOrder.length}
-                className={`submit-order ${orderedItems.length === currentQuestion.itemsToOrder.length ? 'pulse' : ''}`}
-              >
-                Confirmar orden
-              </ConfirmButton>
-            </div>
-          )}
-        </div>
-
-        <div className="quiz-footer">
-          <button
-            onClick={() => {
-              restartQuiz();
-              resetOrderQuestion();
-              resetImageSelection();
-              resetTermMatch();
-              resetFillBlankMultiple();
-
-            }}
-            className="quit-button hover-scale"
-          >
-            Salir del Quiz
-          </button>
-        </div>
-      </div>
-    </div>
-
-  );
+const getOptionPositions = (count) => {
+  // Centra los cubos/cilindros en X, separados por 10 unidades
+  const spacing = 10;
+  const startX = -((count - 1) * spacing) / 2;
+  return Array.from({ length: count }, (_, i) => [startX + i * spacing, 5, -10]);
 };
 
-export default QuizComponent;
+const DecorativeElements = ({ optionCount }) => (
+  <>
+    {getOptionPositions(optionCount).map((pos, idx) => (
+      <mesh key={idx} position={[pos[0], 1, pos[2]]} castShadow>
+        <cylinderGeometry args={[1, 1, 4, 16]} />
+        <meshStandardMaterial color="#E2F5FF" metalness={0.8} roughness={0.2} />
+      </mesh>
+    ))}
+    {[...Array(20)].map((_, i) => (
+      <Float key={i} speed={i % 2 ? 0.5 : 1} floatIntensity={0.5}>
+        <mesh position={[
+          Math.sin(i) * 30,
+          5 + Math.cos(i * 2) * 5,
+          Math.cos(i) * 30
+        ]}>
+          <icosahedronGeometry args={[0.5, 0]} />
+          <meshStandardMaterial
+            color={i % 2 ? '#005089' : '#2196f3'}
+            emissive={i % 2 ? '#005089' : '#2196f3'}
+            emissiveIntensity={0.5}
+          />
+        </mesh>
+      </Float>
+    ))}
+  </>
+);
+
+const QuizGame3D = () => {
+  const {
+    currentQuestion,
+    userAnswers,
+    handleAnswerSelect,
+    goToNextQuestion,
+    goToQuizEnd,
+    score,
+    timeLeft,
+    quizCompleted,
+    showResults,
+    user,
+    currentQuestionIndex,
+    totalQuestions,
+    progress,
+    passingScore,
+    maxScore,
+    imageMatchIndex,
+    imageMatchAssociations,
+    imageMatchResult
+  } = useQuizLogic()
+
+  const navigate = useNavigate()
+
+  const [highlightedOption, setHighlightedOption] = useState(null)
+  const [isCorrectAnswer, setIsCorrectAnswer] = useState(null)
+  const [answerLocked, setAnswerLocked] = useState(false)
+  const hasAnsweredRef = useRef(false)
+
+
+  useEffect(() => {
+    if (quizCompleted && showResults) {
+      const resultsData = {
+        score,
+        totalQuestions,
+        maxScore,
+        passingScore,
+        userAnswers,
+        user: user
+          ? {
+            uid: user.uid,
+            displayName: user.displayName,
+            email: user.email,
+            photoURL: user.photoURL
+          }
+          : null
+      }
+      localStorage.removeItem('quiz-progress');
+      navigate('/quiz/results', { state: resultsData })
+    }
+  }, [quizCompleted, showResults])
+
+  // Guardar progreso
+  const handleExitQuiz = () => {
+    const progress = {
+      userAnswers,
+      currentQuestionIndex,
+      score,
+      timeLeft,
+      // Puedes agregar más campos si lo necesitas
+    };
+    localStorage.setItem('quiz-progress', JSON.stringify(progress));
+    navigate('/');
+  };
+
+  const handleCollisionWithOption = (targetName) => {
+    // Para image-match, el flujo es diferente
+    if (answerLocked || hasAnsweredRef.current) return;
+    setAnswerLocked(true);
+    hasAnsweredRef.current = true;
+
+    if (currentQuestion.type === 'image-match') {
+      // No hay userAnswers[currentQuestion.id] hasta terminar todas las asociaciones
+      setHighlightedOption(targetName);
+      // No sabemos si es correcto hasta terminar todas
+      setTimeout(() => {
+        handleAnswerSelect(targetName);
+        setHighlightedOption(null);
+        setIsCorrectAnswer(null);
+        setAnswerLocked(false);
+        // Si ya se terminó de asociar todas las imágenes, mostrar resultado y avanzar
+        if (imageMatchIndex === currentQuestion.images.length - 1) {
+          setTimeout(() => {
+            // Espera un poco para mostrar el resultado visual
+            if (currentQuestionIndex < totalQuestions - 1) {
+              goToNextQuestion();
+            } else {
+              goToQuizEnd();
+            }
+            hasAnsweredRef.current = false;
+          }, 2200);
+        } else {
+          hasAnsweredRef.current = false;
+        }
+      }, 1200);
+    } else {
+      // Pregunta normal
+      if (userAnswers[currentQuestion.id]) return;
+      const isCorrect = targetName === currentQuestion.correctAnswer;
+      setHighlightedOption(targetName);
+      setIsCorrectAnswer(isCorrect);
+      setTimeout(() => {
+        handleAnswerSelect(targetName);
+        setHighlightedOption(null);
+        setIsCorrectAnswer(null);
+        setAnswerLocked(false);
+        if (currentQuestionIndex < totalQuestions - 1) {
+          goToNextQuestion();
+        } else {
+          goToQuizEnd();
+        }
+        hasAnsweredRef.current = false;
+      }, 3000);
+    }
+  };
+
+  return (
+    <div style={{ width: '100vw', height: '100vh', position: 'relative' }}>
+      <Canvas
+        shadows
+        camera={{ position: [0, 15, 30], fov: 50 }}
+        gl={{ antialias: true }}
+      >
+        <Sky sunPosition={[10, 20, 10]} />
+        <Stars radius={100} depth={50} count={5000} factor={4} fade />
+
+        <ambientLight intensity={0.5} />
+        <directionalLight position={[10, 20, 10]} intensity={1.5} castShadow />
+        <pointLight position={[0, 15, 0]} intensity={0.5} color="#ffccaa" />
+        <hemisphereLight groundColor="#4caf50" intensity={0.3} />
+
+        <Physics gravity={[0, -9.81, 0]}>
+          <ColoredFloor />
+      <mesh position={[0, 13, -20]} receiveShadow>
+        <boxGeometry args={[80, 28, 2]} />
+        <meshStandardMaterial color="#2AABEC" transparent opacity={0.7} />
+
+        <Html
+          position={[0, 3, 1.1]}
+          transform
+          center
+          distanceFactor={10}
+          className="question-wall"
+          style={{ zIndex: 1000, pointerEvents: 'auto' }}
+        >
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            minWidth: '520px',
+            maxWidth: '900px',
+            padding: '32px 24px',
+            background: 'rgba(255,255,255,0.92)',
+            borderRadius: '24px',
+            boxShadow: '0 8px 32px rgba(0,0,0,0.18)',
+            border: '2px solid rgba(0,0,0,0.08)',
+            backdropFilter: 'blur(6px)'
+          }}>
+            <div style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              width: '100%',
+              marginBottom: '18px',
+              gap: '18px',
+              fontSize: '22px',
+              fontWeight: 600,
+              color: '#222'
+            }}>
+              <span>Pregunta {currentQuestionIndex + 1}/{totalQuestions}</span>
+              <span style={{
+                background: 'rgba(100,150,255,0.18)',
+                padding: '6px 18px',
+                borderRadius: '20px',
+                fontWeight: 700,
+                fontSize: '20px',
+                color: '#1e293b',
+                letterSpacing: '1px'
+              }}>⏱️ {timeLeft}s</span>
+            </div>
+            <div style={{
+              fontSize: '32px',
+              fontWeight: 700,
+              color: '#22223b',
+              textAlign: 'center',
+              marginBottom: '22px',
+              textShadow: '0 2px 8px rgba(0,0,0,0.08)'
+            }}>
+              {currentQuestion.question}
+            </div>
+            {/* Si es image-match, mostrar la imagen actual */}
+            {currentQuestion.type === 'image-match' && currentQuestion.images && (
+              <div style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                marginBottom: '18px',
+                marginTop: '8px',
+                width: '100%'
+              }}>
+                <img
+                  src={currentQuestion.images[imageMatchIndex]?.url}
+                  alt={currentQuestion.images[imageMatchIndex]?.alt || ''}
+                  style={{
+                    maxWidth: '320px',
+                    maxHeight: '220px',
+                    borderRadius: '18px',
+                    boxShadow: '0 4px 18px rgba(0,0,0,0.18)',
+                    border: '3px solid #2AABEC',
+                    background: '#fff',
+                    marginBottom: '8px'
+                  }}
+                />
+                <div style={{
+                  fontSize: '18px',
+                  color: '#333',
+                  fontWeight: 500,
+                  marginTop: '2px',
+                  marginBottom: '0'
+                }}>
+                  Imagen {imageMatchIndex + 1} de {currentQuestion.images.length}
+                </div>
+                {/* Mostrar feedback si ya terminó de asociar todas */}
+                {imageMatchResult !== null && (
+                  <div style={{
+                    marginTop: '12px',
+                    fontSize: '22px',
+                    fontWeight: 700,
+                    color: imageMatchResult ? '#10b981' : '#ef4444',
+                    background: imageMatchResult ? 'rgba(16,185,129,0.12)' : 'rgba(239,68,68,0.12)',
+                    borderRadius: '10px',
+                    padding: '10px 18px',
+                    border: `2px solid ${imageMatchResult ? '#10b981' : '#ef4444'}`
+                  }}>
+                    {imageMatchResult ? '¡Asociación correcta!' : 'Alguna asociación es incorrecta'}
+                  </div>
+                )}
+              </div>
+            )}
+            <div style={{
+              width: '100%',
+              marginTop: '10px',
+              marginBottom: '0',
+              background: 'rgba(0,0,0,0.08)',
+              borderRadius: '8px',
+              height: '12px',
+              overflow: 'hidden',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.06)'
+            }}>
+              <div style={{
+                width: `${(score / maxScore) * 100}%`,
+                height: '100%',
+                background: 'linear-gradient(90deg, #6366f1, #8b5cf6)',
+                borderRadius: '8px',
+                transition: 'width 0.5s ease'
+              }} />
+            </div>
+            <div style={{
+              width: '100%',
+              textAlign: 'right',
+              fontSize: '15px',
+              color: '#444',
+              marginTop: '4px',
+              fontWeight: 500
+            }}>
+              {score} / {maxScore} puntos
+            </div>
+          </div>
+        </Html>
+      </mesh>
+
+
+
+          <OptionCubes
+            options={currentQuestion.options}
+            currentQuestionId={currentQuestion.id}
+            userAnswers={userAnswers}
+            highlightedOption={highlightedOption}
+            isCorrect={isCorrectAnswer}
+            optionType={currentQuestion.type === 'image-match' ? 'text' : 'text'}
+            optionPositions={getOptionPositions(currentQuestion.options.length)}
+          />
+
+          <Esphere
+            position={[0, 15, 20]}
+            onCollision={handleCollisionWithOption}
+            disabled={answerLocked}
+          />
+
+          <DecorativeElements optionCount={currentQuestion.options.length} />
+        </Physics>
+
+        <OrbitControls
+          enablePan={false}
+          enableZoom={false}
+          enableRotate={true}
+          minDistance={25}
+          maxDistance={35}
+          minPolarAngle={Math.PI / 4}      // 45 grados
+          maxPolarAngle={Math.PI / 1.8}  // ~80 grados
+          target={[0, 1, -1]}
+          enableDamping
+          minAzimuthAngle={-Math.PI / 5}
+          maxAzimuthAngle={Math.PI / 5}
+        />
+      </Canvas>
+
+      <div style={{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '400px',
+        padding: '30px',
+        boxSizing: 'border-box',
+        display: 'flex',
+        flexDirection: 'column',
+        pointerEvents: 'none',
+        zIndex: 2000
+      }}>
+
+
+        {user && (
+          <div style={{
+            background: '#2AABEC',
+            color: 'white',
+            padding: '12px 20px',
+            borderRadius: '50px',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '12px',
+            backdropFilter: 'blur(8px)',
+            boxShadow: '0 4px 20px rgba(0,0,0,0.3)',
+            border: '1px solid rgba(255,255,255,0.15)',
+            marginBottom: '30px',
+            width: 'fit-content',
+            pointerEvents: 'auto',
+          }}>
+            {user.photoURL && (
+              <img
+                src={user.photoURL}
+                alt="user"
+                style={{
+                  width: '45px',
+                  height: '45px',
+                  borderRadius: '50%',
+                  objectFit: 'cover',
+                  border: '2px solid rgba(255,255,255,0.3)'
+                }}
+              />
+            )}
+            <span style={{ fontSize: '18px', fontWeight: '600' }}>{user.displayName}</span>
+          </div>
+        )}
+
+        {/* Botón para salir y guardar progreso */}
+        <button
+          onClick={handleExitQuiz}
+          style={{
+            background: '#ef4444',
+            color: 'white',
+            border: 'none',
+            borderRadius: '30px',
+            padding: '12px 28px',
+            fontSize: '18px',
+            fontWeight: 700,
+            marginBottom: '18px',
+            cursor: 'pointer',
+            boxShadow: '0 2px 8px rgba(0,0,0,0.12)',
+            pointerEvents: 'auto',
+            transition: 'background 0.2s',
+          }}
+        >
+          Salir y guardar
+        </button>
+      </div>
+
+      <style>
+        {`
+          @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+          }
+          .question-wall {
+            z-index: 1000 !important;
+            position: relative;
+          }
+        `}
+      </style>
+    </div>
+  )
+}
+
+export default QuizGame3D

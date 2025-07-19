@@ -1,4 +1,4 @@
-import { Navigate, Route, Routes } from 'react-router';
+import { Navigate,  Route, Routes } from 'react-router';
 
 import About from './pages/about/About.jsx';
 import Home from './pages/home/Home.jsx';
@@ -9,6 +9,7 @@ import Login from './pages/auth/Login.jsx';
 import Start from './pages/quiz/components/QuizComponent.jsx';
 import Podio from './pages/quiz/components/Leaderboard.jsx';
 import Tabla from './pages/quiz/components/FullLeaderboard.jsx';
+import Resultado from './pages/quiz/components/QuizResults.jsx';
 
 import Epoc from './pages/enfermedades/epoc/Epoc.jsx';
 import Asma from './pages/enfermedades/asma/Asma.jsx';
@@ -34,14 +35,16 @@ function App() {
     <Routes>
       {/* Ruta de Login fuera del Layout */}
       <Route path="/login" element={<Login />} />
+      <Route path="/quiz/start" element={<Start />} />
+        
       
       {/* Rutas dentro del Layout */}
       <Route element={<Layout />}>
         <Route index path="/" element={<Home />} />
         <Route path="/quiz" element={<Quiz />} />
-        <Route path="/quiz/start" element={<Start />} />
         <Route path="/leaderboard" element={<Podio />} />
         <Route path="/leaderboard/full" element={<Tabla />} />
+        <Route path="/quiz/results" element={<Resultado />} />
 
 
         <Route path="/about" element={<About />} />
