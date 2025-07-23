@@ -16,3 +16,108 @@
   z-index: 10;
   pointer-events: none; /* para no bloquear clics al canvas */
 }
+
+.info-hint {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  background: rgba(42, 171, 236, 0.9);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-family: $font-family-base;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  z-index: 10;
+  pointer-events: none;
+  
+  strong {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 2px 4px;
+    border-radius: 3px;
+    font-weight: 600;
+  }
+}
+
+.modal-inhaler {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+  pointer-events: auto;
+  
+  .modal-content {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    padding: 20px;
+    max-width: 320px;
+    width: 85vw;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    border: 2px solid #2AABEC;
+    font-family: $font-family-base;
+    
+    h3 {
+      color: #2AABEC;
+      margin-bottom: 12px;
+      font-size: 1.2em;
+      text-align: center;
+      font-weight: 600;
+    }
+    
+    p {
+      color: #333;
+      line-height: 1.5;
+      margin-bottom: 12px;
+      font-size: 0.9em;
+    }
+    
+    ul {
+      list-style: none;
+      padding: 0;
+      margin-bottom: 15px;
+      
+      li {
+        color: #444;
+        margin-bottom: 8px;
+        padding-left: 18px;
+        position: relative;
+        line-height: 1.4;
+        font-size: 0.85em;
+        
+        &:before {
+          content: "•";
+          position: absolute;
+          left: 0;
+          top: 0;
+          color: #2AABEC;
+          font-weight: bold;
+          font-size: 1.2em;
+        }
+        
+        strong {
+          color: #2AABEC;
+          font-weight: 600;
+        }
+      }
+    }
+    
+    .modal-footer {
+      text-align: center;
+      font-size: 0.8em;
+      color: #666;
+      margin-bottom: 0;
+      font-style: italic;
+      
+      strong {
+        background: #2AABEC;
+        color: white;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-style: normal;
+        font-weight: 600;
+      }
+    }
+  }
+}

@@ -1,5 +1,6 @@
 /* eslint-disable react/no-unknown-property */
-import { Suspense, useEffect, useRef } from 'react'
+/* eslint-disable react/prop-types */
+import { Suspense, useEffect, useRef, useState } from 'react'
 import { useGLTF, useAnimations, OrbitControls, Loader, Html } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber'
 import Base from '../../asma/models-3d/Base'
@@ -7,15 +8,24 @@ import Lights from './LightsBreathingHard'
 import Staging from '../staging/Staging'
 import './BreathingHard.scss'
 
-export function BreathingHard(props) {
+export function BreathingHard({ isAnimating, ...props }) {
   const group = useRef()
   const { nodes, materials, animations } = useGLTF('/models-3d/BreathingHard.glb')
   const { actions } = useAnimations(animations, group)
 
   useEffect(() => {
-    actions["Armature|mixamo.com|Layer0"].fadeIn(0.5).play()
-    return () => actions["Armature|mixamo.com|Layer0"].fadeOut(0.5).stop();
-  }, [actions]);
+    const action = actions["Armature|mixamo.com|Layer0"]
+    if (action) {
+      action.fadeIn(0.5).play()
+      action.paused = !isAnimating
+    }
+    
+    return () => {
+      if (action) {
+        action.fadeOut(0.5).stop()
+      }
+    }
+  }, [actions, isAnimating])
 
   return (
     <group ref={group} {...props} dispose={null}>
@@ -109,12 +119,32 @@ useGLTF.preload('/models-3d/BreathingHard.glb')
 
 export default function Scene() {
   const controlsRef = useRef()
+  const [isAnimating, setIsAnimating] = useState(true)
 
   const resetCamera = () => {
     if (controlsRef.current) {
       controlsRef.current.reset()
     }
   }
+
+  const toggleAnimation = () => {
+    setIsAnimating((prev) => !prev)
+  }
+
+  // Event listener para la tecla 'P'
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key.toLowerCase() === 'p') {
+        toggleAnimation()
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [])
 
   return (
     <>
@@ -153,9 +183,13 @@ export default function Scene() {
             scale={2.5}
             position={[0, -12, 5]}
             rotation={[0, 0, 0]}
+            isAnimating={isAnimating}
           />
         </Canvas>
       </Suspense>
+      <div className="animation-control-hint">
+        Presiona <strong>P</strong> para {isAnimating ? 'pausar' : 'reanudar'} la animación
+      </div>
     </>
   );
 }
