@@ -50,21 +50,64 @@ const LeaderboardPage = () => {
         const particlesContainer = document.querySelector('.particles-container');
         if (!particlesContainer) return;
   
-        for (let i = 0; i < 200; i++) {
+        // Limpiar partículas existentes
+        particlesContainer.innerHTML = '';
+  
+        for (let i = 0; i < 300; i++) {
           const particle = document.createElement('div');
           particle.classList.add('particle');
   
+          // Posición inicial aleatoria
           particle.style.left = `${Math.random() * 100}%`;
           particle.style.top = `${Math.random() * 100}%`;
   
-          const size = Math.random() * 15 + 5;
+          // Tamaño variable para las burbujas
+          const size = Math.random() * 20 + 8;
           particle.style.width = `${size}px`;
           particle.style.height = `${size}px`;
   
-          particle.style.animationDuration = `${Math.random() * 20 + 10}s`;
-          particle.style.animationDelay = `${Math.random() * 5}s`;
+          // Duración y delay aleatorios
+          const duration = Math.random() * 25 + 15;
+          particle.style.animationDuration = `${duration}s`;
+          particle.style.animationDelay = `${Math.random() * 8}s`;
+  
+          // Asignar diferentes tipos de animación
+          const animationType = Math.random();
+          if (animationType < 0.6) {
+            particle.style.animationName = 'float';
+          } else if (animationType < 0.8) {
+            particle.style.animationName = 'bubbleFloat';
+          } else {
+            particle.style.animationName = 'pulse, float';
+          }
+  
+          // Agregar algunas burbujas con movimiento lateral
+          if (i % 7 === 0) {
+            particle.style.animationName += ', wobble';
+            particle.style.animationDuration = `${duration}s, 3s`;
+          }
   
           particlesContainer.appendChild(particle);
+        }
+  
+        // Crear algunas burbujas grandes ocasionales
+        for (let i = 0; i < 100; i++) {
+          const bigBubble = document.createElement('div');
+          bigBubble.classList.add('particle');
+          
+          bigBubble.style.left = `${Math.random() * 100}%`;
+          bigBubble.style.top = `${Math.random() * 100}%`;
+          
+          const bigSize = Math.random() * 40 + 30;
+          bigBubble.style.width = `${bigSize}px`;
+          bigBubble.style.height = `${bigSize}px`;
+          
+          bigBubble.style.animationDuration = `${Math.random() * 35 + 20}s`;
+          bigBubble.style.animationDelay = `${Math.random() * 10}s`;
+          bigBubble.style.animationName = 'float, pulse';
+          bigBubble.style.opacity = '0.3';
+          
+          particlesContainer.appendChild(bigBubble);
         }
       };
   
@@ -97,7 +140,7 @@ const LeaderboardPage = () => {
   }
 
   return (
-    <div className="quiz-intro-page">
+    <div className="leaderboard-intro-page">
       <div className="particles-container"></div>
       <div className="leaderboard-page">
         <div className="header">
@@ -150,7 +193,7 @@ const LeaderboardPage = () => {
             Ver Tabla de posiciones
           </button>
           <button onClick={() => navigate('/quiz')} className="play-button">
-            Volver al quiz!
+            Volver al quiz
           </button>
         </div>
 
