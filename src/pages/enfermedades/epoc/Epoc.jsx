@@ -10,20 +10,48 @@ import LungBronchi from './models-3d/LungBronchi';
 const Epoc = () => {
   const location = useLocation();
   const [showContent, setShowContent] = useState(false);
+  const [showScrollButton, setShowScrollButton] = useState(false);
 
   useEffect(() => {
     const isNestedRoute = location.pathname !== 'epoc' && !location.pathname.endsWith('epoc');
     setShowContent(isNestedRoute);
-    
-    if (isNestedRoute) {
-      setTimeout(() => {
-        const contentElement = document.querySelector('.epoc-outlet-wrapper');
-        if (contentElement) {
-          contentElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-      }, 300);
-    }
   }, [location.pathname]);
+
+  // Efecto para controlar la visibilidad del botón de scroll
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      setShowScrollButton(scrollTop > 300);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Función para hacer scroll hacia arriba
+  const scrollToTop = () => {
+    // Método más suave y compatible con diferentes navegadores
+    const scrollToTopSmoothly = () => {
+      const currentPosition = document.documentElement.scrollTop || document.body.scrollTop;
+      
+      if (currentPosition > 0) {
+        window.requestAnimationFrame(scrollToTopSmoothly);
+        window.scrollTo(0, currentPosition - currentPosition / 8);
+      }
+    };
+
+    // Intentar primero con scroll behavior smooth (navegadores modernos)
+    try {
+      window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: 'smooth'
+      });
+    } catch {
+      // Fallback para navegadores más antiguos
+      scrollToTopSmoothly();
+    }
+  };
 
   return (
     <div className="epoc-container">
@@ -87,6 +115,17 @@ const Epoc = () => {
         <div className="epoc-outlet-wrapper">
           <Outlet />
         </div>
+      )}
+
+      {/* Botón flotante para scroll hacia arriba */}
+      {showScrollButton && (
+        <button 
+          className="scroll-to-top-button"
+          onClick={scrollToTop}
+          aria-label="Ir hacia arriba"
+        >
+          ↑
+        </button>
       )}
     </div>
   );
