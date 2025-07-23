@@ -9,6 +9,9 @@ import Staging from "./StagingQueEs";
 import TextMark from "./TextClick"; // Importa el componente Text
 import Text3Dinfo from "./Text3Dinfo"; // Importa el componente Text3Dinfo
 import ManejoCamara from "./ManejoCamara"; // Importa el componente ManejoCamara
+import HtmlQuestion from "./HtmlQuestion";
+import HtmlInfo from "./HtmlInfo"; // Importa el componente HtmlInfo
+
 //Modelo 3d "QUE ES LA TUBERCULOSIS"
 const Model = (props) => {
   const { nodes, materials } = useGLTF("/models-3d/tbc-tratamiento.glb");
@@ -60,6 +63,7 @@ function useKeyPressP(callback) {
 }
 const PiantModel = (props) => {
   const [showMessage, setShowMessage] = useState(true)
+  const [showHtmlinfo, setHtmlinfo] = useState(false)
   const [mensajeinformativo, setMensajeinformativo] = useState(``)
   const handleQuestionClick = () => {
     //alert("¡Has hecho clic en el signo de pregunta!");
@@ -80,6 +84,12 @@ const PiantModel = (props) => {
     setShowMessage(prev => !prev);
     cambiarMensaje();
   });
+
+  const handleHtmlClick = () => {
+    setHtmlinfo(prev => !prev);
+  }
+
+  const info = `Al presionar la tecla 'P' o darle clic en el mismo letrero 3D "presiona P", puedes encontrar más información sobre la Tubercules, además de interactuar con el modelo 3D.`;
   return (
     <Suspense fallback={<Loader />}>
       <Canvas camera={{ position: [0, 10, 20] }} shadows={true}>
@@ -95,6 +105,11 @@ const PiantModel = (props) => {
         <Text3Dinfo position={[0, 15, 0]} // Posición del texto
           onClick={handleQuestionClick}
         />
+        {showHtmlinfo ? (
+          <HtmlInfo onRestore={handleHtmlClick} mensaje={info} />
+        ) : (
+          <HtmlQuestion position={[-20, 0, 0]} onClick={handleHtmlClick} />
+        )}
       </Canvas>
     </Suspense>
   );

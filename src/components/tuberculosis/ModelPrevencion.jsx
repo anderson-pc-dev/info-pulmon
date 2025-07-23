@@ -7,6 +7,8 @@ import Lights from "./LightPrevencion";
 import Recipient from "./RecipientPrevencion"; // Importa el componente Recipient
 import Staging from "./StagingQueEs";
 import ManejoCamara from "./ManejoCamaraPrevencion"; // Importa el componente ManejoCamara
+import HtmlQuestion from "./HtmlQuestion";
+import HtmlInfo from "./HtmlInfo"; // Importa el componente HtmlInfo
 //Modelo 3d "QUE ES LA TUBERCULOSIS"
 const Model = (props) => {
   const group = useRef()
@@ -276,54 +278,71 @@ const Model = (props) => {
 }
 
 useGLTF.preload("/models-3d/tbc-prevencion.glb");
-function useKeyPressP(callback) {
+function useKeyPress(key, callback) {
   useEffect(() => {
     function handleKeyDown(event) {
-      if (event.key === 'p' || event.key === 'P') {
+      // console.log("key", event.key);
+      if (event.key.toLowerCase() === key.toLowerCase()) {
         callback();
       }
     }
-
     window.addEventListener('keydown', handleKeyDown);
-
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [callback]);
+  }, [key, callback]);
 }
 const PiantModel = (props) => {
   const [showMessage, setShowMessage] = useState(true)
-    const [mensajeinformativo, setMensajeinformativo] = useState()
-    const handleQuestionClick = () => {
-      //alert("¡Has hecho clic en el signo de pregunta!");
-      setShowMessage(prev => !prev);
-      cambiarMensaje();
-    };
-    const cambiarMensaje = (val) => {
-      //console.log("showMessage", showMessage);
-      if (showMessage) {
-        if(val === 1) {
-          setMensajeinformativo(1);
-        } else if(val === 2) {
-          setMensajeinformativo(2);
-        }else if(val === 3) {
-          setMensajeinformativo(3);
-        }
-      }
-      if (!showMessage) {
-        setMensajeinformativo(0);
+  const [showHtmlinfo, setHtmlinfo] = useState(false)
+  const [mensajeinformativo, setMensajeinformativo] = useState(0)
+  const handleQuestionClick = () => {
+    //alert("¡Has hecho clic en el signo de pregunta!");
+    setShowMessage(prev => !prev);
+    cambiarMensaje();
+  };
+  const cambiarMensaje = (val) => {
+    //console.log("showMessage", showMessage);
+    if (showMessage === true) {
+      if(val === 1) {
+        setMensajeinformativo(1);
+      } else if(val === 2) {
+        setMensajeinformativo(2);
+      }else if(val === 3) {
+        setMensajeinformativo(3);
       }
     }
+    if (showMessage === false) {
+      setMensajeinformativo(0);
+    }
+    // console.log("mensajeinformativo", mensajeinformativo);
+    // console.log("showMessage", showMessage);
+  }
     
-    useKeyPressP(() => {
-      setShowMessage(prev => !prev);
-      cambiarMensaje();
-    });
+  useKeyPress('1', () => {
+    setShowMessage(prev => !prev);
+    cambiarMensaje(1);
+  });
+  useKeyPress('2', () => {
+    setShowMessage(prev => !prev);
+    cambiarMensaje(2);
+  });
+  useKeyPress('3', () => {
+    setShowMessage(prev => !prev);
+    cambiarMensaje(3);
+  });
+
+  const handleHtmlClick = () => {
+    setHtmlinfo(prev => !prev);
+  }
+
+  const info = `Al presionar las teclas '1', '2' o '3', puedes hacer zoom a cada modelo 3D respectivamente.`;
   return (
     <Suspense fallback={<Loader />}>
-      <Canvas camera={{ position: [0, 10, 20] }} shadows={true}>
+      <Canvas camera={{ position: [0, 10, 40] }} shadows={true}>
         {/* <Perf /> */}
         <OrbitControls target={[0, 10, 10]} />
+        <ManejoCamara val={mensajeinformativo}/>
         <Lights />
         {/* <Staging /> */}
         <Model scale={5} />
@@ -349,6 +368,11 @@ const PiantModel = (props) => {
           transparent // Esta propiedad es opcional, pero puedes agregarla
           opacity={1} // Cambia el valor entre 0 (totalmente transparente) y 1 (opaco)
         />
+        {showHtmlinfo ? (
+          <HtmlInfo onRestore={handleHtmlClick} mensaje={info} />
+        ) : (
+          <HtmlQuestion position={[-40, -10, 0]} onClick={handleHtmlClick} />
+        )}
       </Canvas>
     </Suspense>
   );
