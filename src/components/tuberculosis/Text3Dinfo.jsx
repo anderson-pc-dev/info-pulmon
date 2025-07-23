@@ -1,7 +1,7 @@
 import { Text3D, Center } from "@react-three/drei";
 import aliceFont from "../../assets/fonts/alice.json";
 //console.log("aliceFont", aliceFont);
-const Text3Dinfo = ({ text="click me or press 'P'" , onClick, position=[-12, 15, 0]}) => {
+const Text3Dinfo = ({ text="Presiona 'P'" , onClick, position=[-8, 15, 0]}) => {
   return (
     <Center position={position}>
       <Text3D
