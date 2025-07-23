@@ -4,6 +4,7 @@ import { useGLTF, useAnimations, OrbitControls, Loader, Text } from '@react-thre
 import Soporte from './Soporte'
 import { Canvas, useFrame } from '@react-three/fiber'
 import LightsLungHeart from './LightsLungHeart'
+import './RotateInhaler.scss'
 
 export function LungsHeart(props) {
     const group = useRef()
@@ -239,25 +240,49 @@ export function LungsHeart(props) {
 useGLTF.preload('/models-3d/Body.glb')
 
 export default function Scene() {
+    const [showHint, setShowHint] = useState(true)
+
+    const handleModelClick = () => {
+        setShowHint(false)
+    }
+
     return (
-        <Suspense fallback={<Loader />}>
-            <Canvas camera={{ position: [0, -11.6, 3], fov: 40 }} shadows={true}>
-                <OrbitControls enableRotate enableZoom={false} enablePan={false} target={[0, -11.6, 0]} />
-                <LightsLungHeart />
-                <Soporte />
-                <LungsHeart scale={2.0} position={[0, -11.95, 0]} rotation={[0, 0, 0]} />
-                <Text
-                    position={[0, -10.8, 0]}
-                    fontSize={0.15}
-                    color="#2AABEC"
-                    
-                    anchorX="center"
-                    anchorY="middle"
-                >
-                    Presiona &quot;P&quot; para pausar/reanudar
-                </Text>
-            </Canvas>
-        </Suspense>
+        <>
+            <Suspense fallback={<Loader />}>
+                <Canvas camera={{ position: [0, -11.6, 3], fov: 40 }} shadows={true}>
+                    <OrbitControls enableRotate enableZoom={false} enablePan={false} target={[0, -11.6, 0]} />
+                    <LightsLungHeart />
+                    <Soporte />
+                    <group onClick={handleModelClick}>
+                        <LungsHeart scale={2.0} position={[0, -11.95, 0]} rotation={[0, 0, 0]} />
+                    </group>
+                    <Text
+                        position={[0, -10.8, 0]}
+                        fontSize={0.15}
+                        color="#2AABEC"
+                        
+                        anchorX="center"
+                        anchorY="middle"
+                    >
+                        Presiona &quot;P&quot; para pausar/reanudar
+                    </Text>
+                    <Text
+                        position={[0, -12.3, 0]}
+                        fontSize={0.08}
+                        color="#FF6B6B"
+                        anchorX="center"
+                        anchorY="middle"
+                    >
+                        Sistema Respiratorio: Observa cómo trabajan los pulmones y el corazón
+                    </Text>
+                </Canvas>
+            </Suspense>
+            {showHint && (
+                <div className="hint">
+                    💡 Haz clic en el modelo para rotarlo
+                </div>
+            )}
+        </>
     )
 }
 

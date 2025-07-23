@@ -29,7 +29,7 @@
     position: absolute;
     font-weight: bold;
 
-    bottom: 50px;
+    bottom: 65px;
     
     z-index: 10;
     padding: 10px 16px;
@@ -44,5 +44,27 @@
 
     &:hover {
         background-color: $dark;
+    }
+}
+
+.animation-control-hint {
+    position: absolute;
+    bottom: 22px;
+    right: 20px;
+    background: rgba(42, 171, 236, 0.9);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-family: $font-family-base;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    z-index: 10;
+    pointer-events: none;
+    
+    strong {
+        background: rgba(255, 255, 255, 0.2);
+        padding: 2px 4px;
+        border-radius: 3px;
+        font-weight: 600;
     }
 }

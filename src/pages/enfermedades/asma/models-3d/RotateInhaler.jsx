@@ -1,8 +1,8 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react/no-unknown-property */
-import { useRef, Suspense, useState } from 'react'
+import { useRef, Suspense, useState, useEffect } from 'react'
 import { useFrame, Canvas } from '@react-three/fiber'
-import { Center, Loader, OrbitControls, Text3D } from '@react-three/drei'
+import { Center, Loader, OrbitControls, Text3D, Html } from '@react-three/drei'
 import { Inhaler } from './Inhaler'
 import Soporte from './Base'
 import StagingInhaler from '../staging/StagingInhaler'
@@ -30,14 +30,28 @@ function RotatingInhaler({ isRotating, onClick, ...props }) {
 
 export default function Scene() {
   const [isRotating, setIsRotating] = useState(true)
-
   const [showHint, setShowHint] = useState(true)
+  const [showModal, setShowModal] = useState(false)
 
   const toggleRotation = () => {
     setIsRotating((prev) => !prev)
     setShowHint(false)
-
   }
+
+  // Event listener para la tecla 'S'
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key.toLowerCase() === 's') {
+        setShowModal((prev) => !prev)
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [])
 
   return (
     <>
@@ -106,6 +120,32 @@ export default function Scene() {
               />
             </Text3D>
           </Center>
+
+          {/* Modal 2D dentro del Canvas */}
+          {showModal && (
+            <Html
+              position={[0, -10, 0]}
+              transform={false}
+              center
+              style={{
+                pointerEvents: 'none',
+              }}
+            >
+              <div className="modal-inhaler">
+                <div className="modal-content">
+                  <h3>Inhaladores Médicos</h3>
+                  <p>
+                    Los inhaladores son dispositivos médicos que administran medicamentos 
+                    directamente a los pulmones para el alivio rápido de síntomas, control 
+                    de la inflamación y prevención de ataques respiratorios.
+                  </p>
+                  <p className="modal-footer">
+                    Presiona <strong>S</strong>  para cerrar
+                  </p>
+                </div>
+              </div>
+            </Html>
+          )}
         </Canvas>
       </Suspense>
       {showHint && (
@@ -113,6 +153,9 @@ export default function Scene() {
           💡 Haz clic en el modelo para pausar/reanudar la rotación
         </div>
       )}
+      <div className="info-hint">
+        Presiona <strong>S</strong> para ver información sobre los inhaladores
+      </div>
     </>
   )
 }

@@ -14,7 +14,7 @@ const Soporte = () => {
                 transparent={true}
                 roughness={0.8}
                 metalness={0.2}
-                opacity={0.2}
+                opacity={0.0}
             />
         </mesh>
 
