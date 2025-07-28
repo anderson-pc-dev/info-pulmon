@@ -1,60 +1,43 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable no-unused-vars */
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable react/no-unknown-property */
 import { Canvas } from '@react-three/fiber'
 import { Physics, RigidBody } from '@react-three/rapier'
-import { Html, Float, OrbitControls, Stars, Sky } from '@react-three/drei'
+import { Html, Float, OrbitControls} from '@react-three/drei'
 import { useQuizLogic } from './QuizLogic'
 import { useEffect, useState, useRef } from 'react'
 import { useNavigate } from 'react-router'
 import Esphere from './Esphere'
+import Staging from '../../enfermedades/epoc/staging/StagingQuiz'
 import OptionCubes from './OptionCubes'
 
 import './QuizComponent.scss'
 
 const ColoredFloor = () => (
-  <RigidBody type="fixed" friction={1} restitution={0.2}>
-    <mesh position={[0, -1, 0]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
+  <RigidBody 
+    type="fixed" 
+    friction={1} 
+    restitution={0.2}
+  >
+    <mesh 
+      position={[0, -1, 0]} 
+      rotation={[-Math.PI / 2, 0, 0]} 
+      receiveShadow
+    >
       <planeGeometry args={[80, 80]} />
-      <meshStandardMaterial color="#4c6bafff" />
+      <shadowMaterial
+          roughness={0.8}
+          metalness={1}
+          transparent={true}
+          opacity={0.8}  
+        />
     </mesh>
   </RigidBody>
 )
 
 const getOptionPositions = (count) => {
   // Centra los cubos/cilindros en X, separados por 10 unidades
-  const spacing = 10;
+  const spacing = 16;
   const startX = -((count - 1) * spacing) / 2;
   return Array.from({ length: count }, (_, i) => [startX + i * spacing, 5, -10]);
 };
-
-const DecorativeElements = ({ optionCount }) => (
-  <>
-    {getOptionPositions(optionCount).map((pos, idx) => (
-      <mesh key={idx} position={[pos[0], 1, pos[2]]} castShadow>
-        <cylinderGeometry args={[1, 1, 4, 16]} />
-        <meshStandardMaterial color="#E2F5FF" metalness={0.8} roughness={0.2} />
-      </mesh>
-    ))}
-    {[...Array(20)].map((_, i) => (
-      <Float key={i} speed={i % 2 ? 0.5 : 1} floatIntensity={0.5}>
-        <mesh position={[
-          Math.sin(i) * 30,
-          5 + Math.cos(i * 2) * 5,
-          Math.cos(i) * 30
-        ]}>
-          <icosahedronGeometry args={[0.5, 0]} />
-          <meshStandardMaterial
-            color={i % 2 ? '#005089' : '#2196f3'}
-            emissive={i % 2 ? '#005089' : '#2196f3'}
-            emissiveIntensity={0.5}
-          />
-        </mesh>
-      </Float>
-    ))}
-  </>
-);
 
 const QuizGame3D = () => {
   const {
@@ -176,12 +159,10 @@ const QuizGame3D = () => {
     <div style={{ width: '100vw', height: '100vh', position: 'relative' }}>
       <Canvas
         shadows
-        camera={{ position: [0, 15, 30], fov: 50 }}
+        camera={{ position: [0, 4, 30], fov: 60 }}
         gl={{ antialias: true }}
       >
-        <Sky sunPosition={[10, 20, 10]} />
-        <Stars radius={100} depth={50} count={5000} factor={4} fade />
-
+        <Staging />
         <ambientLight intensity={0.5} />
         <directionalLight position={[10, 20, 10]} intensity={1.5} castShadow />
         <pointLight position={[0, 15, 0]} intensity={0.5} color="#ffccaa" />
@@ -194,7 +175,7 @@ const QuizGame3D = () => {
         <meshStandardMaterial color="#2AABEC" transparent opacity={0.7} />
 
         <Html
-          position={[0, 3, 1.1]}
+          position={[0, 1, 1.1]}
           transform
           center
           distanceFactor={10}
@@ -327,9 +308,6 @@ const QuizGame3D = () => {
           </div>
         </Html>
       </mesh>
-
-
-
           <OptionCubes
             options={currentQuestion.options}
             currentQuestionId={currentQuestion.id}
@@ -341,18 +319,16 @@ const QuizGame3D = () => {
           />
 
           <Esphere
-            position={[0, 15, 20]}
+            position={[0, 15, 21]}
             onCollision={handleCollisionWithOption}
             disabled={answerLocked}
           />
-
-          <DecorativeElements optionCount={currentQuestion.options.length} />
         </Physics>
 
         <OrbitControls
           enablePan={false}
           enableZoom={false}
-          enableRotate={true}
+          enableRotate={false}
           minDistance={25}
           maxDistance={35}
           minPolarAngle={Math.PI / 4}      // 45 grados
