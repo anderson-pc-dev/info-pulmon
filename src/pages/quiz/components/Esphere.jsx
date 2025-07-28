@@ -1,58 +1,71 @@
 /* eslint-disable react/no-unknown-property */
-/* eslint-disable no-unused-vars */
-/* eslint-disable react/prop-types */
 import { RigidBody } from "@react-three/rapier";
-import { useRef, useCallback, useState } from "react";
+import { useRef, useCallback, useState, useEffect } from "react";
 import { useThree, useFrame } from "@react-three/fiber";
-import { Vector3 } from "three";
-import { Line } from "@react-three/drei";
+import { Vector3, Raycaster } from "three";
+import { Line, useGLTF } from "@react-three/drei";
 
-const Esphere = ({ onCollision, ...props }) => {
+const BallWithAim = ({ onCollision, ...props }) => {
   const sphereRef = useRef();
-  const { camera, raycaster, gl } = useThree();
-  // Eliminado: línea de dirección
+  const { camera, mouse, gl } = useThree();
   const [isAiming, setIsAiming] = useState(false);
+  const [linePoints, setLinePoints] = useState([]);
+  const raycaster = new Raycaster();
 
+  const { nodes, materials } = useGLTF("/models-3d/soccer_ball.glb");
 
-  // Al presionar el mouse, solo activar aiming
-  const handlePointerDown = useCallback((e) => {
-    e.stopPropagation();
-    setIsAiming(true);
-  }, []);
+  useFrame(() => {
+    if (isAiming && sphereRef.current) {
+      const origin = sphereRef.current.translation();
+      const spherePos = new Vector3(origin.x, origin.y, origin.z);
+      raycaster.setFromCamera(mouse, camera);
+      const dir = raycaster.ray.direction.clone().normalize();
+      const endPoint = spherePos.clone().add(dir.multiplyScalar(20)); 
+      setLinePoints([spherePos, endPoint]);
+    }
+  });
 
-  // Al mover el mouse mientras se mantiene presionado
-  // No hace falta handlePointerMove
-
-  // Al soltar el mouse, disparar la esfera
-  const handlePointerUp = useCallback(() => {
-    if (!isAiming) return;
+  const shootBall = useCallback(() => {
+    if (!isAiming || !sphereRef.current) return;
     setIsAiming(false);
-    // Calcular dirección cámara→esfera
+    setLinePoints([]);
+
     const origin = sphereRef.current.translation();
     const spherePos = new Vector3(origin.x, origin.y, origin.z);
-    const camPos = camera.position;
-    const dir = new Vector3().subVectors(spherePos, camPos).normalize();
-    const force = 800;
+    raycaster.setFromCamera(mouse, camera);
+    const direction = raycaster.ray.direction.clone().normalize();
+    const force = 480; 
+
     sphereRef.current.wakeUp();
     sphereRef.current.applyImpulse(
       {
-        x: dir.x * force,
-        y: dir.y * force,
-        z: dir.z * force,
+        x: direction.x * force,
+        y: direction.y * force,
+        z: direction.z * force,
       },
       true
     );
+
     setTimeout(() => {
       sphereRef.current.setTranslation({ x: 0, y: 10, z: 15 }, true);
       sphereRef.current.setLinvel({ x: 0, y: 0, z: 0 }, true);
       sphereRef.current.setAngvel({ x: 0, y: 0, z: 0 }, true);
       sphereRef.current.wakeUp();
     }, 2000);
-  }, [isAiming, camera]);
+  }, [isAiming, camera, mouse]);
 
-  // Eliminado: actualización de línea de dirección
+  useEffect(() => {
+    const handlePointerUp = () => shootBall();
+    const canvas = gl.domElement;
+    canvas.addEventListener("pointerup", handlePointerUp);
+    return () => canvas.removeEventListener("pointerup", handlePointerUp);
+  }, [shootBall, gl.domElement]);
 
-  // Detectar colision
+  const handlePointerDown = useCallback((e) => {
+    e.stopPropagation();
+    setIsAiming(true);
+  }, []);
+
   const handleCollisionEnter = (payload) => {
     if (onCollision) {
       const targetName = payload.other.rigidBodyObject?.name;
@@ -61,29 +74,55 @@ const Esphere = ({ onCollision, ...props }) => {
   };
 
   return (
-    <RigidBody
-      ccd
-      mass={5}
-      ref={sphereRef}
-      name="esphereRB"
-      type="dynamic"
-      colliders="ball"
-      friction={0}
-      canSleep={false}
-      onCollisionEnter={handleCollisionEnter}
-      {...props}
-    >
-      {/* Línea de dirección eliminada */}
-      <mesh
-        onPointerDown={handlePointerDown}
-        onPointerUp={handlePointerUp}
+    <>
+      <RigidBody
+        ccd
+        mass={5}
+        ref={sphereRef}
+        name="soccerBallRB"
+        type="dynamic"
+        colliders="ball"
+        friction={0.3}
+        restitution={0.7}
+        linearDamping={0.1}
+        canSleep={false}
+        gravityScale={1}
+        onCollisionEnter={handleCollisionEnter}
+        {...props}
       >
-        <sphereGeometry args={[1, 32]} />
-        <meshStandardMaterial color="hotpink" />
-      </mesh>
-    </RigidBody>
+        <group onPointerDown={handlePointerDown} rotation={[-Math.PI / 2, 0, 0]}>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Object_2.geometry}
+            material={materials.Black_s}
+          />
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Object_3.geometry}
+            material={materials.White_s}
+          />
+        </group>
+      </RigidBody>
+
+      {isAiming && linePoints.length === 2 && (
+        <Line
+          points={linePoints}
+          color="cyan"
+          lineWidth={3}
+          dashed
+          dashScale={1}
+        />
+      )}
+    </>
   );
 };
 
-export default Esphere;
+useGLTF.preload("/models-3d/soccer_ball.glb");
+
+export default BallWithAim;
+
+
+
 

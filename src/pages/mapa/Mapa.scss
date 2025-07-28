@@ -1,0 +1,172 @@
+@import '../../shared/variables';
+@import '../../shared/_font.scss';
+
+$border-radius: 12px;
+$box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+$transition: all 0.3s ease;
+
+.sitemap-container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 2rem 1.5rem;
+  font-family: 'Segoe UI', 'Roboto', sans-serif;
+  padding-top: 60px;
+  color: $body-color;
+}
+
+.sitemap-header {
+  text-align: center;
+  margin-bottom: 3rem;
+  
+  .sitemap-title {
+    font-size: 2.5rem;
+    color: $primary;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+  }
+  
+  .sitemap-description {
+    font-size: 1.1rem;
+    color: lighten($body-color, 20%);
+    max-width: 700px;
+    margin: 0 auto;
+  }
+}
+
+.sitemap-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+.sitemap-section {
+  background: white;
+  border-radius: $border-radius;
+  padding: 1.5rem;
+  box-shadow: $box-shadow;
+  transition: $transition;
+  
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+  }
+  
+  .section-title {
+    font-size: 1.4rem;
+    color: $dark;
+    margin-bottom: 1.2rem;
+    padding-bottom: 0.6rem;
+    border-bottom: 2px solid $white;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    
+    .icon {
+      font-size: 1.2em;
+    }
+  }
+}
+
+.sitemap-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  
+  li {
+    margin: 0.6rem 0;
+    position: relative;
+    padding-left: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    
+    &::before {
+      content: '→';
+      position: absolute;
+      left: 0;
+      color: $warning;
+    }
+  }
+}
+
+.sitemap-link {
+  text-decoration: none;
+  color: $body-color;
+  font-weight: 500;
+  transition: $transition;
+  display: block;
+  padding: 0.4rem 0;
+  
+  &:hover {
+    color: $primary;
+    transform: translateX(5px);
+  }
+}
+
+.disease-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.disease-card {
+  background: $white;
+  border-radius: $border-radius;
+  padding: 1.2rem;
+  border-left: 4px solid $warning;
+  
+  .disease-title {
+    color: $dark;
+    margin-top: 0;
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+    position: relative;
+    padding-bottom: 0.5rem;
+    
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 40px;
+      height: 2px;
+      background: $warning;
+    }
+  }
+}
+
+.disease-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  
+  li {
+    margin: 0.5rem 0;
+  }
+}
+
+.disease-link {
+  text-decoration: none;
+  color: lighten($body-color, 15%);
+  font-size: 0.95rem;
+  transition: $transition;
+  display: block;
+  padding: 0.3rem 0;
+  
+  &:hover {
+    color: $primary;
+    padding-left: 5px;
+  }
+}
+@media (max-width: 768px) {
+  .sitemap-header {
+    .sitemap-title {
+      font-size: 2rem;
+    }
+  }
+  
+  .sitemap-grid {
+    grid-template-columns: 1fr;
+  }
+}

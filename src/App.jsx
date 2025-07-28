@@ -10,6 +10,7 @@ import Start from './pages/quiz/components/QuizComponent.jsx';
 import Podio from './pages/quiz/components/Leaderboard.jsx';
 import Tabla from './pages/quiz/components/FullLeaderboard.jsx';
 import Resultado from './pages/quiz/components/QuizResults.jsx';
+import Mapa from './pages/mapa/Mapa.jsx';
 
 import Epoc from './pages/enfermedades/epoc/Epoc.jsx';
 import Asma from './pages/enfermedades/asma/Asma.jsx';
@@ -45,6 +46,7 @@ function App() {
         <Route path="/leaderboard" element={<Podio />} />
         <Route path="/leaderboard/full" element={<Tabla />} />
         <Route path="/quiz/results" element={<Resultado />} />
+        <Route path="/mapa" element={<Mapa />} />
 
 
         <Route path="/about" element={<About />} />

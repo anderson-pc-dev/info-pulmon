@@ -1,8 +1,9 @@
-import { NavLink } from 'react-router';
 import './Quiz.scss';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import QuizInstructionsModal from './components/QuizInstructionsModal';
 
 const Quiz = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
@@ -100,11 +101,19 @@ const Quiz = () => {
           </div>
         </div>
 
-        <NavLink to="/quiz/start" className="start-quiz-button">
+        <button 
+          className="start-quiz-button" 
+          onClick={() => setIsModalOpen(true)}
+        >
           Comenzar Quiz
           <span className="button-icon">🚀</span>
-        </NavLink>
+        </button>
       </div>
+
+      <QuizInstructionsModal 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)} 
+      />
      
     </div>
   );

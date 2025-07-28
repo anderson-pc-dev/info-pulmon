@@ -26,6 +26,7 @@ const Footer = () => {
                             <li><Link to="/enfermedades">Enfermedades</Link></li>
                             <li><Link to="/about">Sobre Nosotros</Link></li>
                             <li><Link to="/quiz">Quiz</Link></li>
+                            <li><Link to="/mapa">Mapa del Sitio</Link></li>
                         </ul>
                     </Col>
 
