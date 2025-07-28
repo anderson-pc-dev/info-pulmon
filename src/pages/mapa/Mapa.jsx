@@ -1,5 +1,5 @@
 import { Link } from 'react-router';
-import './mapaStyles.scss';
+import './Mapa.scss';
 
 const SiteMap = () => {
   return (
@@ -17,9 +17,9 @@ const SiteMap = () => {
           </h2>
           <ul className="sitemap-list">
             <li><Link to="/" className="sitemap-link">Inicio</Link></li>
+            <li><Link to="/enfermedades" className="sitemap-link">Enfermedades</Link></li>
             <li><Link to="/about" className="sitemap-link">Acerca de Nosotros</Link></li>
-            <li><Link to="/enfermedades" className="sitemap-link">Enfermedades Respiratorias</Link></li>
-            <li><Link to="/quiz" className="sitemap-link">Test de Conocimiento</Link></li>
+            <li><Link to="/quiz" className="sitemap-link">Quiz</Link></li>
             <li><Link to="/login" className="sitemap-link">Iniciar Sesión</Link></li>
           </ul>
         </section>

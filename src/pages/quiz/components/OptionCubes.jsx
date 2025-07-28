@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useGLTF } from '@react-three/drei';
 import { RigidBody, CuboidCollider } from '@react-three/rapier';
 import { Html } from '@react-three/drei';
@@ -93,7 +94,8 @@ const OptionGoals = ({
   highlightedOption,
   isCorrect,
   optionType = 'text',
-  optionPositions
+  optionPositions,
+  hideHtml = false
 }) => {
   const positions = DEFAULT_POSITIONS;
   const rotations = DEFAULT_ROTATIONS;
@@ -161,6 +163,8 @@ const OptionGoals = ({
                 pointerEvents: 'none',
                 transform: 'translateZ(0.2px)',
                 userSelect: 'none',
+                zIndex: 100,
+                visibility: hideHtml ? 'hidden' : 'visible',
               }}
               center
             >
@@ -178,21 +182,26 @@ const OptionGoals = ({
                 color: '#111',
                 borderLeft: `8px solid ${color}`,
                 transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
-                maxWidth: '800px',
+                maxWidth: '1000px',
+                width: '950px',
                 wordBreak: 'break-word',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                minHeight: '100px',
+                minHeight: '150px',
                 position: 'relative',
                 overflow: 'hidden',
+                margin: '0 auto',
+                left: '50%',
+                transform: 'translateX(-50%)',
+                zIndex: -5,
               }}>
                 <div style={{
                   position: 'absolute',
                   top: 0,
                   left: 0,
                   right: 0,
-                  height: '4px',
+                  height: '5px',
                   background: `linear-gradient(90deg, transparent, ${color}, transparent)`,
                   opacity: 0.6,
                 }} />

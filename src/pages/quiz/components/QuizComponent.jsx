@@ -1,12 +1,15 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable react/no-unknown-property */
 import { Canvas } from '@react-three/fiber'
 import { Physics, RigidBody } from '@react-three/rapier'
-import { Html, Float, OrbitControls} from '@react-three/drei'
+import { Html, OrbitControls} from '@react-three/drei'
 import { useQuizLogic } from './QuizLogic'
 import { useEffect, useState, useRef } from 'react'
 import { useNavigate } from 'react-router'
 import Esphere from './Esphere'
 import Staging from '../../enfermedades/epoc/staging/StagingQuiz'
 import OptionCubes from './OptionCubes'
+import QuizHelpModal from './QuizHelpModal'
 
 import './QuizComponent.scss'
 
@@ -53,11 +56,9 @@ const QuizGame3D = () => {
     user,
     currentQuestionIndex,
     totalQuestions,
-    progress,
     passingScore,
     maxScore,
     imageMatchIndex,
-    imageMatchAssociations,
     imageMatchResult
   } = useQuizLogic()
 
@@ -66,6 +67,7 @@ const QuizGame3D = () => {
   const [highlightedOption, setHighlightedOption] = useState(null)
   const [isCorrectAnswer, setIsCorrectAnswer] = useState(null)
   const [answerLocked, setAnswerLocked] = useState(false)
+  const [showHelpModal, setShowHelpModal] = useState(false)
   const hasAnsweredRef = useRef(false)
 
 
@@ -172,7 +174,7 @@ const QuizGame3D = () => {
           <ColoredFloor />
       <mesh position={[0, 13, -20]} receiveShadow>
         <boxGeometry args={[80, 28, 2]} />
-        <meshStandardMaterial color="#2AABEC" transparent opacity={0.7} />
+        <meshStandardMaterial color="#2AABEC" transparent opacity={0.05} />
 
         <Html
           position={[0, 1, 1.1]}
@@ -180,7 +182,11 @@ const QuizGame3D = () => {
           center
           distanceFactor={10}
           className="question-wall"
-          style={{ zIndex: 1000, pointerEvents: 'auto' }}
+          style={{ 
+            zIndex: 500, 
+            pointerEvents: 'auto',
+            visibility: showHelpModal ? 'hidden' : 'visible'
+          }}
         >
           <div style={{
             display: 'flex',
@@ -316,6 +322,7 @@ const QuizGame3D = () => {
             isCorrect={isCorrectAnswer}
             optionType={currentQuestion.type === 'image-match' ? 'text' : 'text'}
             optionPositions={getOptionPositions(currentQuestion.options.length)}
+            hideHtml={showHelpModal}
           />
 
           <Esphere
@@ -408,6 +415,50 @@ const QuizGame3D = () => {
           Salir y guardar
         </button>
       </div>
+
+      {/* Botón de ayuda - Esquina superior derecha */}
+      <div style={{
+        position: 'absolute',
+        top: '30px',
+        right: '30px',
+        zIndex: 10000
+      }}>
+        <button
+          onClick={() => setShowHelpModal(true)}
+          style={{
+            background: '#6b7280',
+            color: 'white',
+            border: 'none',
+            borderRadius: '50px',
+            padding: '12px 24px',
+            fontSize: '16px',
+            fontWeight: 700,
+            cursor: 'pointer',
+            boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+            pointerEvents: 'auto',
+            transition: 'all 0.2s ease',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+          }}
+          onMouseEnter={(e) => {
+            e.target.style.background = '#4b5563';
+            e.target.style.transform = 'translateY(-2px)';
+          }}
+          onMouseLeave={(e) => {
+            e.target.style.background = '#6b7280';
+            e.target.style.transform = 'translateY(0)';
+          }}
+        >
+          Ayuda
+        </button>
+      </div>
+
+      {/* Modal de ayuda */}
+      <QuizHelpModal 
+        isOpen={showHelpModal} 
+        onClose={() => setShowHelpModal(false)} 
+      />
 
       <style>
         {`
