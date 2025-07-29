@@ -163,7 +163,7 @@ const QuizGame3D = () => {
       <Suspense fallback={<div style={{position: 'absolute', top: 0, left: 0, width: '100%', height: '100%'}}><Loader3D message="Cargando quiz 3D..." /></div>}>
         <Canvas
           shadows
-          camera={{ position: [0, 4, 30], fov: 60 }}
+          camera={{ position: [0, 4, 40], fov: 60 }}
           gl={{ antialias: true }}
         >
         <Staging />
