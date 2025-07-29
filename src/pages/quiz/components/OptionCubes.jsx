@@ -26,7 +26,7 @@ const DEFAULT_ROTATIONS = [
   [0, 4.2, 0]
 ];
 
-const GOAL_COLLIDER_SIZE = [3, 2.5, 5];
+const GOAL_COLLIDER_SIZE = [3, 2.5, 7];
 
 function GoalModel({ color, ...props }) {
   const { nodes, materials } = useGLTF('/models-3d/football_net.glb');
@@ -142,7 +142,7 @@ const OptionGoals = ({
           >
             <CuboidCollider
               args={GOAL_COLLIDER_SIZE}
-              position={[0, 1.5, -2]}
+              position={[0, 1.5, 0]}
             />
 
             <GoalModel
