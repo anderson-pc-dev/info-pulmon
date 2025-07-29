@@ -328,7 +328,7 @@ const QuizGame3D = () => {
           />
 
           <Esphere
-            position={[0, 15, 21]}
+            position={[0, 15, 27]}
             onCollision={handleCollisionWithOption}
             disabled={answerLocked}
           />

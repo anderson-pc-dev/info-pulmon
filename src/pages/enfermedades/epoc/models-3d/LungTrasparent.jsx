@@ -9,6 +9,7 @@ import { Suspense } from "react";
 import Lights from '../lights/Lights';  
 import Soporte from '../models-3d/Soporte'; 
 import Text from '../texts/TextLungTranspa'; 
+import Staging from '../staging/Staging1'; 
 import Loader3D from '../../../../components/Loader'; 
 
 function LungModel(props) {
@@ -27,11 +28,16 @@ function LungModel(props) {
   })
 
   const [showInstructions, setShowInstructions] = useState(false)
+  const [isPaused, setIsPaused] = useState(false)
 
   useEffect(() => {
-    actions.Beating.play()
+    if (isPaused) {
+      actions.Beating.stop()
+    } else {
+      actions.Beating.play()
+    }
     return () => actions.Beating.stop()
-  }, [actions.Beating])
+  }, [actions.Beating, isPaused]) 
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -117,7 +123,11 @@ function LungModel(props) {
         restitution={0.7} 
         enabledRotations={[true, true, true]}
       >
-        <group ref={group} {...props} dispose={null}>
+        <group ref={group} {...props} dispose={null}onClick={(e) => {
+            e.stopPropagation()
+            setIsPaused(!isPaused)
+          }}
+        >
           <group name="Scene">
             <mesh
               name="RightLung"
@@ -150,7 +160,16 @@ function LungModel(props) {
               material={materials.LeftLungMaterial}
               morphTargetDictionary={nodes.LeftLung.morphTargetDictionary}
               morphTargetInfluences={nodes.LeftLung.morphTargetInfluences}
-            />
+            >
+              <meshStandardMaterial 
+                attach="material"
+                color="#333333"  
+                opacity={0.5}    
+                transparent={true}
+                roughness={0.7}
+                metalness={0.1}
+              />
+            </mesh>
             <mesh
               name="ThyrocricoidLigament"
               castShadow
@@ -241,8 +260,9 @@ export default function Scene() {
           enablePan={false}
           target={[0, -6.5, -8]}
         />
-        <Text textSintoma={"Presiona la tecla C"}/>
+        <Text textSintoma={"Pulmon Enfermo"}/>
         <Lights />
+        <Staging />
         <Physics gravity={[0, -9.81, 0]}>
           <Soporte />
           <LungModel 
@@ -252,6 +272,37 @@ export default function Scene() {
           />
         </Physics>
       </Canvas>
+      <div
+        style={{
+          position: "absolute",
+          bottom: "18px",
+          right: "19px",
+          backgroundColor: "rgba(0, 0, 0, 0.6)",
+          color: "white",
+          padding: "0.4rem 1rem",
+          borderRadius: "0.5rem",
+          fontSize: "0.9rem",
+          zIndex: 10,
+        }}
+      >
+        💡 Presiona la tecla "C" <br />
+      </div>
+
+      <div
+        style={{
+          position: "absolute",
+          top: "18px",
+          left: "19px",
+          backgroundColor: "rgba(0, 0, 0, 0.6)",
+          color: "white",
+          padding: "0.4rem 1rem",
+          borderRadius: "0.5rem",
+          fontSize: "0.9rem",
+          zIndex: 10,
+        }}
+      >
+        🖱️ Haz click en el modelo
+      </div>
     </Suspense>
     </div>
   )

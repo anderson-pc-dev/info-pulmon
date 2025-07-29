@@ -11,10 +11,11 @@ const Soporte = () => {
         position-z={-11}
       >
         <circleGeometry args={[66, 32]} /> 
-        <meshStandardMaterial 
-          color={ "#FFFFFF" } 
-          roughness={0.8} 
-          metalness={1} 
+        <shadowMaterial
+          roughness={0.8}
+          metalness={1}
+          transparent={true}
+          opacity={0.8}  
         />
       </mesh>
       </RigidBody>
