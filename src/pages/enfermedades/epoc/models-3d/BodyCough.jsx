@@ -1,12 +1,13 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useGLTF, useAnimations } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber';
-import {Loader,OrbitControls,Html,PositionalAudio} from "@react-three/drei";
+import {OrbitControls,Html,PositionalAudio} from "@react-three/drei";
 import { Suspense } from "react";
 import Lights from '../lights/Lights';  
 import Soporte from '../models-3d/SoporteBody'; 
 import Staging from '../staging/Staging';
 import Text from '../texts/TextSintoma'; 
+import Loader3D from '../../../../components/Loader'; 
 
 function BodyCough(props) {
     const group = useRef()
@@ -183,11 +184,12 @@ useGLTF.preload('/models-3d/Body-Cough.glb')
 
 export default function Scene() {
     return (
-      <Suspense fallback={<Loader />}>
-        <Canvas
-          camera={{ position: [0, 1, 5], fov: 50 }}  
-          shadows={true}
-        >
+      <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+        <Suspense fallback={<Loader3D message="Cargando cuerpo con tos..." />}>
+          <Canvas
+            camera={{ position: [0, 1, 5], fov: 50 }}  
+            shadows={true}
+          >
           <OrbitControls
             enableRotate={true}
             enableZoom={true}       
@@ -208,5 +210,6 @@ export default function Scene() {
           />
         </Canvas>
       </Suspense>
+      </div>
     );
   }

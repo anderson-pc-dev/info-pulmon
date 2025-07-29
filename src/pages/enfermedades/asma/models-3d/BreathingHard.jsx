@@ -1,11 +1,12 @@
 /* eslint-disable react/no-unknown-property */
 /* eslint-disable react/prop-types */
 import { Suspense, useEffect, useRef, useState } from 'react'
-import { useGLTF, useAnimations, OrbitControls, Loader, Html } from '@react-three/drei'
+import { useGLTF, useAnimations, OrbitControls, Html } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber'
 import Base from '../../asma/models-3d/Base'
 import Lights from './LightsBreathingHard'
 import Staging from '../staging/Staging'
+import Loader3D from '../../../../components/Loader'
 import './BreathingHard.scss'
 
 export function BreathingHard({ isAnimating, ...props }) {
@@ -147,11 +148,11 @@ export default function Scene() {
   }, [])
 
   return (
-    <>
-      <button className="asma-toggle-btn" onClick={resetCamera}>
+    <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+      {/* <button className="asma-toggle-btn" onClick={resetCamera}>
         Restablecer cámara
-      </button>
-      <Suspense fallback={<Loader />}>
+      </button> */}
+      <Suspense fallback={<Loader3D message="Cargando dificultad respiratoria..." />}>
         <Canvas frameloop="always" camera={{ position: [0, -13, 11], fov: 65 }} shadows={true}>
           <OrbitControls
             ref={controlsRef}
@@ -190,6 +191,6 @@ export default function Scene() {
       <div className="animation-control-hint">
         Presiona <strong>P</strong> para {isAnimating ? 'pausar' : 'reanudar'} la animación
       </div>
-    </>
+    </div>
   );
 }

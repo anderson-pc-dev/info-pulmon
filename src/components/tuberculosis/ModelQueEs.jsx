@@ -1,4 +1,4 @@
-import { useGLTF, Loader, OrbitControls } from "@react-three/drei";
+import { useGLTF, OrbitControls } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import { Suspense, useState, useEffect } from "react";
 import Lights from "./LightQueEs";
@@ -6,6 +6,7 @@ import Recipient from "./RecipientQueEs"; // Importa el componente Recipient
 import Text3Dinfo from "./Text3Dinfo";
 import ManejoCamara from "./ManejoCamara"; // Importa el componente ManejoCamara
 import TextMark from "./TextClick"; // Importa el componente Text
+import Loader3D from '../../components/Loader';
 
 //Modelo 3d "QUE ES LA TUBERCULOSIS"
 const Model = (props) => {
@@ -91,8 +92,9 @@ const PiantModel = (props) => {
     cambiarMensaje();
   });
   return (
-    <Suspense fallback={<Loader />}>
-      <Canvas camera={{ position: [0, 10, 20] }} shadows={true}>
+    <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+      <Suspense fallback={<Loader3D message="Cargando modelo: ¿Qué es la tuberculosis?..." />}>
+        <Canvas camera={{ position: [0, 10, 20] }} shadows={true}>
         {/* <Perf /> */}
         <OrbitControls target={[0, 10, 10]} />
         <Lights />
@@ -118,6 +120,7 @@ const PiantModel = (props) => {
         />
       </Canvas>
     </Suspense>
+    </div>
   );
 };
 

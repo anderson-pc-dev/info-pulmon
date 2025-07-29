@@ -1,12 +1,13 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react/no-unknown-property */
-import { Bounds, Loader, OrbitControls, useGLTF, PositionalAudio, Text3D, Center, Html } from '@react-three/drei'
+import { Bounds, OrbitControls, useGLTF, PositionalAudio, Text3D, Center, Html } from '@react-three/drei'
 import Soporte from './Base'
 import Lights from './LightsBreathingHard'
 import { Suspense, useRef, useState, useEffect } from 'react'
 import { Canvas } from '@react-three/fiber'
 import Staging from '../staging/StagingPillBottle'
 import font from "../../../../assets/fonts/Brunson_Regular.json";
+import Loader3D from '../../../../components/Loader';
 
 // Componente para píldoras individuales movibles
 function MovablePill({ nodes, materials, pillNumber, initialPosition, onDrag }) {
@@ -207,8 +208,9 @@ export default function Scene() {
   }, [])
 
   return (
-    <Suspense fallback={<Loader />}>
-      <Canvas shadows camera={{ position:[0, -5, 50],  fov: 80 }}>
+    <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+      <Suspense fallback={<Loader3D message="Cargando frasco de pastillas..." />}>
+        <Canvas shadows camera={{ position:[0, -5, 50],  fov: 80 }}>
         <OrbitControls
           makeDefault
           target={[0, -8, 0]}  
@@ -380,5 +382,6 @@ export default function Scene() {
         </Bounds>
       </Canvas>
     </Suspense>
+    </div>
   )
 }
