@@ -94,7 +94,7 @@ function BodyCough(props) {
             Gracias por continuar navegando. A continuación, encontrarás los síntomas más comunes de la EPOC. 
             Esperamos que esta información te sea útil para identificar señales tempranas de la enfermedad y buscar atención médica oportuna si experimenta
             alguno de los sintomas. <nr/>
-            <strong>Puedes hacer click en el modelo para cambiar el entorno y puedes presionar la tecla "A" para activar el audio del modelo.</strong>
+            <strong>Haz Click en el entorno para cambiar el ambiente.</strong>
           </p>
         </div>
       </Html>
@@ -189,8 +189,8 @@ export default function Scene() {
           shadows={true}
         >
           <OrbitControls
-            enableRotate={true}
-            enableZoom={true}       
+            enableRotate={false}
+            enableZoom={false}       
             enablePan={false}      
             target={[0, 0, 0]}   
             maxPolarAngle={Math.PI / 2} 
@@ -198,7 +198,7 @@ export default function Scene() {
 
           />
           <Lights />
-          <Text textSintoma={"Presiona la tecla C"} />
+          <Text textSintoma={"Tos persistente"} />
           <Soporte/>
           <Staging/>
           <BodyCough
@@ -207,6 +207,37 @@ export default function Scene() {
             rotation={[1.5, 0, 0]}  
           />
         </Canvas>
+        <div
+        style={{
+          position: "absolute",
+          bottom: "18px",
+          right: "19px",
+          backgroundColor: "rgba(0, 0, 0, 0.6)",
+          color: "white",
+          padding: "0.4rem 1rem",
+          borderRadius: "0.5rem",
+          fontSize: "0.9rem",
+          zIndex: 10,
+        }}
+      >
+        💡 Presiona la tecla "C" <br />
+      </div>
+
+      <div
+        style={{
+          position: "absolute",
+          top: "18px",
+          left: "19px",
+          backgroundColor: "rgba(0, 0, 0, 0.6)",
+          color: "white",
+          padding: "0.4rem 1rem",
+          borderRadius: "0.5rem",
+          fontSize: "0.9rem",
+          zIndex: 10,
+        }}
+      >
+        💡 Presiona la tecla "A", para activar el sonido
+      </div>
       </Suspense>
     );
   }

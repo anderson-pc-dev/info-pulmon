@@ -161,7 +161,7 @@ const QuizGame3D = () => {
     <div style={{ width: '100vw', height: '100vh', position: 'relative' }}>
       <Canvas
         shadows
-        camera={{ position: [0, 4, 30], fov: 60 }}
+        camera={{ position: [0, 4, 40], fov: 60 }}
         gl={{ antialias: true }}
       >
         <Staging />
@@ -326,7 +326,7 @@ const QuizGame3D = () => {
           />
 
           <Esphere
-            position={[0, 15, 21]}
+            position={[0, 15, 27]}
             onCollision={handleCollisionWithOption}
             disabled={answerLocked}
           />
