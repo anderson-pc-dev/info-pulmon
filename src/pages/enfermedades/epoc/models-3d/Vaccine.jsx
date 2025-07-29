@@ -1,6 +1,6 @@
 import { useGLTF } from '@react-three/drei'
 import { Canvas, useFrame } from '@react-three/fiber';
-import { Loader, OrbitControls } from "@react-three/drei";
+import { OrbitControls } from "@react-three/drei";
 import { Suspense, useRef, useState, useEffect } from "react";
 import { Physics } from '@react-three/rapier';
 import { CuboidCollider, RigidBody } from "@react-three/rapier";
@@ -9,6 +9,7 @@ import Lights from '../lights/LightsVaccine';
 import Soporte from '../models-3d/SoporteVaccine'; 
 import Staging from '../staging/StagingVaccine';
 import Text from '../texts/TextTratamiento';
+import Loader3D from '../../../../components/Loader';
 
 function Vaccine(props) {
   const { nodes, materials } = useGLTF('/models-3d/Vaccine.glb')
@@ -158,8 +159,8 @@ export default function Scene() {
   }
 
   return (
-    <>
-      <Suspense fallback={<Loader />}>
+    <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+      <Suspense fallback={<Loader3D message="Cargando vacuna..." />}>
         <Canvas
           camera={{ position: [10, 10, 38], fov: 40 }}  
           shadows={true}
@@ -189,6 +190,8 @@ export default function Scene() {
           {showWelcome && <WelcomeMessage onRestore={handleRestore} />}
         </Canvas>
       </Suspense>
-    </>
+    </div>
   );
 }
+
+useGLTF.preload('/models-3d/Vaccine.glb')

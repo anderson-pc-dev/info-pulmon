@@ -1,5 +1,5 @@
 /* eslint-disable react/no-unknown-property */
-import { useGLTF, Loader, OrbitControls, Image } from "@react-three/drei";
+import { useGLTF, OrbitControls, Image } from "@react-three/drei";
 import { Canvas, useThree } from "@react-three/fiber";
 import { Suspense, useRef, useEffect, useState, use } from "react";
 import { Perf } from "r3f-perf";
@@ -8,6 +8,7 @@ import Recipient from "./RecipientTratamiento"; // Importa el componente Recipie
 import Staging from "./StagingQueEs";
 import TextMark from "./TextClick"; // Importa el componente Text
 import Text3Dinfo from "./Text3Dinfo"; // Importa el componente Text3Dinfo
+import Loader3D from '../../components/Loader';
 import ManejoCamara from "./ManejoCamara"; // Importa el componente ManejoCamara
 import HtmlQuestion from "./HtmlQuestion";
 import HtmlInfo from "./HtmlInfo"; // Importa el componente HtmlInfo
@@ -91,8 +92,9 @@ const PiantModel = (props) => {
 
   const info = `Al presionar la tecla 'P' o darle clic en el mismo letrero 3D "presiona P", puedes encontrar más información sobre la Tubercules, además de interactuar con el modelo 3D.`;
   return (
-    <Suspense fallback={<Loader />}>
-      <Canvas camera={{ position: [0, 10, 20] }} shadows={true}>
+    <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+      <Suspense fallback={<Loader3D message="Cargando tratamiento de tuberculosis..." />}>
+        <Canvas camera={{ position: [0, 10, 20] }} shadows={true}>
         {/* <Perf /> */}
         <OrbitControls target={[0, 10, 10]} />
         <ManejoCamara sm={showMessage}/>
@@ -112,6 +114,7 @@ const PiantModel = (props) => {
         )}
       </Canvas>
     </Suspense>
+    </div>
   );
 };
 

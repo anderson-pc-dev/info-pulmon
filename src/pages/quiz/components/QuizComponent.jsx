@@ -4,12 +4,13 @@ import { Canvas } from '@react-three/fiber'
 import { Physics, RigidBody } from '@react-three/rapier'
 import { Html, OrbitControls} from '@react-three/drei'
 import { useQuizLogic } from './QuizLogic'
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState, useRef, Suspense } from 'react'
 import { useNavigate } from 'react-router'
 import Esphere from './Esphere'
 import Staging from '../../enfermedades/epoc/staging/StagingQuiz'
 import OptionCubes from './OptionCubes'
 import QuizHelpModal from './QuizHelpModal'
+import Loader3D from '../../../components/Loader'
 
 import './QuizComponent.scss'
 
@@ -159,11 +160,12 @@ const QuizGame3D = () => {
 
   return (
     <div style={{ width: '100vw', height: '100vh', position: 'relative' }}>
-      <Canvas
-        shadows
-        camera={{ position: [0, 4, 30], fov: 60 }}
-        gl={{ antialias: true }}
-      >
+      <Suspense fallback={<div style={{position: 'absolute', top: 0, left: 0, width: '100%', height: '100%'}}><Loader3D message="Cargando quiz 3D..." /></div>}>
+        <Canvas
+          shadows
+          camera={{ position: [0, 4, 40], fov: 60 }}
+          gl={{ antialias: true }}
+        >
         <Staging />
         <ambientLight intensity={0.5} />
         <directionalLight position={[10, 20, 10]} intensity={1.5} castShadow />
@@ -326,7 +328,7 @@ const QuizGame3D = () => {
           />
 
           <Esphere
-            position={[0, 15, 21]}
+            position={[0, 15, 27]}
             onCollision={handleCollisionWithOption}
             disabled={answerLocked}
           />
@@ -346,6 +348,7 @@ const QuizGame3D = () => {
           maxAzimuthAngle={Math.PI / 5}
         />
       </Canvas>
+      </Suspense>
 
       <div style={{
         position: 'absolute',

@@ -1,13 +1,16 @@
+/* eslint-disable react/no-unknown-property */
 import { useEffect, useRef, useState } from 'react'
 import { useGLTF, useAnimations } from '@react-three/drei'
 import { Canvas, useFrame } from '@react-three/fiber';
-import { Loader, OrbitControls, Html } from "@react-three/drei";
+import { OrbitControls, Html } from "@react-three/drei";
 import { CuboidCollider, RigidBody } from "@react-three/rapier";
 import { Physics, vec3 } from '@react-three/rapier';
 import { Suspense } from "react";
 import Lights from '../lights/Lights';  
 import Soporte from '../models-3d/Soporte'; 
 import Text from '../texts/TextLungTranspa'; 
+import Staging from '../staging/Staging1'; 
+import Loader3D from '../../../../components/Loader'; 
 
 function LungModel(props) {
   const group = useRef()
@@ -25,11 +28,16 @@ function LungModel(props) {
   })
 
   const [showInstructions, setShowInstructions] = useState(false)
+  const [isPaused, setIsPaused] = useState(false)
 
   useEffect(() => {
-    actions.Beating.play()
+    if (isPaused) {
+      actions.Beating.stop()
+    } else {
+      actions.Beating.play()
+    }
     return () => actions.Beating.stop()
-  }, [actions.Beating])
+  }, [actions.Beating, isPaused]) 
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -115,7 +123,11 @@ function LungModel(props) {
         restitution={0.7} 
         enabledRotations={[true, true, true]}
       >
-        <group ref={group} {...props} dispose={null}>
+        <group ref={group} {...props} dispose={null}onClick={(e) => {
+            e.stopPropagation()
+            setIsPaused(!isPaused)
+          }}
+        >
           <group name="Scene">
             <mesh
               name="RightLung"
@@ -148,7 +160,16 @@ function LungModel(props) {
               material={materials.LeftLungMaterial}
               morphTargetDictionary={nodes.LeftLung.morphTargetDictionary}
               morphTargetInfluences={nodes.LeftLung.morphTargetInfluences}
-            />
+            >
+              <meshStandardMaterial 
+                attach="material"
+                color="#333333"  
+                opacity={0.5}    
+                transparent={true}
+                roughness={0.7}
+                metalness={0.1}
+              />
+            </mesh>
             <mesh
               name="ThyrocricoidLigament"
               castShadow
@@ -228,18 +249,20 @@ useGLTF.preload('/models-3d/Lung-Transparent.glb');
 
 export default function Scene() {
   return (
-    <Suspense fallback={<Loader />}>
-      <Canvas
-        camera={{ position: [0, -5, 5], fov: 80 }}
-        shadows={true}>
+    <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+      <Suspense fallback={<Loader3D message="Cargando pulmón..." />}>
+        <Canvas
+          camera={{ position: [0, -5, 5], fov: 80 }}
+          shadows={true}>
         <OrbitControls
           enableRotate={true}
           enableZoom={true}
           enablePan={false}
           target={[0, -6.5, -8]}
         />
-        <Text textSintoma={"Presiona la tecla C"}/>
+        <Text textSintoma={"Pulmon Enfermo"}/>
         <Lights />
+        <Staging />
         <Physics gravity={[0, -9.81, 0]}>
           <Soporte />
           <LungModel 
@@ -249,6 +272,38 @@ export default function Scene() {
           />
         </Physics>
       </Canvas>
+      <div
+        style={{
+          position: "absolute",
+          bottom: "18px",
+          right: "19px",
+          backgroundColor: "rgba(0, 0, 0, 0.6)",
+          color: "white",
+          padding: "0.4rem 1rem",
+          borderRadius: "0.5rem",
+          fontSize: "0.9rem",
+          zIndex: 10,
+        }}
+      >
+        💡 Presiona la tecla "C" <br />
+      </div>
+
+      <div
+        style={{
+          position: "absolute",
+          top: "18px",
+          left: "19px",
+          backgroundColor: "rgba(0, 0, 0, 0.6)",
+          color: "white",
+          padding: "0.4rem 1rem",
+          borderRadius: "0.5rem",
+          fontSize: "0.9rem",
+          zIndex: 10,
+        }}
+      >
+        🖱️ Haz click en el modelo
+      </div>
     </Suspense>
+    </div>
   )
 }

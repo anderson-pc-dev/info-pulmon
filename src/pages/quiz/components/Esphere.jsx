@@ -34,7 +34,7 @@ const BallWithAim = ({ onCollision, ...props }) => {
     const spherePos = new Vector3(origin.x, origin.y, origin.z);
     raycaster.setFromCamera(mouse, camera);
     const direction = raycaster.ray.direction.clone().normalize();
-    const force = 480; 
+    const force = 150; 
 
     sphereRef.current.wakeUp();
     sphereRef.current.applyImpulse(
@@ -47,7 +47,7 @@ const BallWithAim = ({ onCollision, ...props }) => {
     );
 
     setTimeout(() => {
-      sphereRef.current.setTranslation({ x: 0, y: 10, z: 15 }, true);
+      sphereRef.current.setTranslation({ x: 0, y: 10, z: 27 }, true);
       sphereRef.current.setLinvel({ x: 0, y: 0, z: 0 }, true);
       sphereRef.current.setAngvel({ x: 0, y: 0, z: 0 }, true);
       sphereRef.current.wakeUp();
@@ -90,7 +90,11 @@ const BallWithAim = ({ onCollision, ...props }) => {
         onCollisionEnter={handleCollisionEnter}
         {...props}
       >
-        <group onPointerDown={handlePointerDown} rotation={[-Math.PI / 2, 0, 0]}>
+        <group 
+          onPointerDown={handlePointerDown} 
+          rotation={[-Math.PI / 2, 0, 0]}
+          scale={[0.6, 0.6, 0.6]} 
+        >
           <mesh
             castShadow
             receiveShadow

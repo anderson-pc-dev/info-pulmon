@@ -1,12 +1,13 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useGLTF, useAnimations } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber';
-import {Loader,OrbitControls,Html,PositionalAudio} from "@react-three/drei";
+import {OrbitControls,Html,PositionalAudio} from "@react-three/drei";
 import { Suspense } from "react";
 import Lights from '../lights/Lights';  
 import Soporte from '../models-3d/SoporteBody'; 
 import Staging from '../staging/Staging';
 import Text from '../texts/TextSintoma'; 
+import Loader3D from '../../../../components/Loader'; 
 
 function BodyCough(props) {
     const group = useRef()
@@ -94,7 +95,7 @@ function BodyCough(props) {
             Gracias por continuar navegando. A continuación, encontrarás los síntomas más comunes de la EPOC. 
             Esperamos que esta información te sea útil para identificar señales tempranas de la enfermedad y buscar atención médica oportuna si experimenta
             alguno de los sintomas. <nr/>
-            <strong>Puedes hacer click en el modelo para cambiar el entorno y puedes presionar la tecla "A" para activar el audio del modelo.</strong>
+            <strong>Haz Click en el entorno para cambiar el ambiente.</strong>
           </p>
         </div>
       </Html>
@@ -183,14 +184,15 @@ useGLTF.preload('/models-3d/Body-Cough.glb')
 
 export default function Scene() {
     return (
-      <Suspense fallback={<Loader />}>
-        <Canvas
-          camera={{ position: [0, 1, 5], fov: 50 }}  
-          shadows={true}
-        >
+      <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+        <Suspense fallback={<Loader3D message="Cargando cuerpo con tos..." />}>
+          <Canvas
+            camera={{ position: [0, 1, 5], fov: 50 }}  
+            shadows={true}
+          >
           <OrbitControls
-            enableRotate={true}
-            enableZoom={true}       
+            enableRotate={false}
+            enableZoom={false}       
             enablePan={false}      
             target={[0, 0, 0]}   
             maxPolarAngle={Math.PI / 2} 
@@ -198,7 +200,7 @@ export default function Scene() {
 
           />
           <Lights />
-          <Text textSintoma={"Presiona la tecla C"} />
+          <Text textSintoma={"Tos persistente"} />
           <Soporte/>
           <Staging/>
           <BodyCough
@@ -207,6 +209,38 @@ export default function Scene() {
             rotation={[1.5, 0, 0]}  
           />
         </Canvas>
+        <div
+        style={{
+          position: "absolute",
+          bottom: "18px",
+          right: "19px",
+          backgroundColor: "rgba(0, 0, 0, 0.6)",
+          color: "white",
+          padding: "0.4rem 1rem",
+          borderRadius: "0.5rem",
+          fontSize: "0.9rem",
+          zIndex: 10,
+        }}
+      >
+        💡 Presiona la tecla "C" <br />
+      </div>
+
+      <div
+        style={{
+          position: "absolute",
+          top: "18px",
+          left: "19px",
+          backgroundColor: "rgba(0, 0, 0, 0.6)",
+          color: "white",
+          padding: "0.4rem 1rem",
+          borderRadius: "0.5rem",
+          fontSize: "0.9rem",
+          zIndex: 10,
+        }}
+      >
+        💡 Presiona la tecla "A", para activar el sonido
+      </div>
       </Suspense>
+      </div>
     );
   }

@@ -1,9 +1,10 @@
 /* eslint-disable react/no-unknown-property */
 import { Suspense, useEffect, useRef, useState } from 'react'
-import { useGLTF, useAnimations, OrbitControls, Loader, Text } from '@react-three/drei'
+import { useGLTF, useAnimations, OrbitControls, Text } from '@react-three/drei'
 import Soporte from './Soporte'
 import { Canvas, useFrame } from '@react-three/fiber'
 import LightsLungHeart from './LightsLungHeart'
+import Loader3D from '../../../../components/Loader'
 import './RotateInhaler.scss'
 
 export function LungsHeart(props) {
@@ -247,8 +248,8 @@ export default function Scene() {
     }
 
     return (
-        <>
-            <Suspense fallback={<Loader />}>
+        <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+            <Suspense fallback={<Loader3D message="Cargando pulmones y corazón..." />}>
                 <Canvas camera={{ position: [0, -11.6, 3], fov: 40 }} shadows={true}>
                     <OrbitControls enableRotate enableZoom={false} enablePan={false} target={[0, -11.6, 0]} />
                     <LightsLungHeart />
@@ -282,7 +283,7 @@ export default function Scene() {
                     💡 Haz clic en el modelo para rotarlo
                 </div>
             )}
-        </>
+        </div>
     )
 }
 
