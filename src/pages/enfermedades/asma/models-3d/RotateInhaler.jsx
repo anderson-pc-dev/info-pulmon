@@ -2,12 +2,13 @@
 /* eslint-disable react/no-unknown-property */
 import { useRef, Suspense, useState, useEffect } from 'react'
 import { useFrame, Canvas } from '@react-three/fiber'
-import { Center, Loader, OrbitControls, Text3D, Html } from '@react-three/drei'
+import { Center, OrbitControls, Text3D, Html } from '@react-three/drei'
 import { Inhaler } from './Inhaler'
 import Soporte from './Base'
 import StagingInhaler from '../staging/StagingInhaler'
 import Lights from './LightsBreathingHard'
 import font from "../../../../assets/fonts/Brunson_Regular.json";
+import Loader3D from '../../../../components/Loader';
 
 import './RotateInhaler.scss'
 
@@ -54,8 +55,8 @@ export default function Scene() {
   }, [])
 
   return (
-    <>
-      <Suspense fallback={<Loader />}>
+    <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+      <Suspense fallback={<Loader3D message="Cargando inhalador..." />}>
         <Canvas
           camera={{ position: [0, -9.5, 4], fov: 50 }}
           shadows
@@ -156,6 +157,6 @@ export default function Scene() {
       <div className="info-hint">
         Presiona <strong>S</strong> para ver información sobre los inhaladores
       </div>
-    </>
+    </div>
   )
 }

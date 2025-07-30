@@ -54,6 +54,7 @@ const BallWithAim = ({ onCollision, ...props }) => {
 
     setTimeout(() => {
       sphereRef.current.setTranslation({ x: 0, y: 10, z: 27 }, true);
+      sphereRef.current.setTranslation({ x: 0, y: 10, z: 27 }, true);
       sphereRef.current.setLinvel({ x: 0, y: 0, z: 0 }, true);
       sphereRef.current.setAngvel({ x: 0, y: 0, z: 0 }, true);
       sphereRef.current.wakeUp();
@@ -96,6 +97,11 @@ const BallWithAim = ({ onCollision, ...props }) => {
         onCollisionEnter={handleCollisionEnter}
         {...props}
       >
+        <group 
+          onPointerDown={handlePointerDown} 
+          rotation={[-Math.PI / 2, 0, 0]}
+          scale={[0.6, 0.6, 0.6]} 
+        >
         <group 
           onPointerDown={handlePointerDown} 
           rotation={[-Math.PI / 2, 0, 0]}

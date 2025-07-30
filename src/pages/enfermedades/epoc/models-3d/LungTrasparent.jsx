@@ -1,7 +1,8 @@
+/* eslint-disable react/no-unknown-property */
 import { useEffect, useRef, useState } from 'react'
 import { useGLTF, useAnimations } from '@react-three/drei'
 import { Canvas, useFrame } from '@react-three/fiber';
-import { Loader, OrbitControls, Html } from "@react-three/drei";
+import { OrbitControls, Html } from "@react-three/drei";
 import { CuboidCollider, RigidBody } from "@react-three/rapier";
 import { Physics, vec3 } from '@react-three/rapier';
 import { Suspense } from "react";
@@ -9,6 +10,7 @@ import Lights from '../lights/Lights';
 import Soporte from '../models-3d/Soporte'; 
 import Text from '../texts/TextLungTranspa'; 
 import Staging from '../staging/Staging1'; 
+import Loader3D from '../../../../components/Loader'; 
 
 function LungModel(props) {
   const group = useRef()
@@ -247,10 +249,11 @@ useGLTF.preload('/models-3d/Lung-Transparent.glb');
 
 export default function Scene() {
   return (
-    <Suspense fallback={<Loader />}>
-      <Canvas
-        camera={{ position: [0, -5, 5], fov: 80 }}
-        shadows={true}>
+    <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+      <Suspense fallback={<Loader3D message="Cargando pulmón..." />}>
+        <Canvas
+          camera={{ position: [0, -5, 5], fov: 80 }}
+          shadows={true}>
         <OrbitControls
           enableRotate={true}
           enableZoom={true}
@@ -301,5 +304,6 @@ export default function Scene() {
         🖱️ Haz click en el modelo
       </div>
     </Suspense>
+    </div>
   )
 }

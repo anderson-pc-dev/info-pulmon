@@ -1,5 +1,5 @@
 /* eslint-disable react/no-unknown-property */
-import { useGLTF, Loader, OrbitControls, useAnimations, Image } from "@react-three/drei";
+import { useGLTF, OrbitControls, useAnimations, Image } from "@react-three/drei";
 import { Canvas, useThree } from "@react-three/fiber";
 import { Suspense, useRef, useEffect, useState, use } from "react";
 import { Perf } from "r3f-perf";
@@ -9,6 +9,7 @@ import Staging from "./StagingQueEs";
 import ManejoCamara from "./ManejoCamaraPrevencion"; // Importa el componente ManejoCamara
 import HtmlQuestion from "./HtmlQuestion";
 import HtmlInfo from "./HtmlInfo"; // Importa el componente HtmlInfo
+import Loader3D from '../../components/Loader';
 //Modelo 3d "QUE ES LA TUBERCULOSIS"
 const Model = (props) => {
   const group = useRef()
@@ -338,8 +339,9 @@ const PiantModel = (props) => {
 
   const info = `Al presionar las teclas '1', '2' o '3', puedes hacer zoom a cada modelo 3D respectivamente.`;
   return (
-    <Suspense fallback={<Loader />}>
-      <Canvas camera={{ position: [0, 10, 40] }} shadows={true}>
+    <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+      <Suspense fallback={<Loader3D message="Cargando prevención de tuberculosis..." />}>
+        <Canvas camera={{ position: [0, 10, 40] }} shadows={true}>
         {/* <Perf /> */}
         <OrbitControls target={[0, 10, 10]} />
         <ManejoCamara val={mensajeinformativo}/>
@@ -375,6 +377,7 @@ const PiantModel = (props) => {
         )}
       </Canvas>
     </Suspense>
+    </div>
   );
 };
 

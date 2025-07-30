@@ -1,9 +1,13 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable react/prop-types */
+/* eslint-disable react/no-unknown-property */
 import { useGLTF } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber';
-import { Loader, OrbitControls } from "@react-three/drei";
+import { OrbitControls } from "@react-three/drei";
 import { Suspense, useState, useEffect, useRef } from "react";
 import Lights from '../lights/LightsBronchi';  
 import { Physics, RigidBody, CuboidCollider } from '@react-three/rapier';
+import Loader3D from '../../../../components/Loader';
 
 function PodiumModel(props) {
   const { nodes, materials } = useGLTF('/models-3d/winner_podium.glb');
@@ -124,11 +128,12 @@ export default function Scene() {
   }, []);
 
   return (
-    <Suspense fallback={<Loader />}>
-      <Canvas
-        camera={{ position: [0, 2, 5], fov: 60 }}
-        shadows={true}
-      >
+    <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+      <Suspense fallback={<Loader3D message="Cargando podium..." />}>
+        <Canvas
+          camera={{ position: [0, 2, 5], fov: 60 }}
+          shadows={true}
+        >
         <OrbitControls
           enableRotate={false}
           enableZoom={false}
@@ -155,5 +160,6 @@ export default function Scene() {
         </Physics>
       </Canvas>
     </Suspense>
+    </div>
   );
 }

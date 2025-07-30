@@ -1,12 +1,16 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable no-undef */
+/* eslint-disable react/no-unknown-property */
 import {useEffect, useState } from 'react';
 import { useGLTF } from '@react-three/drei';
 import { Canvas, useFrame } from '@react-three/fiber';
-import {Loader,OrbitControls, Html} from "@react-three/drei";
+import {OrbitControls, Html} from "@react-three/drei";
 import { Suspense, useRef } from "react";
 import Lights from '../lights/LightsBronchi';  
 import Soporte from '../models-3d/SoporteBronchi'; 
 import Staging from '../staging/StagingBronchi';
 import Text from '../texts/TextPrevencion';
+import Loader3D from '../../../../components/Loader';
 
 function LungBronchi(props) {
   const { nodes, materials } = useGLTF('/models-3d/Lung-Bronchi.glb')
@@ -94,11 +98,12 @@ export default function Scene() {
   }
 
   return (
-    <Suspense fallback={<Loader />}>
-      <Canvas
-        camera={{ position: [0, 0, 12], fov: 90 }}  
-        shadows={true}
-      >
+    <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+      <Suspense fallback={<Loader3D message="Cargando bronquios..." />}>
+        <Canvas
+          camera={{ position: [0, 0, 12], fov: 90 }}  
+          shadows={true}
+        >
         <OrbitControls
           enableRotate={true}
           enableZoom={true}       
@@ -146,6 +151,7 @@ export default function Scene() {
                 Gracias por continuar navegando. A continuación, encontrarás información clave sobre la prevención y los cuidados esenciales de la EPOC.
                 Te invitamos a conocer cómo puedes reducir los factores de riesgo y mejorar tu calidad de vida si ya has sido diagnosticado con esta enfermedad.
                 <br/>
+                <strong>Puedes presionar la tecla &quot;A&quot; para detener la animación del modelo.</strong>
               </p>
               <button 
                 onClick={() => setShowMessage(false)}
@@ -197,5 +203,6 @@ export default function Scene() {
         💡 Presiona la tecla "A" para detener la animacion
       </div>
     </Suspense>
+    </div>
   );
 }

@@ -1,5 +1,5 @@
 /* eslint-disable react/no-unknown-property */
-import { useGLTF, Loader, OrbitControls, useAnimations  } from "@react-three/drei";
+import { useGLTF, OrbitControls, useAnimations  } from "@react-three/drei";
 import { Canvas, useThree } from "@react-three/fiber";
 import { Suspense, useRef, useEffect, useState, use } from "react";
 import { Perf } from "r3f-perf";
@@ -9,6 +9,7 @@ import Staging from "./StagingQueEs";
 import TextMark from "./TextClick"; // Importa el componente Text
 import Text3Dinfo from "./Text3Dinfo"; // Importa el componente Text3Dinfo
 import ManejoCamara from "./ManejoCamara"; // Importa el componente ManejoCamara
+import Loader3D from '../../components/Loader';
 //Modelo 3d "QUE ES LA TUBERCULOSIS"
 const Model = (props) => {
     const group = useRef()
@@ -230,8 +231,9 @@ const PiantModelSintomas = (props) => {
   });
     
   return (
-    <Suspense fallback={<Loader />}>
-      <Canvas camera={{ position: [0, 10, 20] }} shadows={true}>
+    <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+      <Suspense fallback={<Loader3D message="Cargando síntomas de tuberculosis..." />}>
+        <Canvas camera={{ position: [0, 10, 20] }} shadows={true}>
         {/* <Perf /> */}
         <OrbitControls target={[0, 10, 10]} />
         <ManejoCamara sm={showMessage}/>
@@ -259,6 +261,7 @@ const PiantModelSintomas = (props) => {
           />
       </Canvas>
     </Suspense>
+    </div>
   );
 };
 
