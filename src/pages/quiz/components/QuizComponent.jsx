@@ -118,7 +118,7 @@ const QuizGame3D = () => {
       setHighlightedOption(targetName);
       // No sabemos si es correcto hasta terminar todas
       setTimeout(() => {
-        handleAnswerSelect(targetName);
+        const answerData = handleAnswerSelect(targetName);
         setHighlightedOption(null);
         setIsCorrectAnswer(null);
         setAnswerLocked(false);
@@ -129,7 +129,7 @@ const QuizGame3D = () => {
             if (currentQuestionIndex < totalQuestions - 1) {
               goToNextQuestion();
             } else {
-              goToQuizEnd();
+              goToQuizEnd(answerData);
             }
             hasAnsweredRef.current = false;
           }, 2200);
@@ -144,14 +144,14 @@ const QuizGame3D = () => {
       setHighlightedOption(targetName);
       setIsCorrectAnswer(isCorrect);
       setTimeout(() => {
-        handleAnswerSelect(targetName);
+        const answerData = handleAnswerSelect(targetName);
         setHighlightedOption(null);
         setIsCorrectAnswer(null);
         setAnswerLocked(false);
         if (currentQuestionIndex < totalQuestions - 1) {
           goToNextQuestion();
         } else {
-          goToQuizEnd();
+          goToQuizEnd(answerData);
         }
         hasAnsweredRef.current = false;
       }, 3000);
