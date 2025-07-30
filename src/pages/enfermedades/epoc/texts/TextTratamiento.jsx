@@ -2,9 +2,9 @@ import { Text3D, Center } from "@react-three/drei";
 import aliceFont from "../../../../assets/fonts/Brunson_Regular.json";
 
 const TextTratamiento = ({ 
-  text = "Presiona la tecla C", 
-  position = [0, 12, -3], 
-  rotation = [0, 0.25, 0],
+  text = "¡Haz click!", 
+  position = [10, 12, -3], 
+  rotation = [0, 0.18 , 0],
   color = "#005089",
   depth = 0.5,
   onClick,

@@ -12,8 +12,8 @@ const LightsVaccine = () => {
     
 
       <directionalLight
-        position={[22, 24, -8]} 
-        intensity={7}
+        position={[5, 20, 35]} 
+        intensity={2}
         //ref={directionalLightRef}
         castShadow={true}
         shadow-mapSize-width={2048} 

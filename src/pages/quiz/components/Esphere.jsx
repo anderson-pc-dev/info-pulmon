@@ -1,12 +1,12 @@
-/* eslint-disable react/no-unknown-property */
 import { RigidBody } from "@react-three/rapier";
 import { useRef, useCallback, useState, useEffect } from "react";
 import { useThree, useFrame } from "@react-three/fiber";
 import { Vector3, Raycaster } from "three";
-import { Line, useGLTF } from "@react-three/drei";
+import { Line, useGLTF, PositionalAudio } from "@react-three/drei";
 
 const BallWithAim = ({ onCollision, ...props }) => {
   const sphereRef = useRef();
+  const audioRef = useRef();
   const { camera, mouse, gl } = useThree();
   const [isAiming, setIsAiming] = useState(false);
   const [linePoints, setLinePoints] = useState([]);
@@ -30,11 +30,17 @@ const BallWithAim = ({ onCollision, ...props }) => {
     setIsAiming(false);
     setLinePoints([]);
 
+    // Reproducir sonido de patada
+    if (audioRef.current) {
+      audioRef.current.stop(); 
+      audioRef.current.play();
+    }
+
     const origin = sphereRef.current.translation();
     const spherePos = new Vector3(origin.x, origin.y, origin.z);
     raycaster.setFromCamera(mouse, camera);
     const direction = raycaster.ray.direction.clone().normalize();
-    const force = 150; 
+    const force = 130; 
 
     sphereRef.current.wakeUp();
     sphereRef.current.applyImpulse(
@@ -106,6 +112,13 @@ const BallWithAim = ({ onCollision, ...props }) => {
             receiveShadow
             geometry={nodes.Object_3.geometry}
             material={materials.White_s}
+          />
+          <PositionalAudio
+            ref={audioRef}
+            url="/sounds/ball.mp3" 
+            autoplay={false}
+            distance={10}
+            loop={false}
           />
         </group>
       </RigidBody>

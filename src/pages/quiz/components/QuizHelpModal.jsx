@@ -90,7 +90,7 @@ const QuizHelpModal = ({ isOpen, onClose }) => {
               </div>
               <div className="rule-item">
                 <span className="rule-icon">⏱️</span>
-                <span>20 minutos límite</span>
+                <span>10 minutos límite</span>
               </div>
               <div className="rule-item">
                 <span className="rule-icon">🎯</span>
