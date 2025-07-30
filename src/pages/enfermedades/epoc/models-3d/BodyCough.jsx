@@ -212,8 +212,8 @@ export default function Scene() {
         <div
         style={{
           position: "absolute",
-          bottom: "18px",
-          right: "19px",
+          bottom: "5px",
+          right: "5px",
           backgroundColor: "rgba(0, 0, 0, 0.6)",
           color: "white",
           padding: "0.4rem 1rem",
@@ -228,8 +228,8 @@ export default function Scene() {
       <div
         style={{
           position: "absolute",
-          top: "18px",
-          left: "19px",
+          top: "5px",
+          left: "5px",
           backgroundColor: "rgba(0, 0, 0, 0.6)",
           color: "white",
           padding: "0.4rem 1rem",

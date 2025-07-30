@@ -1,19 +1,17 @@
-import { useGLTF } from '@react-three/drei'
-import { Canvas, useFrame } from '@react-three/fiber';
-import { OrbitControls } from "@react-three/drei";
-import { Suspense, useRef, useState, useEffect } from "react";
-import { Physics } from '@react-three/rapier';
-import { CuboidCollider, RigidBody } from "@react-three/rapier";
-import {Html} from "@react-three/drei";
-import Lights from '../lights/LightsVaccine';  
-import Soporte from '../models-3d/SoporteVaccine'; 
-import Staging from '../staging/StagingVaccine';
-import Text from '../texts/TextTratamiento';
+import { useGLTF, Html } from '@react-three/drei'
+import { Canvas, useFrame } from '@react-three/fiber'
+import { Loader, OrbitControls } from "@react-three/drei"
+import { Suspense, useRef, useState, useEffect } from "react"
+import Lights from '../lights/LightsVaccine'
+import Soporte from '../models-3d/SoporteVaccine'
+import Staging from '../staging/StagingVaccine'
+import Text from '../texts/TextTratamiento'
+import { Physics } from '@react-three/cannon'
 import Loader3D from '../../../../components/Loader';
 
-function Vaccine(props) {
-  const { nodes, materials } = useGLTF('/models-3d/Vaccine.glb')
-  
+// Modelo de la Cara
+function FaceModel(props) {
+  const { nodes, materials } = useGLTF('/models-3d/face1.glb')
   const groupRef = useRef()
   return (
     <group ref={groupRef} {...props} dispose={null}>
@@ -113,73 +111,25 @@ function InhalerModel({ animate, reset, ...props }) {
         />
       )}
     </group>
-    <CuboidCollider
-      args={[1.3, 10, 1]} 
-      position={[-1, 5, 0]} 
-    />
-    </RigidBody>
   )
 }
 
-useGLTF.preload('/models-3d/Vaccine.glb')
-
-function WelcomeMessage({ onRestore }) {
-  return (
-    <Html center position={[0, 2, 0]}>
-      <div style={{
-          background: 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)',
-          padding: '20px',
-          borderRadius: '15px',
-          color: '#2c3e50',
-          width: '320px',
-          textAlign: 'center',
-          boxShadow: '0 4px 20px rgba(0,0,0,0.15)',
-          border: '1px solid rgba(255,255,255,0.3)'
-      }}>
-        <h2 style={{
-            margin: '0 0 15px 0',
-            color: '#3498db',
-            fontSize: '1.5em',
-            fontWeight: '600'
-          }}>¡Bienvenido!</h2>
-        <p style={{
-            marginBottom: '15px',
-            lineHeight: '1.5'
-          }}>A continuación encontrarás los tratamientos más efectivos para el manejo de la EPOC, 
-    organizados en tres pilares fundamentales: las modificaciones en tu estilo de vida 
-    que marcarán la diferencia, los medicamentos esenciales que te ayudarán a controlar 
-    los síntomas, y las señales de alerta que nunca debes ignorar.
-    Explora cada sección para descubrir cómo puedes tomar el control de tu EPOC y mejorar 
-    significativamente tu calidad de vida.</p>
-        <button 
-          onClick={onRestore}
-          style={{
-            marginTop: '15px',
-            padding: '8px 16px',
-            backgroundColor: '#4CAF50',
-            color: 'white',
-            border: 'none',
-            borderRadius: '4px',
-            cursor: 'pointer'
-          }}
-        >
-          Restaurar Escena
-        </button>
-      </div>
-    </Html>
-  );
-}
+useGLTF.preload('/models-3d/face1.glb')
+useGLTF.preload('/models-3d/Inhaler1.glb')
 
 export default function Scene() {
-  const [isAnimating, setIsAnimating] = useState(true)
-  const [showWelcome, setShowWelcome] = useState(false)
-  const [resetKey, setResetKey] = useState(0); 
+  const [animate, setAnimate] = useState(false)
+  const [reset, setReset] = useState(false)
+  const [showInstructions, setShowInstructions] = useState(false)
 
+  // Manejar teclado
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key.toLowerCase() === 'c') {
-        setShowWelcome(prev => !prev); 
-        setIsAnimating(prev => !prev); 
+        setShowInstructions(prev => !prev)
+      }
+      if (e.key.toLowerCase() === 'q') {
+        resetScene()
       }
     }
 
@@ -187,82 +137,128 @@ export default function Scene() {
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [])
 
-  const handleTextClick = () => {
-    setShowWelcome(prev => !prev);
-    setIsAnimating(prev => !prev);
-  }
-
-  const handleRestore = () => {
-    setShowWelcome(false)
-    setIsAnimating(true)
-    setResetKey(prev => prev + 1); 
+  const resetScene = () => {
+    setAnimate(false)
+    setReset(prev => !prev) // Cambiamos el estado para forzar el reset
   }
 
   return (
     <div style={{ position: 'relative', width: '100%', height: '100%' }}>
-      <Suspense fallback={<Loader3D message="Cargando vacuna..." />}>
+      <Suspense fallback={<Loader3D message="Cargando escena 3D..." />}>
         <Canvas
-          camera={{ position: [10, 10, 38], fov: 40 }}  
+          camera={{ position: [10, 10, 38], fov: 40 }}
           shadows={true}
         >
           <OrbitControls
             enableRotate={true}
-            enableZoom={true}       
-            enablePan={false}      
-            target={[0, 1, 0]}   
-            maxPolarAngle={Math.PI / 2} 
-            minPolarAngle={0}    
+            enableZoom={true}
+            enablePan={false}
+            target={[0, 1, 0]}
+            maxPolarAngle={Math.PI / 2}
+            minPolarAngle={0}
           />
           <Lights />
           <Physics>
-            <Vaccine
-              key={resetKey} 
-              isAnimating={isAnimating}
-              scale={1.4}            
-              reset={resetKey} 
-              position={[-1, -5, 0]}   
-              rotation={[0, 0, 0]}  
+            <FaceModel
+              scale={0.5}
+              position={[-5.5, -6, -2]}
+              rotation={[0, 0.6, 0]}
             />
-            <Soporte/>
+            <InhalerModel
+              animate={animate}
+              scale={0.8}
+              reset={reset}
+              position={[8, -4.5, 0]}
+              rotation={[0, -0.3, 0]}
+            />
+            <Soporte />
           </Physics>
-          <Text onClick={handleTextClick} />
-          <Staging/>
-          {showWelcome && <WelcomeMessage onRestore={handleRestore} />}
+
+          <Text onClick={() => setAnimate(true)} />
+          <Staging />
+
+          {showInstructions && (
+            <Html center position={[0, 2, 0]}>
+              <div style={{
+                background: 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)',
+                padding: '20px',
+                borderRadius: '15px',
+                color: '#2c3e50',
+                width: '320px',
+                textAlign: 'center',
+                boxShadow: '0 4px 20px rgba(0,0,0,0.15)',
+                border: '1px solid rgba(255,255,255,0.3)'
+              }}>
+                <h2 style={{
+                  margin: '0 0 15px 0',
+                  color: '#3498db',
+                  fontSize: '1.5em',
+                  fontWeight: '600'
+                }}>¡Bienvenido!</h2>
+                <p style={{
+                  marginBottom: '15px',
+                  lineHeight: '1.5'
+                }}>
+                  A continuación encontrarás los tratamientos más efectivos para el manejo de la EPOC, 
+                  organizados en tres pilares fundamentales: las modificaciones en tu estilo de vida 
+                  que marcarán la diferencia, los medicamentos esenciales que te ayudarán a controlar 
+                  los síntomas, y las señales de alerta que nunca debes ignorar.
+                  Explora cada sección para descubrir cómo puedes tomar el control de tu EPOC y mejorar 
+                  significativamente tu calidad de vida.
+                </p>
+                <button 
+                  onClick={resetScene}
+                  style={{
+                    marginTop: '15px',
+                    padding: '8px 16px',
+                    backgroundColor: '#4CAF50',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '4px',
+                    cursor: 'pointer',
+                    transition: 'background-color 0.3s'
+                  }}
+                  onMouseEnter={(e) => e.target.style.backgroundColor = '#45a049'}
+                  onMouseLeave={(e) => e.target.style.backgroundColor = '#4CAF50'}
+                >
+                  Restaurar Escena
+                </button>
+              </div>
+            </Html>
+          )}
         </Canvas>
         <div
-        style={{
-          position: "absolute",
-          bottom: "18px",
-          right: "19px",
-          backgroundColor: "rgba(0, 0, 0, 0.6)",
-          color: "white",
-          padding: "0.4rem 1rem",
-          borderRadius: "0.5rem",
-          fontSize: "0.9rem",
-          zIndex: 10,
-        }}
-      >
-        💡 Presiona la tecla "C" <br />
-      </div>
+          style={{
+            position: "absolute",
+            bottom: "5px",
+            right: "5px",
+            backgroundColor: "rgba(0, 0, 0, 0.6)",
+            color: "white",
+            padding: "0.4rem 1rem",
+            borderRadius: "0.5rem",
+            fontSize: "0.9rem",
+            zIndex: 10,
+          }}
+        >
+          💡 Presiona la tecla "C" <br />
+        </div>
 
-      <div
-        style={{
-          position: "absolute",
-          top: "18px",
-          left: "19px",
-          backgroundColor: "rgba(0, 0, 0, 0.6)",
-          color: "white",
-          padding: "0.4rem 1rem",
-          borderRadius: "0.5rem",
-          fontSize: "0.9rem",
-          zIndex: 10,
-        }}
-      >  
-      Broncodilatadores
-      </div>
+        <div
+          style={{
+            position: "absolute",
+            top: "5px",
+            left: "5px",
+            backgroundColor: "rgba(0, 0, 0, 0.6)",
+            color: "white",
+            padding: "0.4rem 1rem",
+            borderRadius: "0.5rem",
+            fontSize: "0.9rem",
+            zIndex: 10,
+          }}
+        >  
+          Broncodilatadores
+        </div>
       </Suspense>
     </div>
-  );
+  )
 }
-
-useGLTF.preload('/models-3d/Vaccine.glb')
