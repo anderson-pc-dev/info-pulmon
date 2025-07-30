@@ -49,9 +49,13 @@ export const useQuizLogic = () => {
       const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
       return () => clearTimeout(timer);
     } else if (timeLeft === 0 && !quizCompleted) {
-      completeQuiz(score);
+      // Calcular el puntaje final basándose en las respuestas actuales
+      const finalScore = Object.values(userAnswers).reduce((total, answer) => {
+        return total + (answer.isCorrect ? quizConfig.pointsPerQuestion : 0);
+      }, 0);
+      completeQuiz(finalScore);
     }
-  }, [timeLeft, quizCompleted]);
+  }, [timeLeft, quizCompleted, userAnswers]);
 
   // Guardar puntuación final en la API
   const saveQuizScore = async (finalScore, timeSpent) => {
@@ -276,23 +280,25 @@ export const useQuizLogic = () => {
   const handleAnswerSelect = (selectedAnswer) => {
     if (currentQuestion.type !== 'image-match') {
       const isCorrect = selectedAnswer === currentQuestion.correctAnswer;
+      const answerData = {
+        selectedAnswer,
+        isCorrect,
+        question: currentQuestion.question,
+        correctAnswer: currentQuestion.correctAnswer,
+        explanation: currentQuestion.explanation
+      };
       const newAnswers = {
         ...userAnswers,
-        [currentQuestion.id]: {
-          selectedAnswer,
-          isCorrect,
-          question: currentQuestion.question,
-          correctAnswer: currentQuestion.correctAnswer,
-          explanation: currentQuestion.explanation
-        }
+        [currentQuestion.id]: answerData
       };
       setUserAnswers(newAnswers);
       if (isCorrect) {
         setScore(prev => prev + quizConfig.pointsPerQuestion);
       }
+      return answerData;
     } else {
       const imageObj = currentQuestion.images[imageMatchIndex];
-      if (!imageObj) return;
+      if (!imageObj) return null;
       const newAssociations = {
         ...imageMatchAssociations,
         [imageObj.id]: selectedAnswer
@@ -301,6 +307,7 @@ export const useQuizLogic = () => {
 
       if (imageMatchIndex < currentQuestion.images.length - 1) {
         setImageMatchIndex(prev => prev + 1);
+        return null;
       } else {
         let allCorrect = true;
         for (const img of currentQuestion.images) {
@@ -310,20 +317,22 @@ export const useQuizLogic = () => {
           }
         }
         setImageMatchResult(allCorrect);
+        const answerData = {
+          selectedAnswer: newAssociations,
+          isCorrect: allCorrect,
+          question: currentQuestion.question,
+          correctAnswer: currentQuestion.correctMatches,
+          explanation: currentQuestion.explanation
+        };
         const newAnswers = {
           ...userAnswers,
-          [currentQuestion.id]: {
-            selectedAnswer: newAssociations,
-            isCorrect: allCorrect,
-            question: currentQuestion.question,
-            correctAnswer: currentQuestion.correctMatches,
-            explanation: currentQuestion.explanation
-          }
+          [currentQuestion.id]: answerData
         };
         setUserAnswers(newAnswers);
         if (allCorrect) {
           setScore(prev => prev + quizConfig.pointsPerQuestion);
         }
+        return answerData;
       }
     }
   };
@@ -341,8 +350,23 @@ export const useQuizLogic = () => {
     }
   };
 
-  const goToQuizEnd = () => {
-    completeQuiz(score);
+  const goToQuizEnd = (lastAnswer = null) => {
+    // Calcular el puntaje final basándose en las respuestas del usuario
+    // incluyendo la última respuesta si se proporciona
+    let answersToCheck = userAnswers;
+    
+    if (lastAnswer) {
+      answersToCheck = {
+        ...userAnswers,
+        [currentQuestion.id]: lastAnswer
+      };
+    }
+    
+    const finalScore = Object.values(answersToCheck).reduce((total, answer) => {
+      return total + (answer.isCorrect ? quizConfig.pointsPerQuestion : 0);
+    }, 0);
+    
+    completeQuiz(finalScore);
   };
 
   return {
