@@ -146,7 +146,6 @@ export default function Scene() {
                 Gracias por continuar navegando. A continuación, encontrarás información clave sobre la prevención y los cuidados esenciales de la EPOC.
                 Te invitamos a conocer cómo puedes reducir los factores de riesgo y mejorar tu calidad de vida si ya has sido diagnosticado con esta enfermedad.
                 <br/>
-                <strong>Puedes presionar la tecla "A" para detener la animación del modelo.</strong>
               </p>
               <button 
                 onClick={() => setShowMessage(false)}
@@ -166,6 +165,37 @@ export default function Scene() {
           </Html>
         )}
       </Canvas>
+      <div
+        style={{
+          position: "absolute",
+          bottom: "18px",
+          right: "19px",
+          backgroundColor: "rgba(0, 0, 0, 0.6)",
+          color: "white",
+          padding: "0.4rem 1rem",
+          borderRadius: "0.5rem",
+          fontSize: "0.9rem",
+          zIndex: 10,
+        }}
+      >
+        💡 Presiona la tecla "C" o haz "click" en el titulo <br />
+      </div>
+
+      <div
+        style={{
+          position: "absolute",
+          top: "18px",
+          left: "19px",
+          backgroundColor: "rgba(0, 0, 0, 0.6)",
+          color: "white",
+          padding: "0.4rem 1rem",
+          borderRadius: "0.5rem",
+          fontSize: "0.9rem",
+          zIndex: 10,
+        }}
+      >
+        💡 Presiona la tecla "A" para detener la animacion
+      </div>
     </Suspense>
   );
 }

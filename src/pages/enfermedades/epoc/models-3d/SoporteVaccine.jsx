@@ -1,8 +1,5 @@
-import { RigidBody } from "@react-three/rapier";
-
 const SoporteVaccine = () => {
     return (
-      <RigidBody>
       <mesh
         rotation-x={-Math.PI / 2}  
         receiveShadow={true}      
@@ -16,7 +13,6 @@ const SoporteVaccine = () => {
           opacity={0.8}  
         />
       </mesh>
-      </RigidBody>
     );
   };
   

@@ -147,17 +147,17 @@ const OptionGoals = ({
 
             <GoalModel
               color={color}
-              scale={2.3}
+              scale={2.4}
               emissive={color}
               emissiveIntensity={glowIntensity}
             />
 
             <Html
-              position={[0, 3, 0]}
+              position={[0, 3.5, 0]}
               rotation={[0, 1.3, 0]}
               transform
               occlude
-              distanceFactor={4}
+              distanceFactor={5}
               style={{
                 width: '500px',
                 pointerEvents: 'none',

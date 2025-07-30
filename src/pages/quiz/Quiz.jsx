@@ -67,11 +67,11 @@ const Quiz = () => {
           <div className="feature-card">
             <div className="feature-icon">❓</div>
             <h3>10 Preguntas</h3>
-            <p>Variedad de formatos para evaluar tu conocimiento</p>
+            <p>Para evaluar tu conocimiento</p>
           </div>
           <div className="feature-card">
             <div className="feature-icon">⏱️</div>
-            <h3>20 Minutos</h3>
+            <h3>10 Minutos</h3>
             <p>Tiempo límite para completar el desafío</p>
           </div>
           <div className="feature-card">
@@ -84,7 +84,6 @@ const Quiz = () => {
         <div className="instructions-section">
           <h2><span className="highlight">¿Cómo funciona?</span></h2>
           <ul className="instructions-list">
-            <li><strong>Tipos de preguntas:</strong> Completar, seleccionar la imagen, arrastrar y relacionar columnas</li>
             <li><strong>Puntuación:</strong> Cada respuesta correcta otorga 10 puntos</li>
             <li><strong>Intentos:</strong> Se puede repetir el quiz, pero solo se guarda la mejor puntuación</li>
           </ul>
@@ -93,7 +92,7 @@ const Quiz = () => {
         <div className="quiz-tips">
           <div className="tip-card">
             <div className="tip-icon">💡</div>
-            <p>Selecciona la opción correcta y presiona &apos;Siguiente&apos; para avanzar.</p>
+            <p>Selecciona la opción correcta y avanza por el quiz.</p>
           </div>
           <div className="tip-card">
             <div className="tip-icon">📊</div>

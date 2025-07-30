@@ -3,7 +3,7 @@ import aliceFont from "../../../../assets/fonts/Brunson_Regular.json";
 
 const TextPrevencion = ({ 
   text = "Pulmon Sano", 
-  position = [0, 12, -3], 
+  position = [0, 11, -3], 
   rotation = [0, 0, 0],
   color = "#005089",
   depth = 0.5, 

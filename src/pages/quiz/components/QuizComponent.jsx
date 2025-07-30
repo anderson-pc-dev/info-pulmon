@@ -177,15 +177,16 @@ const QuizGame3D = () => {
         <meshStandardMaterial color="#2AABEC" transparent opacity={0.05} />
 
         <Html
-          position={[0, 1, 1.1]}
+          position={[0, 5, 1.1]}
           transform
           center
-          distanceFactor={10}
+          distanceFactor={13}  // Aumenté este valor de 10 a 15 para hacer todo más grande
           className="question-wall"
           style={{ 
             zIndex: 500, 
             pointerEvents: 'auto',
-            visibility: showHelpModal ? 'hidden' : 'visible'
+            visibility: showHelpModal ? 'hidden' : 'visible',
+            width: '1000px'  // Añadí un ancho fijo mayor
           }}
         >
           <div style={{
@@ -193,9 +194,9 @@ const QuizGame3D = () => {
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
-            minWidth: '520px',
-            maxWidth: '900px',
-            padding: '32px 24px',
+            minWidth: '600px',  // Aumenté de 520px a 600px
+            maxWidth: '1000px',  // Aumenté de 900px a 1000px
+            padding: '40px 30px',  // Aumenté el padding
             background: 'rgba(255,255,255,0.92)',
             borderRadius: '24px',
             boxShadow: '0 8px 32px rgba(0,0,0,0.18)',
@@ -207,30 +208,31 @@ const QuizGame3D = () => {
               justifyContent: 'space-between',
               alignItems: 'center',
               width: '100%',
-              marginBottom: '18px',
+              marginBottom: '24px',  // Aumenté el margen
               gap: '18px',
-              fontSize: '22px',
+              fontSize: '24px',  // Aumenté de 22px a 24px
               fontWeight: 600,
               color: '#222'
             }}>
               <span>Pregunta {currentQuestionIndex + 1}/{totalQuestions}</span>
               <span style={{
                 background: 'rgba(100,150,255,0.18)',
-                padding: '6px 18px',
+                padding: '8px 20px',  // Aumenté el padding
                 borderRadius: '20px',
                 fontWeight: 700,
-                fontSize: '20px',
+                fontSize: '22px',  // Aumenté de 20px a 22px
                 color: '#1e293b',
                 letterSpacing: '1px'
               }}>⏱️ {timeLeft}s</span>
             </div>
             <div style={{
-              fontSize: '32px',
+              fontSize: '38px',  // Aumenté de 32px a 38px
               fontWeight: 700,
               color: '#22223b',
               textAlign: 'center',
-              marginBottom: '22px',
-              textShadow: '0 2px 8px rgba(0,0,0,0.08)'
+              marginBottom: '28px',  // Aumenté el margen
+              textShadow: '0 2px 8px rgba(0,0,0,0.08)',
+              lineHeight: '1.4'  // Añadí line-height para mejor legibilidad
             }}>
               {currentQuestion.question}
             </div>
@@ -240,28 +242,28 @@ const QuizGame3D = () => {
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
-                marginBottom: '18px',
-                marginTop: '8px',
+                marginBottom: '24px',  // Aumenté el margen
+                marginTop: '12px',  // Aumenté el margen
                 width: '100%'
               }}>
                 <img
                   src={currentQuestion.images[imageMatchIndex]?.url}
                   alt={currentQuestion.images[imageMatchIndex]?.alt || ''}
                   style={{
-                    maxWidth: '320px',
-                    maxHeight: '220px',
+                    maxWidth: '400px',  // Aumenté de 320px a 400px
+                    maxHeight: '280px',  // Aumenté de 220px a 280px
                     borderRadius: '18px',
                     boxShadow: '0 4px 18px rgba(0,0,0,0.18)',
                     border: '3px solid #2AABEC',
                     background: '#fff',
-                    marginBottom: '8px'
+                    marginBottom: '12px'  // Aumenté el margen
                   }}
                 />
                 <div style={{
-                  fontSize: '18px',
+                  fontSize: '20px',  // Aumenté de 18px a 20px
                   color: '#333',
                   fontWeight: 500,
-                  marginTop: '2px',
+                  marginTop: '4px',
                   marginBottom: '0'
                 }}>
                   Imagen {imageMatchIndex + 1} de {currentQuestion.images.length}
@@ -269,13 +271,13 @@ const QuizGame3D = () => {
                 {/* Mostrar feedback si ya terminó de asociar todas */}
                 {imageMatchResult !== null && (
                   <div style={{
-                    marginTop: '12px',
-                    fontSize: '22px',
+                    marginTop: '16px',  // Aumenté el margen
+                    fontSize: '24px',  // Aumenté de 22px a 24px
                     fontWeight: 700,
                     color: imageMatchResult ? '#10b981' : '#ef4444',
                     background: imageMatchResult ? 'rgba(16,185,129,0.12)' : 'rgba(239,68,68,0.12)',
                     borderRadius: '10px',
-                    padding: '10px 18px',
+                    padding: '12px 20px',  // Aumenté el padding
                     border: `2px solid ${imageMatchResult ? '#10b981' : '#ef4444'}`
                   }}>
                     {imageMatchResult ? '¡Asociación correcta!' : 'Alguna asociación es incorrecta'}
@@ -285,11 +287,11 @@ const QuizGame3D = () => {
             )}
             <div style={{
               width: '100%',
-              marginTop: '10px',
+              marginTop: '16px',  // Aumenté el margen
               marginBottom: '0',
               background: 'rgba(0,0,0,0.08)',
               borderRadius: '8px',
-              height: '12px',
+              height: '14px',  // Aumenté la altura
               overflow: 'hidden',
               boxShadow: '0 2px 8px rgba(0,0,0,0.06)'
             }}>
@@ -304,9 +306,9 @@ const QuizGame3D = () => {
             <div style={{
               width: '100%',
               textAlign: 'right',
-              fontSize: '15px',
+              fontSize: '20px',  // Aumenté de 15px a 16px
               color: '#444',
-              marginTop: '4px',
+              marginTop: '6px',  // Aumenté el margen
               fontWeight: 500
             }}>
               {score} / {maxScore} puntos
